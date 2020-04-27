@@ -23,6 +23,7 @@ jobs:
         git config --global user.name "Auto push from github"
         ssh-keyscan git.epitech.eu >> ~/.ssh/known_hosts 
         echo "Clonning as ${USER}@epitech.eu from git@git.epitech.eu:/${USER}@epitech.eu/${REPO}"
+        cat ~/.ssh/blih | wc
         git clone git@git.epitech.eu:/${USER}@epitech.eu/${REPO} /tmp/blihRepo
         echo "Clone done"
         export REPOVAR=`pwd`
