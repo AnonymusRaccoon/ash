@@ -8,7 +8,7 @@
 #include "shell.h"
 #include "builtin.h"
 #include "redirections.h"
-#include "my.h"
+
 #include <unistd.h>
 #include <malloc.h>
 #include <errno.h>
@@ -48,12 +48,12 @@ int builtin_cd(char **argv, env_t *env)
     }
     if (!argv[1])
         path = my_getenv(env->env, "HOME");
-    else if (argv[1] && !my_strcmp(argv[1], "-"))
+    else if (argv[1] && !strcmp(argv[1], "-"))
         path = my_getenv(env->env, "OLDPWD");
     else
         path = argv[1];
     if (chdir(path) < 0)
-        my_printf("%s: %s.\n", path, strerror(errno));
+        printf("%s: %s.\n", path, strerror(errno));
     else
         env->env = my_setenv(env->env, "OLDPWD", old);
     free(old);

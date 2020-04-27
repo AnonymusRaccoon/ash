@@ -7,7 +7,9 @@
 
 #include <malloc.h>
 #include <stddef.h>
-#include "my.h"
+#include <string.h>
+#include "utility.h"
+
 
 char *my_getenv(char **env, char *name)
 {
@@ -15,22 +17,22 @@ char *my_getenv(char **env, char *name)
         return (NULL);
     for (int i = 0; env[i]; i++) {
         if (same_var(env[i], name) == env[i])
-            return (env[i] + my_strlen(name) + 1);
+            return (env[i] + strlen(name) + 1);
     }
     return (NULL);
 }
 
 char *create_envvar(char *name, char *value)
 {
-    int len = my_strlen(name) + (value ? my_strlen(value) : 0);
+    int len = strlen(name) + (value ? strlen(value) : 0);
     char *var = malloc(sizeof(char) * (len + 2));
 
     if (!var)
         return (NULL);
-    my_strcpy(var, name);
-    my_strcat(var, "=");
+    strcpy(var, name);
+    strcat(var, "=");
     if (value)
-        my_strcat(var, value);
+        strcat(var, value);
     return (var);
 }
 
@@ -48,7 +50,7 @@ char **my_setenv(char **env, char *name, char *value)
     }
     for (i = 0; env && env[i]; i++)
         old += sizeof(char *);
-    env = my_realloc(env, old, old + sizeof(char *));
+    env = realloc(env, old + sizeof(char *));
     if (!env)
         return (NULL);
     env[i] = create_envvar(name, value);

@@ -28,7 +28,7 @@ Test(setenv, null)
     cr_assert_eq(env[1], NULL);
 }
 
-Test(env, unsetenv)
+Test(env, my_unsetenv)
 {
     char **env = malloc(sizeof(char **) * 1);
     env[0] = NULL;

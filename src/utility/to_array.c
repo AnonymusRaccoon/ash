@@ -2,12 +2,12 @@
 ** EPITECH PROJECT, 2020
 ** PSU_minishell1_2019
 ** File description:
-** my_to_array
+** to_array
 */
 
 #include <stddef.h>
 #include <malloc.h>
-#include "my.h"
+#include <string.h>
 
 static int get_word_count(char *str)
 {
@@ -35,7 +35,7 @@ char **to_array(char *str)
     if (!arr)
         return (NULL);
     arr[0] = str;
-    for (i = 1; (p = my_strchr(p, ':')); i++) {
+    for (i = 1; (p = strchr(p, ':')); i++) {
         *p = '\0';
         p++;
         arr[i] = p;

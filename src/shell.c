@@ -9,8 +9,7 @@
 #include <stdio.h>
 #include <malloc.h>
 #include "shell.h"
-#include "my.h"
-
+#include <string.h>
 #include <errno.h>
 
 void start_shell(env_t *env)
@@ -22,7 +21,7 @@ void start_shell(env_t *env)
 
     while (!should_close) {
         if (cmd) {
-            p = my_strchr(cmd, '\n');
+            p = strchr(cmd, '\n');
             if (p)
                 *p = '\0';
             if (eval_raw_cmd(cmd, env) < 0)

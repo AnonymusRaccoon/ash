@@ -5,14 +5,15 @@
 ** redirections
 */
 
-#include "my.h"
+
 #include "shell.h"
 #include "redirections.h"
 #include <unistd.h>
 #include <stdlib.h>
 #include <sys/types.h>
 #include <sys/wait.h>
-
+#include <string.h>
+#include "utility.h"
 
 const redirection_map redirections[] = {
     {"|", &get_pipe_fd, &handle_pipe, OUTPUT | PIPE | EX_PIPE},
@@ -26,7 +27,7 @@ const redirection_map redirections[] = {
 const redirection_map *get_redirection(char *c)
 {
     for (int i = 0; redirections[i].key; i++)
-        if (!my_strncmp(redirections[i].key, c, my_strlen(redirections[i].key)))
+        if (!strncmp(redirections[i].key, c, strlen(redirections[i].key)))
             return (&redirections[i]);
     return (NULL);
 }
@@ -47,7 +48,7 @@ redirection *split_redirections(char *cmd)
         if (!shell_cmd)
             continue;
         *cmd = '\0';
-        cmd += my_strlen(shell_cmd->key);
+        cmd += strlen(shell_cmd->key);
         redirection_ctr(&cmds[j++], cmd, shell_cmd);
         if (shell_cmd->type & PIPE)
             break;

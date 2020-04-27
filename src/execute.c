@@ -15,7 +15,7 @@
 #include <malloc.h>
 #include <signal.h>
 #include <errno.h>
-#include "my.h"
+#include "utility.h"
 #include "shell.h"
 #include "redirections.h"
 
@@ -37,11 +37,11 @@ char *eval(char *cmd, char **argv, env_t* env)
     char **envpath = NULL;
 
     if (pathstr) {
-        pathstr = my_strdup(pathstr);
+        pathstr = strdup(pathstr);
         if (pathstr)
             envpath = to_array(pathstr);
     }
-    if (my_strchr(cmd, '/') == NULL) {
+    if (strchr(cmd, '/') == NULL) {
         if (!envpath)
             return (NULL);
         for (int i = 0; envpath[i] && !path; i++)
@@ -98,7 +98,7 @@ void run_cmd(char **argv, redirection *inout[2], env_t *env)
     int status;
     char *path;
 
-    if (my_strlen(argv[0]) == 0)
+    if (strlen(argv[0]) == 0)
         return;
     pid = fork();
     if (pid == 0) {

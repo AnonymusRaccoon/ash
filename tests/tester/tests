@@ -44,7 +44,7 @@ TESTS=
 [905-END]
 
 [906]
-NAME="setenv and unsetenv"
+NAME="setenv and my_unsetenv"
 SETUP="/usr/bin/env > .lstenv ; while read varenv ; do unset $varenv ; done < <(/bin/cat .lstenv | /usr/bin/cut -f1 -d=) ; export PATH=/bin:/usr/bin ; export _=ls ; export LS_COLORS=RID ; export MYBG=4 ; export LVL=4 ; export NOTE=2"
 CLEAN="while read varenv ; do export "$varenv" 2>/dev/null ; done  < <(/bin/cat .lstenv) ; /bin/rm -f .lstenv"
 TESTS=
@@ -94,7 +94,7 @@ NAME="Launch DivZero program with core dump"
 SETUP="export TERM=xterm ; PATH='/bin:/usr/bin'"
 CLEAN=""
 TESTS=
-  echo "./my_divzero"
+  echo "./divzero"
 [909-END]
 
 [910]
@@ -102,7 +102,7 @@ NAME="Launch SegFault program without core dump"
 SETUP="ulimit -c 0 ; export TERM=xterm ; PATH='/bin:/usr/bin'"
 CLEAN=""
 TESTS=
-  echo "./my_segfault"
+  echo "./segfault"
 [910-END]
 
 [911]

@@ -13,7 +13,7 @@
 #include <malloc.h>
 #include <errno.h>
 #include <stdlib.h>
-#include "my.h"
+#include "utility.h"
 #include "shell.h"
 
 const char *my_strsignal(int status)
@@ -54,7 +54,7 @@ void handle_signal(int status, env_t *env)
     free(stat);
     if (!WIFSIGNALED(status))
         return;
-    write(2, err, my_strlen(err));
+    write(2, err, strlen(err));
     if (WCOREDUMP(status))
         write(2, " (core dumped)", 15);
     write(2, "\n", 1);
@@ -63,12 +63,12 @@ void handle_signal(int status, env_t *env)
 void exec_error(char *path, char *cmd)
 {
     if (errno == ENOEXEC) {
-        my_printf("%s: Exec format error. Wrong Architecture.\n", cmd);
+        printf("%s: Exec format error. Wrong Architecture.\n", cmd);
     } else if (access(path, F_OK) == 0) {
-        write(2, cmd, my_strlen(cmd));
+        write(2, cmd, strlen(cmd));
         write(2, ": Permission denied.\n", 22);
     } else {
-        write(2, cmd, my_strlen(cmd));
+        write(2, cmd, strlen(cmd));
         write(2, ": Command not found.\n", 21);
     }
     exit(1);

@@ -5,7 +5,7 @@
 ** args
 */
 
-#include "my.h"
+
 #include <unistd.h>
 #include <malloc.h>
 

@@ -6,17 +6,16 @@
 */
 
 #include "shell.h"
-#include "my.h"
+#include <stdlib.h>
 #include <malloc.h>
 #include <stddef.h>
+#include <string.h>
 
 int get_return(char *ret)
 {
     if (!ret)
         return (0);
-    if (!my_str_isnum(ret))
-        return (0);
-    return (my_getnbr(ret));
+    return (atoi(ret));
 }
 
 int main(int argc, char **argv, char **env)
@@ -28,7 +27,7 @@ int main(int argc, char **argv, char **env)
     if (!env || !envcp)
         return (84);
     for (int i = 0; env[i]; i++)
-        envcp[i] = my_strdup(env[i]);
+        envcp[i] = strdup(env[i]);
     envcp[env_get_length(env)] = NULL;
     envt->env = envcp;
     envt->vars = NULL;

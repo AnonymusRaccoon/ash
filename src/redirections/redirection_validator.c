@@ -5,14 +5,15 @@
 ** redirection_validator
 */
 
-#include "my.h"
+
 #include "shell.h"
 #include "redirections.h"
 #include <unistd.h>
 #include <stdlib.h>
 #include <sys/types.h>
 #include <sys/wait.h>
-
+#include <string.h>
+#include <stdio.h>
 
 bool validate_redirection_args(const redirection_map *cmd, char *arg, char *end)
 {
@@ -24,9 +25,9 @@ bool validate_redirection_args(const redirection_map *cmd, char *arg, char *end)
     if (count != 0 && end - arg - 1 != 0)
         return (true);
     if (cmd->type & PIPE)
-        my_printf("Invalid null command.\n");
+        printf("Invalid null command.\n");
     else
-        my_printf("Missing name for redirect.\n");
+        printf("Missing name for redirect.\n");
     return (false);
 }
 
@@ -36,11 +37,11 @@ int *input_count, int *output_count)
     *input_count += (shell_cmd->type & INPUT) != 0;
     *output_count += (shell_cmd->type & OUTPUT) != 0;
     if (*input_count > 1) {
-        my_printf("Ambiguous input redirect.\n");
+        printf("Ambiguous input redirect.\n");
         return (true);
     }
     if (*output_count > 1) {
-        my_printf("Ambiguous output redirect.\n");
+        printf("Ambiguous output redirect.\n");
         return (true);
     }
     if (shell_cmd->type & PIPE) {
@@ -63,7 +64,7 @@ bool redirections_are_invalid(char *cmd)
         shell_cmd = get_redirection(cmd);
         if (!validate_redirection_args(shell_cmd, fcmd, cmd))
             return (true);
-        cmd += my_strlen(shell_cmd->key);
+        cmd += strlen(shell_cmd->key);
         if (redirections_are_ambiguous(shell_cmd, &input_count, &output_count))
             return (true);
         fcmd = cmd;

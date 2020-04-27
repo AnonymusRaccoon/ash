@@ -7,7 +7,7 @@
 
 #include <malloc.h>
 #include <stddef.h>
-#include "my.h"
+#include <string.h>
 
 int count_char(char *str, char c)
 {
@@ -23,8 +23,8 @@ int count_str(char *str, char *delim)
 {
     int count = 0;
 
-    while ((str = my_strstr(str, delim))) {
-        str += my_strlen(delim);
+    while ((str = strstr(str, delim))) {
+        str += strlen(delim);
         count++;
     }
     return (count);

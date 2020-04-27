@@ -5,7 +5,7 @@
 ** redirections_input
 */
 
-#include "my.h"
+
 #include "shell.h"
 #include "redirections.h"
 #include <unistd.h>
@@ -14,6 +14,7 @@
 #include <sys/wait.h>
 #include <fcntl.h>
 #include <stdio.h>
+#include <string.h>
 
 void redirection_ctr(redirection *red, char *cmd, const redirection_map *type)
 {
@@ -62,14 +63,14 @@ void handle_eof_input(redirection *in, env_t *env)
     in->extra_data = tmp;
     if (!args)
         return;
-    eof = malloc(sizeof(char) * (my_strlen(args[0]) + 2));
-    my_strcpy(eof, args[0]);
-    my_strcpy(eof + my_strlen(args[0]), "\n");
+    eof = malloc(sizeof(char) * (strlen(args[0]) + 2));
+    strcpy(eof, args[0]);
+    strcpy(eof + strlen(args[0]), "\n");
     write(1, "? ", 2);
     while (getline(&input, &t, stdin) >= 0) {
-        if (!my_strcmp(input, eof))
+        if (!strcmp(input, eof))
             return;
-        write(in->extra_data, input, my_strlen(input));
+        write(in->extra_data, input, strlen(input));
         write(1, "? ", 2);
     }
     (void)env;

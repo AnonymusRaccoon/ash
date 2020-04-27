@@ -16,9 +16,9 @@ SRC = src/shell.c \
 	src/args.c \
 	src/builtin/builtin_manager.c \
 	src/builtin/builtin_env.c \
-	src/same_var.c \
 	src/signal.c \
 	src/free_env.c \
+	src/utility/same_var.c \
 	src/utility/tostr.c \
 	src/utility/envvar_is_valid.c \
 	src/utility/to_array.c \
@@ -45,16 +45,14 @@ INCLUDE = -I ./include
 
 CFLAGS = $(INCLUDE) -Wall -Wextra -Wshadow
 
-LDFLAGS = -L lib/my -lmy
+LDFLAGS = 
 
 all: $(NAME)
 
 $(NAME): $(OBJ)
-	$(MAKE) -C lib/my
 	$(CC) -o $(NAME) $(OBJ) $(LDFLAGS)
 
 tests_run: clean
-	$(MAKE) -C lib/my
 	$(CC) -o $(UT) $(TESTS) $(SRC) $(COVERAGE) $(CFLAGS) $(LDFLAGS)
 	$(UT)
 
@@ -63,12 +61,10 @@ func: all
 	rm tests/tester/mysh
 
 clean:
-	$(MAKE) -C lib/my clean
 	$(RM) $(OBJ)
 	$(RM) *.gc*
 
 fclean: clean
-	$(MAKE) -C lib/my fclean
 	$(RM) $(NAME)
 	$(RM) $(UT)
 

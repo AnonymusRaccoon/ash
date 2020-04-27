@@ -1,0 +1,19 @@
+/*
+** EPITECH PROJECT, 2020
+** ash
+** File description:
+** utility
+*/
+
+#pragma once
+
+#include <stdbool.h>
+
+char *catpath(char *p1, char *p2);
+char **to_array(char *str);
+char *tostr(int n);
+bool is_alpha(char c);
+bool envvar_is_valid(const char *str);
+int count_str(char *str, char *delim);
+char **split_str(char *str, char delim);
+char *same_var(char *str, const char *to_find);
