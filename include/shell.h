@@ -1,0 +1,41 @@
+/*
+** EPITECH PROJECT, 2020
+** PSU_minishell1_2019
+** File description:
+** shell
+*/
+
+typedef struct redirection redirection;
+#pragma once
+
+#include <stdbool.h>
+
+typedef struct env_s
+{
+    char **env;
+    char **vars;
+} env_t;
+
+void start_shell(env_t *env);
+void free_env(env_t *env);
+int prompt_run(char *cmd, redirection *inout[2], env_t *env);
+void prompt_prepare(env_t *env);
+
+int eval_raw_cmd(char *cmd, env_t *env);
+int run_with_redirections(char *cmd, env_t *env, redirection *input);
+void run_cmd(char **argv, redirection *inout[2], env_t *env);
+void handle_signal(int status, env_t *env);
+char **get_argv(char *cmd);
+int get_argc(char **argv);
+void exec_error(char *path, char *cmd);
+
+int env_get_length(char **env);
+char *my_getenv(char **env, char *name);
+char **my_setenv(char **env, char *name, char *value);
+char **my_unsetenv(char **env, char *name);
+bool envvar_is_valid(const char *str);
+
+#define INVALID_ENV_VAR \
+"setenv: Variable name must contain alphanumeric characters.\n"
+
+#define ERROR 84
