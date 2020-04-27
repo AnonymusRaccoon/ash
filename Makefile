@@ -26,7 +26,7 @@ SRC = src/shell.c \
 	src/utility/split_str.c
 
 OBJ = $(SRC:%.c=%.o)
-OBJ += main.o
+OBJ += src/main.o
 
 TESTS = tests/tenv.c \
 	tests/targc.c \
@@ -37,7 +37,7 @@ COVERAGE = -lcriterion --coverage
 
 UT = ./unit_tests
 
-NAME = mysh
+NAME = 42sh
 
 CC = gcc
 
