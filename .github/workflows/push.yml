@@ -1,0 +1,45 @@
+name: Push to epitech
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v1
+      with:
+        submodules: true
+    - name: Push
+      run: |
+        mkdir -p ~/.ssh
+        echo -ne $SSH_PRIVATE_KEY >> ~/.ssh/blih
+        chmod 400 ~/.ssh/blih
+        find . -regex '.*\/\.git.*' -delete
+        ls -lRa
+        echo -ne "Host git.epitech.eu\n\tHostname git.epitech.eu\n\tUser git\n\tIdentityFile $(readlink -f ~/.ssh/blih)\n" >> ~/.ssh/config
+        git config --global user.email "$(USER)@epitech.eu"
+        git config --global user.name "Auto push from github"
+        ssh-keyscan git.epitech.eu >> ~/.ssh/known_hosts 
+        git clone git@git.epitech.eu:/$(USER)@epitech.eu/$(REPO) /tmp/blihRepo
+        echo cloneDone
+        export REPOVAR=`pwd`
+        cd /tmp/blihRepo
+        echo cdDone
+        find .  -not -path "./.git*" -delete
+        echo findDone
+        cp -r $REPOVAR/* .
+        echo cpDone
+        ls -lRa
+        git add --all
+        echo addDone
+        git commit -m "Sync"
+        echo Commid
+        git push origin master
+        echo Pushed
+      env:
+        SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        TEST: ${{ secrets.TEST }}
+        USER: clement.le-bihan
+        REPO: PSU_42sh_2019
