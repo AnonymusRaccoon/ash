@@ -24,7 +24,7 @@ jobs:
         ssh-keyscan git.epitech.eu >> ~/.ssh/known_hosts 
         echo "Clonning as ${USER}@epitech.eu from git@git.epitech.eu:/${USER}@epitech.eu/${REPO}"
         git clone git@git.epitech.eu:/${USER}@epitech.eu/${REPO} /tmp/blihRepo
-        echo cloneDone
+        echo "Clone done"
         export REPOVAR=`pwd`
         cd /tmp/blihRepo
         echo cdDone
