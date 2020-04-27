@@ -25,19 +25,15 @@ jobs:
         echo "Clone done"
         export REPOVAR=`pwd`
         cd /tmp/blihRepo
-        echo cdDone
         find .  -not -path "./.git*" -delete
-        echo findDone
         cp -r $REPOVAR/* .
-        echo "Cp done"
-        ls -lRa
         git add --all
-        echo addDone
         git commit -m "Sync"
-        echo Commid
         git push origin master
         echo Pushed
       env:
         SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
         USER: clement.le-bihan
         REPO: PSU_42sh_2019
+#The SSH_PRIVATE_KEY should be a secret on the repository containing the private key of the repository owner. 
+#This key should NOT contains regular \n but new-line should be marked by the string "\n" aka \\n
