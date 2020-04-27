@@ -1,5 +1,4 @@
 **/*.o
 **/*.a
-mysh
 .vscode/
 42sh
