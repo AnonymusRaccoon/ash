@@ -26,7 +26,7 @@ Test(cd, home)
         env->env[i] = strdup(environ[i]);
     builtin_cd(args, env);
 
-    cr_assert_str_eq(getcwd(NULL, 0), my_getenv("HOME"));
+    cr_assert_str_eq(getcwd(NULL, 0), getenv("HOME"));
 }
 
 Test(cd, absolute)

@@ -2,3 +2,6 @@
 **/*.a
 .vscode/
 42sh
+**/*.gcda
+**/*.gcno
+unit_tests
