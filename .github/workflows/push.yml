@@ -31,7 +31,7 @@ jobs:
         find .  -not -path "./.git*" -delete
         echo findDone
         cp -r $REPOVAR/* .
-        echo cpDone
+        echo "Cp done"
         ls -lRa
         git add --all
         echo addDone
