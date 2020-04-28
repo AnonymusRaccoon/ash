@@ -20,6 +20,8 @@ const builtin builtins[] = {
     {"unsetenv", &builtin_unsetenv},
     {"exit", &builtin_exit},
     {"cd", &builtin_cd},
+    {"which", &builtin_which},
+    {"where", &builtin_where},
     {NULL, NULL}
 };
 

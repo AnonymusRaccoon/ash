@@ -22,3 +22,9 @@ int builtin_setenv(char **argv, env_t *env);
 int builtin_unsetenv(char **argv, env_t *env);
 int builtin_cd(char **argv, env_t *env);
 int builtin_exit(char **argv, env_t *env);
+int builtin_which(char **argv, env_t *env);
+int builtin_where(char **argv, env_t *env);
+
+//utility
+int check_builtins(char *cmd);
+char **get_envpath(env_t *env);

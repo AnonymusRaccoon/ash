@@ -16,6 +16,8 @@ SRC = src/shell.c \
 	src/args.c \
 	src/builtin/builtin_manager.c \
 	src/builtin/builtin_env.c \
+	src/builtin/builtin_which.c \
+	src/builtin/builtin_where.c \
 	src/signal.c \
 	src/free_env.c \
 	src/utility/same_var.c \

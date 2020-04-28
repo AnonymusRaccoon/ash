@@ -7,11 +7,9 @@
 
 #include <unistd.h>
 #include "shell.h"
-
 #include <malloc.h>
 #include <errno.h>
 #include <string.h>
-
 
 int builtin_env(char **argv, env_t *env)
 {

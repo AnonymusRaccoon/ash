@@ -27,12 +27,16 @@ char *find_binary(char *cmd, char *folder)
         free(path);
         return (NULL);
     }
+    if (access(path, X_OK)) {
+        free(path);
+        return (NULL);
+    }
     return (path);
 }
 
 char *eval(char *cmd, char **argv, env_t* env)
 {
-    char *pathstr= my_getenv(env->env, "PATH");
+    char *pathstr = my_getenv(env->env, "PATH");
     char *path = NULL;
     char **envpath = NULL;
 
