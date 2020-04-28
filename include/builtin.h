@@ -28,3 +28,4 @@ int builtin_where(char **argv, env_t *env);
 //utility
 int check_builtins(char *cmd);
 char **get_envpath(env_t *env);
+char *check_executable(char *cmd, char *folder);

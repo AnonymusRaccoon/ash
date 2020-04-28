@@ -5,12 +5,37 @@
 ** builtin where
 */
 
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
 #include "builtin.h"
 #include "utility.h"
 #include "shell.h"
+
+char *check_executable(char *cmd, char *folder)
+{
+    struct stat st_buff;
+    char *path = catpath(folder, cmd);
+
+    if (stat(path, &st_buff) == -1)
+        return (NULL);
+    if (access(path, F_OK)) {
+        free(path);
+        return (NULL);
+    }
+    if (access(path, X_OK)) {
+        free(path);
+        return (NULL);
+    }
+    if ((st_buff.st_mode & __S_IFMT) == __S_IFDIR) {
+        free(path);
+        return (NULL);
+    }
+    return (path);
+}
 
 char **get_envpath(env_t *env)
 {
@@ -37,14 +62,14 @@ int check_path_no_stop(char *cmd, env_t *env)
         if (!envpath)
             return (0);
         for (int i = 0; envpath[i]; i++) {
-            path = find_binary(cmd, envpath[i]);
+            path = check_executable(cmd, envpath[i]);
             if (path) {
                 printf("%s\n", path);
                 res++;
             }
         }
     }
-    else if (find_binary(cmd, "")) {
+    else if (check_executable(cmd, "")) {
         printf("%s\n", cmd);
         res++;
     }

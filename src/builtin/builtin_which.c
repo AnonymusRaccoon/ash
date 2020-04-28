@@ -40,14 +40,14 @@ int check_path(char *cmd, env_t *env)
         if (!envpath)
             return (0);
         for (int i = 0; envpath[i] && !path; i++) {
-            path = find_binary(cmd, envpath[i]);
+            path = check_executable(cmd, envpath[i]);
             if (path) {
                 printf("%s\n", path);
                 return (1);
             }
         }
     }
-    else if (find_binary(cmd, "")) {
+    else if (check_executable(cmd, "")) {
         printf("%s\n", cmd);
         return (1);
     }
