@@ -32,7 +32,7 @@ char *find_binary(char *cmd, char *folder)
 
 char *eval(char *cmd, char **argv, env_t* env)
 {
-    char *pathstr= my_getenv(env->env, "PATH");
+    char *pathstr = my_getenv(env->env, "PATH");
     char *path = NULL;
     char **envpath = NULL;
 
@@ -48,7 +48,7 @@ char *eval(char *cmd, char **argv, env_t* env)
             path = find_binary(cmd, envpath[i]);
     } else
         path = cmd;
-    execve(path, argv, env->env);
+    globbing(path, argv, env);
     return (path);
 }
 
