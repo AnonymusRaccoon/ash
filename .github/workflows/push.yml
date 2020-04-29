@@ -1,6 +1,9 @@
 name: Push to epitech
 
-on: [push]
+on:
+  push:
+    branches:
+      - master
 
 jobs:
   build:
@@ -12,7 +15,7 @@ jobs:
     - name: Push
       run: |
         mkdir -p ~/.ssh
-        echo -ne $SSH_PRIVATE_KEY >> ~/.ssh/blih
+        echo -ne $SSH_PRIVATE_KEY > ~/.ssh/blih
         chmod 400 ~/.ssh/blih
         find . -regex '.*\/\.git.*' -delete
         echo -ne "Host git.epitech.eu\n\tHostname git.epitech.eu\n\tUser git\n\tIdentityFile $(readlink -f ~/.ssh/blih)\n" >> ~/.ssh/config
@@ -22,7 +25,6 @@ jobs:
         echo "Clonning as ${USER}@epitech.eu from git@git.epitech.eu:/${USER}@epitech.eu/${REPO}"
         cat ~/.ssh/blih | wc
         git clone git@git.epitech.eu:/${USER}@epitech.eu/${REPO} /tmp/blihRepo
-        echo "Clone done"
         export REPOVAR=`pwd`
         cd /tmp/blihRepo
         find .  -not -path "./.git*" -delete
