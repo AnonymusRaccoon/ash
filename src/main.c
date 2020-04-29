@@ -31,6 +31,7 @@ int main(int argc, char **argv, char **env)
     envcp[env_get_length(env)] = NULL;
     envt->env = envcp;
     envt->vars = NULL;
+    envt->history = NULL;
     start_shell(envt);
     ret = get_return(my_getenv(envt->vars, "?"));
     (void)argc;

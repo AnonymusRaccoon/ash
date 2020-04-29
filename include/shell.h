@@ -10,10 +10,21 @@ typedef struct redirection redirection;
 
 #include <stdbool.h>
 
+typedef struct history_s
+{
+    int index;
+    char *command;
+    int hour;
+    int minute;
+    int print;
+    struct history_s *next;
+} history_t;
+
 typedef struct env_s
 {
     char **env;
     char **vars;
+    history_t *history;
 } env_t;
 
 void start_shell(env_t *env);
