@@ -11,55 +11,47 @@
 #include "utility.h"
 #include "builtin.h"
 
-int check_builtins(char *cmd)
+bool find_path_in_builtins(char *cmd)
 {
-    const builtin builtin_arr[] = {
-        {"env", &builtin_env},
-        {"setenv", &builtin_setenv},
-        {"unsetenv", &builtin_unsetenv},
-        {"exit", &builtin_exit},
-        {"cd", &builtin_cd},
-        {"which", NULL},
-        {"where", NULL},
-        {NULL, NULL}
-    };
-    for (int i = 0; builtin_arr[i].name; i++)
-        if (!strcmp(cmd, builtin_arr[i].name)) {
+    extern const builtin builtins[];
+
+    for (int i = 0; builtins[i].name; i++)
+        if (!strcmp(cmd, builtins[i].name)) {
             printf("%s: shell built-in command.\n", cmd);
-            return (1);
+            return (true);
         }
-    return (0);
+    return (false);
 }
 
-int check_path(char *cmd, env_t *env)
+bool find_path_from_env(char *cmd, env_t *env)
 {
     char *path = NULL;
     char **envpath = get_envpath(env);
 
     if (strchr(cmd, '/') == NULL) {
         if (!envpath)
-            return (0);
+            return (false);
         for (int i = 0; envpath[i] && !path; i++) {
             path = check_executable(cmd, envpath[i]);
             if (path) {
                 printf("%s\n", path);
-                return (1);
+                return (true);
             }
         }
     }
     else if (check_executable(cmd, "")) {
         printf("%s\n", cmd);
-        return (1);
+        return (true);
     }
-    return (0);
+    return (false);
 }
 
 void print_path(char *cmd, env_t *env)
 {
     //check_alias
-    if (check_builtins(cmd))
+    if (find_path_in_builtins(cmd))
         return;
-    if (check_path(cmd, env))
+    if (find_path_from_env(cmd, env))
         return;
     else
         printf("%s: Command not found.\n", cmd);
