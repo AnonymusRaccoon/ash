@@ -42,7 +42,7 @@ UT = ./unit_tests
 
 NAME = 42sh
 
-CC = gcc -g
+CC = gcc
 
 INCLUDE = -I ./include
 

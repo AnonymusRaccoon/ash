@@ -18,6 +18,8 @@ char *fusion(char *command, char **args)
     for (int i = 1; args[i]; i++)
         len += strlen(args[i]) + 1;
     str = malloc(sizeof(char) * (len + 1));
+    if (!str)
+        return (NULL);
     strcpy(str, command);
     pos += strlen(command);
     str[pos++] = ' ';

@@ -14,6 +14,7 @@
 #include <sys/wait.h>
 #include <string.h>
 #include "utility.h"
+#include "builtin.h"
 
 const redirection_map redirections[] = {
     {"|", &get_pipe_fd, &handle_pipe, OUTPUT | PIPE | EX_PIPE},
@@ -89,6 +90,8 @@ int *get_return_separator(char *cmd)
         len += (cmd[i] == '|' && cmd[i + 1] == '|') ? 1 : 0;
     }
     array = malloc(sizeof(int) * len);
+    if (!array)
+        return (NULL);
     array[0] = -1;
     for (int i = 0; cmd[i + 1]; i++) {
         if (cmd[i] == ';')
@@ -110,6 +113,8 @@ int eval_raw_cmd(char *cmd, env_t *env)
     char **cmds = split_commands(cmd);
     int ret = 0;
 
+    if (!cmds)
+        return (-1);
     for (int i = 0; cmds[i]; i++) {
         if (redirections_are_invalid(cmds[i])) {
             my_setenv(env->vars, "?", "1");

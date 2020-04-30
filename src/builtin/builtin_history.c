@@ -38,6 +38,8 @@ int add_to_history(char *cmd, env_t *env)
     for (; *command && (*command == ' ' || *command == '\t'); command++);
     if (!strlen(command))
         return (0);
+    if (!log)
+        return (-1);
     for (tmp = env->history; tmp && tmp->next; tmp = tmp->next);
     log->command = strdup(command);
     time(&time_struct);
@@ -111,6 +113,8 @@ int execute_from_history(char **args, env_t *env)
         if (strncmp(&args[0][1], tmp->command, strlen(args[0]) - 1) == 0) {
             tmp->print = 0;
             str = fusion(tmp->command, args);
+            if (!str)
+                return (-1);
             last->command = strdup(str);
             printf("%s\n", str);
             return (eval_raw_cmd(str, env));

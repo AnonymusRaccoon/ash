@@ -40,6 +40,7 @@ char **get_argv(char *cmd);
 int get_argc(char **argv);
 void exec_error(char *path, char *cmd);
 
+int get_return(char *ret);
 int env_get_length(char **env);
 char *my_getenv(char **env, char *name);
 char **my_setenv(char **env, char *name, char *value);
