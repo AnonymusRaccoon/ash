@@ -27,7 +27,8 @@ int builtin_setenv(char **argv, env_t *env)
 {
     if (!argv[1])
         return (builtin_env(argv, env));
-    if ((!('a' <= argv[1][0] && argv[1][0] <= 'z')) && (!('A' <= argv[1][0] && argv[1][0] <= 'Z'))) {
+    if ((!('a' <= argv[1][0] && argv[1][0] <= 'z'))
+    && (!('A' <= argv[1][0] && argv[1][0] <= 'Z'))) {
         write(2, "setenv: Variable name must begin with a letter.\n", 49);
         my_setenv(env->vars, "?", "1");
         return (0);

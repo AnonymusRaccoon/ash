@@ -41,18 +41,11 @@ int add_to_history(char *cmd, env_t *env)
     if (!log)
         return (-1);
     for (tmp = env->history; tmp && tmp->next; tmp = tmp->next);
-    log->command = strdup(command);
     time(&time_struct);
     curr_time = localtime(&time_struct);
-    log->hour = curr_time->tm_hour;
-    log->minute = curr_time->tm_min;
-    log->next = NULL;
-    log->print = 1;
-    log->index = tmp ? tmp->index + 1 : 1;
-    if (env->history)
-        tmp->next = log;
-    else
-        env->history = log;
+    *log = (history_t){tmp ? tmp->index + 1 : 1, strdup(command),
+        curr_time->tm_hour, curr_time->tm_min, 1, NULL};
+    (env->history) ? (tmp->next = log) : (env->history = log);
     remove_duplicate_history(env);
     return (0);
 }
@@ -78,7 +71,8 @@ int show_history(env_t *env)
 {
     for (history_t *tmp = env->history; tmp; tmp = tmp->next) {
         if (tmp->print)
-            printf("%6d\t%d:%02d\t%s\n", tmp->index, tmp->hour, tmp->minute, tmp->command);
+            printf("%6d\t%d:%02d\t%s\n", tmp->index, tmp->hour,
+            tmp->minute, tmp->command);
     }
     return (0);
 }
@@ -96,7 +90,6 @@ int execute_from_history(char **args, env_t *env)
 {
     int len = 0;
     history_t *tmp = NULL;
-    char *str = NULL;
     history_t *last = NULL;
 
     for (tmp = env->history; tmp; tmp = tmp->next) {
@@ -112,12 +105,9 @@ int execute_from_history(char **args, env_t *env)
             continue;
         if (strncmp(&args[0][1], tmp->command, strlen(args[0]) - 1) == 0) {
             tmp->print = 0;
-            str = fusion(tmp->command, args);
-            if (!str)
-                return (-1);
-            last->command = strdup(str);
-            printf("%s\n", str);
-            return (eval_raw_cmd(str, env));
+            last->command = strdup(fusion(tmp->command, args));
+            printf("%s\n", last->command);
+            return (eval_raw_cmd(last->command, env));
         }
     }
     printf("%s: Event not found.\n", &args[0][1]);

@@ -13,9 +13,9 @@ int get_command_len(char *str)
 {
     int len = 0;
 
-    for (int i = 0; str[i]; i++) {        
+    for (int i = 0; str[i]; i++) {
         if (str[i] == ';' || (str[i] == '&' && str[i + 1] == '&')
-        || (str[i] == '|' && str[i + 1] == '|'))
+            || (str[i] == '|' && str[i + 1] == '|'))
             break;
         len++;
     }

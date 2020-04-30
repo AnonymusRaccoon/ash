@@ -101,7 +101,7 @@ int *get_return_separator(char *cmd)
         if (cmd[i] == '|' && cmd[i + 1] == '|')
             array[pos] = 1;
         if ((cmd[i] == '|' && cmd[i + 1] == '|') || (cmd[i] == '&'
-        && cmd[i + 1] == '&') || (cmd[i] == ';'))
+            && cmd[i + 1] == '&') || (cmd[i] == ';'))
             pos++;
     }
     return (array);
