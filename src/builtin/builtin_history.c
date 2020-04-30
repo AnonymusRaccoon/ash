@@ -67,16 +67,24 @@ void remove_duplicate_history(env_t *env)
     }
 }
 
-int execute_from_history(char **args, env_t *env)
+int list_len(history_t *list)
 {
     int len = 0;
     history_t *tmp = NULL;
+    
+    for (tmp = list; tmp; tmp = tmp->next)
+        len++;
+    return (len);
+}
+
+int execute_from_history(char **args, env_t *env)
+{
+    int len = list_len(env->history);
+    history_t *tmp = NULL;
     history_t *last = NULL;
 
-    for (tmp = env->history; tmp; tmp = tmp->next) {
+    for (tmp = env->history; tmp; tmp = tmp->next)
         last = !tmp->next ? tmp : last;
-        len++;
-    }
     for (int i = 0; i < len; i++) {
         tmp = env->history;
         for (int m = 0; m < len - i - 1; m++)
