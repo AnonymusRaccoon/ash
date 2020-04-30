@@ -48,7 +48,10 @@ char *eval(char *cmd, char **argv, env_t* env)
             path = find_binary(cmd, envpath[i]);
     } else
         path = cmd;
-    globbing(path, argv, env);
+    if (get_argc(argv) == 1)
+        execve(path, argv, env->env);
+    else
+        globbing(path, argv, env);
     return (path);
 }
 

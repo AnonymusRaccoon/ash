@@ -64,7 +64,7 @@ void exec_error(char *path, char *cmd)
 {
     if (errno == ENOEXEC) {
         printf("%s: Exec format error. Wrong Architecture.\n", cmd);
-    } else if (access(path, F_OK) == 0) {
+    } else if (path && access(path, F_OK) == 0) {
         write(2, cmd, strlen(cmd));
         write(2, ": Permission denied.\n", 22);
     } else {

@@ -24,14 +24,14 @@ int glob_error(char *arg, int err)
 int globbing(char *path, char **argv, env_t *env)
 {
     static glob_t results;
-    static int flags = 0;
-    static int ret = 0;
+    int flags = GLOB_DOOFFS | GLOB_NOMAGIC;
+    int ret = 0;
 
-    if (get_argc(argv) == 1)
-        return (execve(path, argv, env->env));
+    if (!path)
+        return (0);
     results.gl_offs = 1;
     for (int i = 1; argv[i] && ret == 0; i++) {
-        flags = (i > 1 ? GLOB_DOOFFS | GLOB_APPEND : GLOB_DOOFFS);
+        flags |= (i > 1 ?  GLOB_APPEND : 0);
         ret = glob(argv[i], flags, NULL, &results);
     }
     if (ret != 0)
