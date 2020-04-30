@@ -43,6 +43,7 @@ int builtin_cd(char **argv, env_t *env)
 
     if (get_argc(argv) > 2) {
         write(2, "cd: Too many arguments.\n", 25);
+        my_setenv(env->vars, "?", "1");
         free(argv);
         return (0);
     }
@@ -52,8 +53,10 @@ int builtin_cd(char **argv, env_t *env)
         path = my_getenv(env->env, "OLDPWD");
     else
         path = argv[1];
-    if (chdir(path) < 0)
+    if (chdir(path) < 0) {
         printf("%s: %s.\n", path, strerror(errno));
+        my_setenv(env->vars, "?", "1");
+    }
     else
         env->env = my_setenv(env->env, "OLDPWD", old);
     free(old);

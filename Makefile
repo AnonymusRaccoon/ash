@@ -25,7 +25,8 @@ SRC = src/shell.c \
 	src/utility/to_array.c \
 	src/utility/catpath.c \
 	src/utility/split_str.c \
-	src/utility/fusion.c
+	src/utility/fusion.c	\
+	src/utility/split_commands.c \
 
 OBJ = $(SRC:%.c=%.o)
 OBJ += src/main.o

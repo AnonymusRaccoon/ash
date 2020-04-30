@@ -9,6 +9,7 @@
 #include <stdio.h>
 #include <malloc.h>
 #include "shell.h"
+#include "builtin.h"
 #include <string.h>
 #include <errno.h>
 

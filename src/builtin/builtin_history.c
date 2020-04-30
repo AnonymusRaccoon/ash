@@ -9,8 +9,9 @@
 #include "builtin.h"
 #include "redirections.h"
 #include "time.h"
-#include <stdio.h>
+#include "utility.h"
 #include <string.h>
+#include <stdio.h>
 #include <stdlib.h>
 
 int builtin_history(char **args, env_t *env)
