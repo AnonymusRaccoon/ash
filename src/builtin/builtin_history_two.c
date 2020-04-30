@@ -7,7 +7,24 @@
 
 #include "shell.h"
 #include <stdio.h>
+#include <string.h>
 
+void remove_duplicate_history(env_t *env)
+{
+    char *last_command = NULL;
+    history_t *tmp = env->history;
+
+    if (!tmp->next)
+        return;
+    for (;tmp->next; tmp = tmp->next);
+    last_command = tmp->command;
+    for (tmp = env->history; tmp->next; tmp = tmp->next) {
+        if (!strcmp(last_command, tmp->command))
+            tmp->print = 0;
+        if (!tmp)
+            break;
+    }
+}
 
 int show_history(env_t *env)
 {

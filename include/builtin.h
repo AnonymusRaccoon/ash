@@ -30,3 +30,5 @@ int show_history(env_t *env);
 int clear_history(env_t *env);
 int execute_from_history(char **args, env_t *env);
 void remove_duplicate_history(env_t *env);
+int execute_command_history(history_t *old, history_t *new,
+char **args, env_t *env);

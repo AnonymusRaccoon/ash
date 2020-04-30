@@ -50,28 +50,11 @@ int add_to_history(char *cmd, env_t *env)
     return (0);
 }
 
-void remove_duplicate_history(env_t *env)
-{
-    char *last_command = NULL;
-    history_t *tmp = env->history;
-
-    if (!tmp->next)
-        return;
-    for (;tmp->next; tmp = tmp->next);
-    last_command = tmp->command;
-    for (tmp = env->history; tmp->next; tmp = tmp->next) {
-        if (!strcmp(last_command, tmp->command))
-            tmp->print = 0;
-        if (!tmp)
-            break;
-    }
-}
-
 int list_len(history_t *list)
 {
     int len = 0;
     history_t *tmp = NULL;
-    
+
     for (tmp = list; tmp; tmp = tmp->next)
         len++;
     return (len);
@@ -84,19 +67,27 @@ int execute_from_history(char **args, env_t *env)
     history_t *last = NULL;
 
     for (tmp = env->history; tmp; tmp = tmp->next)
-        last = !tmp->next ? tmp : last;
+        if (!tmp->next)
+            last = tmp;
     for (int i = 0; i < len; i++) {
         tmp = env->history;
         for (int m = 0; m < len - i - 1; m++)
             tmp = tmp->next;
         if (tmp->print && strncmp(&args[0][1], tmp->command,
-        strlen(args[0]) - 1) == 0) {
-            tmp->print = 0;
-            last->command = strdup(fusion(tmp->command, args));
-            printf("%s\n", last->command);
-            return (eval_raw_cmd(last->command, env));
-        }
+            strlen(args[0]) - 1) == 0)
+            return (execute_command_history(tmp, last, args, env));
     }
     printf("%s: Event not found.\n", &args[0][1]);
     return (0);
+}
+
+int execute_command_history(history_t *old, history_t *new,
+char **args, env_t *env)
+{
+    old->print = 0;
+    new->command = fusion(old->command, args);
+    if (!new->command)
+        return (-1);
+    printf("%s\n", new->command);
+    return (eval_raw_cmd(new->command, env));
 }
