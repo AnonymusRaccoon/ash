@@ -78,35 +78,6 @@ int run_with_redirections(char *cmd, env_t *env, redirection *input)
     return (prompt_run(cmd, inout, env));
 }
 
-int *get_return_separator(char *cmd)
-{
-    int *array = NULL;
-    int len = 1;
-    int pos = 1;
-
-    for (int i = 0; cmd[i + 1]; i++) {
-        len += (cmd[i] == ';') ? 1 : 0;
-        len += (cmd[i] == '&' && cmd[i + 1] == '&') ? 1 : 0;
-        len += (cmd[i] == '|' && cmd[i + 1] == '|') ? 1 : 0;
-    }
-    array = malloc(sizeof(int) * len);
-    if (!array)
-        return (NULL);
-    array[0] = -1;
-    for (int i = 0; cmd[i + 1]; i++) {
-        if (cmd[i] == ';')
-            array[pos] = -1;
-        if (cmd[i] == '&' && cmd[i + 1] == '&')
-            array[pos] = 0;
-        if (cmd[i] == '|' && cmd[i + 1] == '|')
-            array[pos] = 1;
-        if ((cmd[i] == '|' && cmd[i + 1] == '|') || (cmd[i] == '&'
-            && cmd[i + 1] == '&') || (cmd[i] == ';'))
-            pos++;
-    }
-    return (array);
-}
-
 int eval_raw_cmd(char *cmd, env_t *env)
 {
     int *return_values = get_return_separator(cmd);

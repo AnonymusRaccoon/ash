@@ -22,18 +22,46 @@ int get_command_len(char *str)
     return (len);
 }
 
-char **split_commands(char *cmd)
+int get_nb_commands(char *cmd)
 {
-    char **array = NULL;
     int len = 1;
-    int pos = 0;
-
     for (int i = 0; cmd[i]; i++) {
         len += (cmd[i] == ';') ? 1 : 0;
         len += (cmd[i] == '&' && cmd[i + 1] == '&') ? 1 : 0;
         len += (cmd[i] == '|' && cmd[i + 1] == '|') ? 1 : 0;
     }
-    array = malloc(sizeof(char *) * (len + 1));
+    return (len);
+}
+
+int *get_return_separator(char *cmd)
+{
+    int len = get_nb_commands(cmd);
+    int *array = malloc(sizeof(int) * len);
+    int pos = 1;
+
+    if (!array)
+        return (NULL);
+    array[0] = -1;
+    for (int i = 0; cmd[i + 1]; i++) {
+        if (cmd[i] == ';')
+            array[pos] = -1;
+        if (cmd[i] == '&' && cmd[i + 1] == '&')
+            array[pos] = 0;
+        if (cmd[i] == '|' && cmd[i + 1] == '|')
+            array[pos] = 1;
+        if ((cmd[i] == '|' && cmd[i + 1] == '|') || (cmd[i] == '&'
+            && cmd[i + 1] == '&') || (cmd[i] == ';'))
+            pos++;
+    }
+    return (array);
+}
+
+char **split_commands(char *cmd)
+{
+    int len = get_nb_commands(cmd);
+    char **array = malloc(sizeof(char *) * (len + 1));
+    int pos = 0;
+
     array[len] = NULL;
     for (int i = 0; i < len; i++) {
         for (; *cmd && (*cmd == ' ' || *cmd == '\t'); cmd++);
