@@ -67,25 +67,6 @@ void remove_duplicate_history(env_t *env)
     }
 }
 
-int show_history(env_t *env)
-{
-    for (history_t *tmp = env->history; tmp; tmp = tmp->next) {
-        if (tmp->print)
-            printf("%6d\t%d:%02d\t%s\n", tmp->index, tmp->hour,
-            tmp->minute, tmp->command);
-    }
-    return (0);
-}
-
-int clear_history(env_t *env)
-{
-    history_t *tmp = NULL;
-
-    for (tmp = env->history; tmp; tmp = tmp->next)
-        tmp->print = 0;
-    return (0);
-}
-
 int execute_from_history(char **args, env_t *env)
 {
     int len = 0;
@@ -93,17 +74,15 @@ int execute_from_history(char **args, env_t *env)
     history_t *last = NULL;
 
     for (tmp = env->history; tmp; tmp = tmp->next) {
-        if (!tmp->next)
-            last = tmp;
+        last = !tmp->next ? tmp : last;
         len++;
     }
     for (int i = 0; i < len; i++) {
         tmp = env->history;
         for (int m = 0; m < len - i - 1; m++)
             tmp = tmp->next;
-        if (!tmp->print)
-            continue;
-        if (strncmp(&args[0][1], tmp->command, strlen(args[0]) - 1) == 0) {
+        if (tmp->print && strncmp(&args[0][1], tmp->command,
+        strlen(args[0]) - 1) == 0) {
             tmp->print = 0;
             last->command = strdup(fusion(tmp->command, args));
             printf("%s\n", last->command);
@@ -111,6 +90,5 @@ int execute_from_history(char **args, env_t *env)
         }
     }
     printf("%s: Event not found.\n", &args[0][1]);
-    my_setenv(env->env, "?", "1");
     return (0);
 }

@@ -15,6 +15,7 @@ SRC = src/shell.c \
 	src/env.c \
 	src/args.c \
 	src/builtin/builtin_history.c \
+	src/builtin/builtin_history_two.c \
 	src/builtin/builtin_manager.c \
 	src/builtin/builtin_env.c \
 	src/signal.c \
