@@ -16,6 +16,7 @@ SRC = src/shell.c \
 	src/args.c \
 	src/builtin/builtin_manager.c \
 	src/builtin/builtin_env.c \
+	src/builtin/builtin_source.c \
 	src/builtin/builtin_which.c \
 	src/builtin/builtin_where.c \
 	src/signal.c \
@@ -25,7 +26,8 @@ SRC = src/shell.c \
 	src/utility/envvar_is_valid.c \
 	src/utility/to_array.c \
 	src/utility/catpath.c \
-	src/utility/split_str.c
+	src/utility/split_str.c \
+	src/utility/envpath.c \
 
 OBJ = $(SRC:%.c=%.o)
 OBJ += src/main.o

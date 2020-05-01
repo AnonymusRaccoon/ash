@@ -24,8 +24,10 @@ int builtin_cd(char **argv, env_t *env);
 int builtin_exit(char **argv, env_t *env);
 int builtin_which(char **argv, env_t *env);
 int builtin_where(char **argv, env_t *env);
-
+int builtin_source(char **argv, env_t *env);
 //utility
 bool find_path_in_builtins(char *cmd);
 char **get_envpath(env_t *env);
 char *check_executable(char *cmd, char *folder);
+char **get_paths_from_envpath(char *cmd, char **envpath);
+char **get_envpath(env_t *env);

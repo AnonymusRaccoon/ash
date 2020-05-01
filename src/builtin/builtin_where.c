@@ -19,82 +19,90 @@ char *check_executable(char *cmd, char *folder)
 {
     struct stat st_buff;
     char *path = catpath(folder, cmd);
+    char *res = path;
 
     if (stat(path, &st_buff) == -1)
-        return (NULL);
-    if (access(path, F_OK)) {
-        return (NULL);
-    }
-    if (access(path, X_OK)) {
-        return (NULL);
-    }
-    if ((st_buff.st_mode & __S_IFMT) == __S_IFDIR) {
-        return (NULL);
-    }
-    return (path);
-}
-
-char **get_envpath(env_t *env)
-{
-    char **envpath = NULL;
-    char *pathstr = my_getenv(env->env, "PATH");
-    char *path_cpy = NULL;
-
-    if (pathstr) {
-        path_cpy = strdup(pathstr);
-        envpath = to_array(path_cpy);
-        free(path_cpy);
-    }
-    return (envpath);
-}
-
-bool find_paths_from_env(char *cmd, env_t *env)
-{
-    bool res = false;
-    char *path = NULL;
-    char **envpath = get_envpath(env);
-
-    if (strchr(cmd, '/') == NULL) {
-        if (!envpath)
-            return (res);
-        for (int i = 0; envpath[i]; i++) {
-            path = check_executable(cmd, envpath[i]);
-            if (path) {
-                printf("%s\n", path);
-                res = true;
-            }
-        }
-    }
-    else if (check_executable(cmd, "")) {
-        printf("%s\n", cmd);
-        res = true;
-    }
+        res = NULL;
+    if (access(path, F_OK))
+        res = NULL;
+    if (access(path, X_OK))
+        res = NULL;
+    if ((st_buff.st_mode & __S_IFMT) == __S_IFDIR)
+        res = NULL;
+    if (!res)
+        free(path);
     return (res);
 }
 
-void print_path_no_stop(char *cmd, env_t *env)
+void fill_path_arr(char *cmd, char **envpath, char **res)
 {
+    int counter = 0;
+    char *path = NULL;
+
+    if (strchr(cmd, '/') == NULL) {
+        if (!envpath)
+            return;
+        for (int i = 0; envpath[i]; i++) {
+            path = check_executable(cmd, envpath[i]);
+            if (path) {
+                res[counter++] = path;
+            }
+        }
+    }
+    else {
+        path = check_executable(cmd, "");
+        if (path) {
+            res[counter++] = path;
+        }
+    }
+    res[counter] = NULL;
+}
+
+char **get_paths_from_envpath(char *cmd, char **envpath)
+{
+    int len = 0;
+    char **res = NULL;
+
+    for (; envpath[len]; len++);
+    res = malloc(sizeof(char *) * (len + 2));
+    if (!res)
+        return (NULL);
+    fill_path_arr(cmd, envpath, res);
+    return (res);
+}
+
+void print_path_no_stop(char *cmd, char **envpath)
+{
+    char **paths = NULL;
     //check_alias_no_stop
     find_path_in_builtins(cmd);
-    find_paths_from_env(cmd, env);
+    if (!envpath)
+        return;
+    paths = get_paths_from_envpath(cmd, envpath);
+    if (!paths)
+        return;
+    for (int i = 0; paths[i]; i++)
+        printf("%s\n", paths[i]);
+    destroy_str_arr(paths);
 }
 
 int builtin_where(char **argv, env_t *env)
 {
     int len = 0;
+    char **envpath = NULL;
 
-    if (!argv)
-        return (0);
     for (; argv[len]; len++);
     if (len <= 1) {
         printf("where: Too few arguments.\n");
         return (0);
     }
+    envpath = get_envpath(env);
     for (int i = 1; argv[i]; i++) {
         if (strchr(argv[i], '/'))
             printf("where: / in command makes no sense\n");
         else
-            print_path_no_stop(argv[i], env);
+            print_path_no_stop(argv[i], envpath);
     }
+    free(envpath);
     return (0);
 }

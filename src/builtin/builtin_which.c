@@ -5,6 +5,7 @@
 ** builtin which
 */
 
+#include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
 #include "shell.h"
@@ -23,52 +24,35 @@ bool find_path_in_builtins(char *cmd)
     return (false);
 }
 
-bool find_path_from_env(char *cmd, env_t *env)
+void print_path(char *cmd, char **envpath)
 {
-    char *path = NULL;
-    char **envpath = get_envpath(env);
-
-    if (strchr(cmd, '/') == NULL) {
-        if (!envpath)
-            return (false);
-        for (int i = 0; envpath[i] && !path; i++) {
-            path = check_executable(cmd, envpath[i]);
-            if (path) {
-                printf("%s\n", path);
-                return (true);
-            }
-        }
-    }
-    else if (check_executable(cmd, "")) {
-        printf("%s\n", cmd);
-        return (true);
-    }
-    return (false);
-}
-
-void print_path(char *cmd, env_t *env)
-{
+    char **res = NULL;
+    int len = 0;
     //check_alias
     if (find_path_in_builtins(cmd))
         return;
-    if (find_path_from_env(cmd, env))
-        return;
+    res = get_paths_from_envpath(cmd, envpath);
+    for (; res[len]; len++);
+    if (len)
+        printf("%s\n", res[0]);
     else
         printf("%s: Command not found.\n", cmd);
+    destroy_str_arr(res);
 }
 
 int builtin_which(char **argv, env_t *env)
 {
     int len = 0;
+    char **envpath = NULL;
 
-    if (!argv)
-        return (0);
     for (; argv[len]; len++);
     if (len == 1) {
         printf("%s: Too few arguments.\n", argv[0]);
         return (0);
     }
+    envpath = get_envpath(env);
     for (int i = 1; argv[i]; i++)
-        print_path(argv[i], env);
+        print_path(argv[i], envpath);
+    free(envpath);
     return (0);
 }

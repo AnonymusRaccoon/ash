@@ -22,6 +22,7 @@ const builtin builtins[] = {
     {"cd", &builtin_cd},
     {"which", &builtin_which},
     {"where", &builtin_where},
+    {"source", &builtin_source},
     {NULL, NULL}
 };
 

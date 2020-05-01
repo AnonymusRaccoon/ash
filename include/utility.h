@@ -17,3 +17,4 @@ bool envvar_is_valid(const char *str);
 int count_str(char *str, char *delim);
 char **split_str(char *str, char delim);
 char *same_var(char *str, const char *to_find);
+void destroy_str_arr(char **arr);
