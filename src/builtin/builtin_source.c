@@ -16,7 +16,7 @@
 #include "utility.h"
 #include "shell.h"
 
-void start_script(char *path, env_t *env)
+static void start_script(char *path, env_t *env)
 {
     char *str = NULL;
     char **arr = NULL;
@@ -28,13 +28,15 @@ void start_script(char *path, env_t *env)
         return;
     stat(path, &st_buff);
     str = malloc(st_buff.st_size);
+    if (!str) {
+        close(fd);
+        return;
+    }
     read(fd, str, st_buff.st_size);
     arr = split_str(str, '\n');
-    for (int i = 0; arr[i]; i++) {
-        if (should_close)
-            break;
-        should_close = (eval_raw_cmd(strdup(arr[i]), env) < 0);
-    }
+    if (arr)
+        for (int i = 0; arr[i] && !should_close; i++)
+            should_close = (eval_raw_cmd(strdup(arr[i]), env) < 0);
     close(fd);
 }
 
