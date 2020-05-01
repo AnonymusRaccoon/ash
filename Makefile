@@ -14,6 +14,8 @@ SRC = src/shell.c \
 	src/redirections/redirection_validator.c \
 	src/env.c \
 	src/args.c \
+	src/builtin/builtin_history.c \
+	src/builtin/builtin_history_two.c \
 	src/builtin/builtin_manager.c \
 	src/builtin/builtin_env.c \
 	src/builtin/builtin_source.c \
@@ -26,8 +28,10 @@ SRC = src/shell.c \
 	src/utility/envvar_is_valid.c \
 	src/utility/to_array.c \
 	src/utility/catpath.c \
-	src/utility/split_str.c \
+	src/utility/split_str.c 
 	src/utility/envpath.c \
+	src/utility/fusion.c	\
+	src/utility/split_commands.c \
 
 OBJ = $(SRC:%.c=%.o)
 OBJ += src/main.o

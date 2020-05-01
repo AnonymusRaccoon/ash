@@ -9,6 +9,7 @@
 #include <stdio.h>
 #include <malloc.h>
 #include "shell.h"
+#include "builtin.h"
 #include <string.h>
 #include <errno.h>
 
@@ -24,6 +25,7 @@ void start_shell(env_t *env)
             p = strchr(cmd, '\n');
             if (p)
                 *p = '\0';
+            add_to_history(cmd, env);
             if (eval_raw_cmd(cmd, env) < 0)
                 should_close = true;
         }

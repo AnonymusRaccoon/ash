@@ -18,3 +18,6 @@ int count_str(char *str, char *delim);
 char **split_str(char *str, char delim);
 char *same_var(char *str, const char *to_find);
 void destroy_str_arr(char **arr);
+char *fusion(char *command, char **args);
+char **split_commands(char *cmd);
+int *get_return_separator(char *cmd);

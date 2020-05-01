@@ -10,10 +10,21 @@ typedef struct redirection redirection;
 
 #include <stdbool.h>
 
+typedef struct history_s
+{
+    int index;
+    char *command;
+    int hour;
+    int minute;
+    int print;
+    struct history_s *next;
+} history_t;
+
 typedef struct env_s
 {
     char **env;
     char **vars;
+    history_t *history;
 } env_t;
 
 void start_shell(env_t *env);
@@ -31,6 +42,7 @@ char **get_argv(char *cmd);
 int get_argc(char **argv);
 void exec_error(char *path, char *cmd);
 
+int get_return(char *ret);
 int env_get_length(char **env);
 char *my_getenv(char **env, char *name);
 char **my_setenv(char **env, char *name, char *value);
