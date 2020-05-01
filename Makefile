@@ -28,7 +28,7 @@ SRC = src/shell.c \
 	src/utility/envvar_is_valid.c \
 	src/utility/to_array.c \
 	src/utility/catpath.c \
-	src/utility/split_str.c 
+	src/utility/split_str.c \
 	src/utility/envpath.c \
 	src/utility/fusion.c	\
 	src/utility/split_commands.c \
@@ -53,7 +53,7 @@ INCLUDE = -I ./include
 
 CFLAGS = $(INCLUDE) -Wall -Wextra -Wshadow
 
-LDFLAGS = 
+LDFLAGS = \
 
 all: $(NAME)
 
