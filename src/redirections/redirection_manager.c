@@ -88,16 +88,15 @@ int eval_raw_cmd(char *cmd, env_t *env)
         return (-1);
     for (int i = 0; cmds[i]; i++) {
         if (redirections_are_invalid(cmds[i])) {
-            my_setenv(env->vars, "?", "1");
+            env->env = my_setenv(env->vars, "?", "1");
             return (0);
         }
     }
     for (int i = 0; cmds[i]; i++) {
-        if (return_values[i] == 0 && get_return(my_getenv(env->vars, "?")))
-            break;
-        if (return_values[i] == 1 && !get_return(my_getenv(env->vars, "?")))
-            break;
-        if (run_with_redirections(cmds[i], env, NULL))
+        if ((return_values[i] == 0 && get_return(my_getenv(env->vars, "?"))) ||
+        (return_values[i] == 1 && !get_return(my_getenv(env->vars, "?")))){
+            for (; return_values[i + 1] != -1 && cmds[i + 1]; i++);
+        } else if (run_with_redirections(cmds[i], env, NULL))
             ret = -1;
     }
     return (ret);

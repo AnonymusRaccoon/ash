@@ -36,12 +36,13 @@ int get_nb_commands(char *cmd)
 int *get_return_separator(char *cmd)
 {
     int len = get_nb_commands(cmd);
-    int *array = malloc(sizeof(int) * len);
+    int *array = malloc(sizeof(int) * (len + 1));
     int pos = 1;
 
     if (!array)
         return (NULL);
     array[0] = -1;
+    array[len] = -2;
     for (int i = 0; cmd[i + 1]; i++) {
         if (cmd[i] == ';')
             array[pos] = -1;
