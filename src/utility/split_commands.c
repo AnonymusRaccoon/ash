@@ -78,3 +78,20 @@ char **split_commands(char *cmd)
     }
     return (array);
 }
+
+int split_is_invalid(char **cmds, int *return_values, int i)
+{
+    if (return_values[i] != 0 && return_values[i] != 1)
+        return (0);
+    if (i != 0) {
+        if (return_values[i] == 1 && !strlen(cmds[i - 1]))
+            return (1);
+        if (return_values[i] == 0 && !strlen(cmds[i]) && !strlen(cmds[i - 1]))
+            return (0);
+        if (return_values[i] == 0 && !strlen(cmds[i]))
+            return (1);
+    }
+    if (return_values[i] != -1 && !strlen(cmds[i]))
+        return (1);
+    return (0);
+}

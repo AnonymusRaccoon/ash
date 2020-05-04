@@ -38,7 +38,7 @@ int run_builtin(const builtin *cmd, char **a, redirection *inout[2], env_t *env)
 
 int builtin_cd(char **argv, env_t *env)
 {
-    char *path = NULL;
+    char *path = argv[1];
     char *old = getcwd(NULL, 0);
 
     if (get_argc(argv) > 2) {
@@ -51,8 +51,6 @@ int builtin_cd(char **argv, env_t *env)
         path = my_getenv(env->env, "HOME");
     else if (argv[1] && !strcmp(argv[1], "-"))
         path = my_getenv(env->env, "OLDPWD");
-    else
-        path = argv[1];
     if (chdir(path) < 0) {
         printf("%s: %s.\n", path, strerror(errno));
         env->vars = my_setenv(env->vars, "?", "1");
