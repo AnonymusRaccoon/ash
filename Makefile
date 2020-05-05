@@ -61,8 +61,8 @@ tests_run: clean
 	$(UT)
 
 func: all
-	cd tests/tester/ && cp ../../mysh mysh && ./tester.sh
-	rm tests/tester/mysh
+	cd tests/tester/ && cp ../../$(NAME) $(NAME) && ./tester.sh
+	rm tests/tester/$(NAME)
 
 clean:
 	$(RM) $(OBJ)
