@@ -28,6 +28,7 @@ SRC = src/shell.c \
 	src/utility/split_str.c \
 	src/utility/fusion.c	\
 	src/utility/split_commands.c \
+	src/utility/get_return.c
 
 OBJ = $(SRC:%.c=%.o)
 OBJ += src/main.o
@@ -61,8 +62,8 @@ tests_run: clean
 	$(UT)
 
 func: all
-	cd tests/tester/ && cp ../../mysh mysh && ./tester.sh
-	rm tests/tester/mysh
+	cd tests/tester/ && cp ../../$(NAME) $(NAME) && ./tester.sh
+	rm tests/tester/$(NAME)
 
 clean:
 	$(RM) $(OBJ)

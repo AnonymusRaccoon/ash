@@ -11,13 +11,6 @@
 #include <stddef.h>
 #include <string.h>
 
-int get_return(char *ret)
-{
-    if (!ret)
-        return (0);
-    return (atoi(ret));
-}
-
 int main(int argc, char **argv, char **env)
 {
     env_t *envt = malloc(sizeof(*envt));
