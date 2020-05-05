@@ -20,11 +20,24 @@ typedef struct history_s
     struct history_s *next;
 } history_t;
 
+typedef struct key_function
+{
+    const char *name;
+    int (*run)(int key, char *command_buffer, env_t *env);
+} key_function_t;
+
+typedef struct binding
+{
+    int key;
+    const key_function_t *func;
+} binding_t;
+
 typedef struct env_s
 {
     char **env;
     char **vars;
     history_t *history;
+    binding_t *bindings;
 } env_t;
 
 void start_shell(env_t *env);
