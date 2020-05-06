@@ -14,6 +14,7 @@
 #include <stddef.h>
 #include <ncurses.h>
 #include <termios.h>
+#include <sys/ioctl.h>
 #define _XOPEN_SOURCE 600
 #define __USE_XOPEN_EXTENDED
 #include <stdlib.h> 
@@ -67,9 +68,13 @@ struct redirection *new_ncurses_pty()
 int pyt_get_fd(redirection *pty)
 {
     struct termios termios;
+    struct winsize winsize;
 
     tcgetattr(0, &termios);
     tcsetattr(pty->fd, TCSANOW, &termios);
+
+    ioctl(0, TIOCGWINSZ, &winsize);
+    ioctl(pty->fd, TIOCSWINSZ, &winsize);
     dup2(pty->fd, 2);
     return (pty->fd);
 }
