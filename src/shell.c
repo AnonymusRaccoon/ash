@@ -54,9 +54,9 @@ void start_shell(env_t *env)
     int key;
     buffer_t buffer = {.size = 0, .buffer = NULL, .pos = 0};
 
+    raw();
     noecho();
     keypad(window, true);
-    cbreak();
     prompt_prepare(env);
     do {
         printf("%s \n", buffer.buffer);
@@ -65,6 +65,6 @@ void start_shell(env_t *env)
             break;
     } while (process_key(key, &buffer, env) >= 0);
     delwin(window);
-    nocbreak();
+    noraw();
     endwin();
 }
