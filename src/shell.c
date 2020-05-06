@@ -5,11 +5,12 @@
 ** shell
 */
 
+#include "shell.h"
+#include "builtin.h"
+#include "key_functions.h"
 #include <stdbool.h>
 #include <stdio.h>
 #include <malloc.h>
-#include "shell.h"
-#include "builtin.h"
 #include <string.h>
 #include <errno.h>
 #include <ncurses.h>
@@ -39,27 +40,28 @@ void test()
     //     free(cmd);
 }
 
-int process_key(int key, char *buffer, env_t *env)
+int process_key(int key, buffer_t *buffer, env_t *env)
 {
     for (int i = 0; env->bindings[i].func; i++)
         if (key == env->bindings[i].key)
-            return (env->bindings[i].func->run(key, buffer, env));
-    return (0);
+            return (env->bindings[i].func(key, buffer, env));
+    return (self_insert_command(key, buffer, env));
 }
 
 void start_shell(env_t *env)
 {
     WINDOW *window = initscr();
     int key;
-    char *buffer = calloc(100, sizeof(char));
+    buffer_t buffer = {.size = 0, .buffer = NULL, .pos = 0};
 
     noecho();
     prompt_prepare(env);
     do {
+        printf("%s \n", buffer.buffer);
         key = getch();
         if (key == ERR)
             break;
-    } while (process_key(key, buffer, env) > 0);
+    } while (process_key(key, &buffer, env) >= 0);
     delwin(window);
     endwin();
 }

@@ -6,6 +6,7 @@
 */
 
 typedef struct redirection redirection;
+typedef struct env_s env_t;
 #pragma once
 
 #include <stdbool.h>
@@ -20,16 +21,17 @@ typedef struct history_s
     struct history_s *next;
 } history_t;
 
-typedef struct key_function
+typedef struct buffer
 {
-    const char *name;
-    int (*run)(int key, char *command_buffer, env_t *env);
-} key_function_t;
+    char *buffer;
+    int size;
+    int pos;
+} buffer_t;
 
 typedef struct binding
 {
     int key;
-    const key_function_t *func;
+    int (*func)(int key, buffer_t *command_buffer, env_t *env);
 } binding_t;
 
 typedef struct env_s
@@ -64,3 +66,5 @@ bool envvar_is_valid(const char *str);
 "setenv: Variable name must contain alphanumeric characters.\n"
 
 #define ERROR 84
+
+extern const binding_t emacs_bindings[];

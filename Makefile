@@ -28,7 +28,9 @@ SRC = src/shell.c \
 	src/utility/split_str.c \
 	src/utility/fusion.c	\
 	src/utility/split_commands.c \
-	src/utility/get_return.c
+	src/utility/get_return.c \
+	src/key_bindings/basic_typing_functions.c \
+	src/key_bindings/default_bindings.c
 
 OBJ = $(SRC:%.c=%.o)
 OBJ += src/main.o
@@ -48,9 +50,9 @@ CC = gcc
 
 INCLUDE = -I ./include
 
-CFLAGS = $(INCLUDE) -Wall -Wextra -Wshadow
+CFLAGS = $(INCLUDE) -Wall -Wextra -Wshadow -Wno-unused-parameter
 
-LDFLAGS = 
+LDFLAGS = -lncurses
 
 all: $(NAME)
 
