@@ -13,6 +13,7 @@
 #include <errno.h>
 #include <stddef.h>
 #include <ncurses.h>
+#include <termios.h>
 #define _XOPEN_SOURCE 600
 #define __USE_XOPEN_EXTENDED
 #include <stdlib.h> 
@@ -63,20 +64,16 @@ struct redirection *new_ncurses_pty()
     return (pty);
 }
 
-// Function called only the child
 int pyt_get_fd(redirection *pty)
 {
-#ifdef TIOCSTTY
-    if (ioctl(pty->fd, TIOCSTTY, 0) == -1)
-        perror(SHELL_NAME);
-#endif
+    struct termios termios;
+
+    tcgetattr(0, &termios);
+    tcsetattr(pty->fd, TCSANOW, &termios);
     dup2(pty->fd, 2);
     return (pty->fd);
 }
 
-// Function only called on the parent
-// READ FROM pty->extra_data and put it to the ncurses window;
-// Once the read return a EOF, the child program should be stopped.
 void pty_get_output(redirection *pty, env_t *env)
 {
     char *line = NULL;
@@ -85,11 +82,8 @@ void pty_get_output(redirection *pty, env_t *env)
     int y = getcury(env->window);
 
     close(pty->fd);
-    while (getline(&line, &size, file) > 0) {
-        dprintf(2, "Writing at %d: %s\n", y, line);
-        mvaddstr(y, 0, line);
-        y++;
-    }
+    while (getline(&line, &size, file) > 0)
+        mvaddstr(y++, 0, line);
     if (line)
         free(line);
     fclose(file);
