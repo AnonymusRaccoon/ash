@@ -13,10 +13,12 @@
 const key_function_t key_functions[] = {
     {"self-insert-command", &self_insert_command},
     {"newline", &newline_command},
+    {"enf-of-file", &eof_command},
     {NULL, NULL}
 };
 
 const binding_t emacs_bindings[] = {
     {'\n', &newline_command},
+    {CTRL('d'), &eof_command},
     {0, NULL}
 };

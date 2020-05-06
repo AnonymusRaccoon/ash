@@ -9,6 +9,8 @@
 
 #include "shell.h"
 
+#define CTRL(c) ((c) & 0x1F)
+
 typedef struct key_function
 {
     const char *name;
@@ -26,3 +28,4 @@ extern const binding_t emacs_bindings[];
 
 int self_insert_command(int key, buffer_t *buffer, env_t *env);
 int newline_command(int key, buffer_t *buffer, env_t *env);
+int eof_command(int key, buffer_t *buffer, env_t *env);

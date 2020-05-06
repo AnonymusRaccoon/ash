@@ -107,8 +107,8 @@ void run_cmd(char **argv, redirection *inout[2], env_t *env)
         path = eval(argv[0], argv, env);
         return (exec_error(path, argv[0]));
     }
+    waitpid(pid, &status, 0);
     if (handle_parent_inout(inout, env, false))
         return;
-    waitpid(pid, &status, 0);
     handle_signal(status, env);
 }

@@ -84,8 +84,13 @@ void pty_get_output(redirection *pty, env_t *env)
     FILE *file = fdopen(pty->extra_data, "r");
     int y = getcury(env->window);
 
-    while (getline(&line, &size, file) > 0)
-        mvaddstr(y++, 0, line);
+    close(pty->fd);
+    while (getline(&line, &size, file) > 0) {
+        dprintf(2, "Writing at %d: %s\n", y, line);
+        mvaddstr(y, 0, line);
+        y++;
+    }
     if (line)
         free(line);
+    fclose(file);
 }
