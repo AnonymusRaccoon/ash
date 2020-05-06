@@ -14,18 +14,11 @@
 
 int self_insert_command(int key, buffer_t *buffer, env_t *env)
 {
-    int len;
     const char *chars = unctrl(key);
-    const int charlens = strlen(chars);
+    int charlens = strlen(chars);
+    int len = (buffer->buffer ? strlen(buffer->buffer) : 0) + charlens;
 
-    if (buffer->buffer == NULL) {
-        buffer->buffer = calloc(sizeof(char *), 100);
-        buffer->size = 100;
-    }
-    if (!buffer->buffer)
-        return (-1);
-    len = strlen(buffer->buffer) + charlens;
-    if (len > buffer->size) {
+    if (len > buffer->size || !buffer->buffer) {
         buffer->buffer = realloc(buffer->buffer, buffer->size + 100);
         buffer->size += 100;
     }
