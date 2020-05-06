@@ -5,9 +5,9 @@
 ** bindings
 */
 
-#include "shell.h"
-
 #pragma once
+
+#include "shell.h"
 
 typedef struct key_function
 {
@@ -15,6 +15,14 @@ typedef struct key_function
     int (*run)(int key, buffer_t *command_buffer, env_t *env);
 } key_function_t;
 
-extern const key_function_t key_functions[];
+typedef struct binding
+{
+    int key;
+    int (*func)(int key, buffer_t *command_buffer, env_t *env);
+} binding_t;
 
-int self_insert_command(int key, buffer_t *command_buffer, env_t *env);
+extern const key_function_t key_functions[];
+extern const binding_t emacs_bindings[];
+
+int self_insert_command(int key, buffer_t *buffer, env_t *env);
+int newline_command(int key, buffer_t *buffer, env_t *env);

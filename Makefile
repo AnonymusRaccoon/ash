@@ -30,7 +30,8 @@ SRC = src/shell.c \
 	src/utility/split_commands.c \
 	src/utility/get_return.c \
 	src/key_bindings/basic_typing_functions.c \
-	src/key_bindings/default_bindings.c
+	src/key_bindings/default_bindings.c \
+	src/redirections/pty_pipe.c
 
 OBJ = $(SRC:%.c=%.o)
 OBJ += src/main.o

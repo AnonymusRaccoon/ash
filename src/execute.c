@@ -87,7 +87,7 @@ bool handle_parent_inout(redirection *inout[2], env_t *env, bool builtin)
     }
     if (inout[1] && inout[1]->type->run_cmd) {
         inout[1]->type->run_cmd(inout[1], env);
-        return (true);
+        return (!(inout[1]->type->type & PTY));
     }
     return (false);
 }

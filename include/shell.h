@@ -7,9 +7,13 @@
 
 typedef struct redirection redirection;
 typedef struct env_s env_t;
+typedef struct binding binding_t;
 #pragma once
 
+#define SHELL_NAME "42sh"
+
 #include <stdbool.h>
+#include <ncurses.h>
 
 typedef struct history_s
 {
@@ -26,13 +30,8 @@ typedef struct buffer
     char *buffer;
     int size;
     int pos;
+    int startx;
 } buffer_t;
-
-typedef struct binding
-{
-    int key;
-    int (*func)(int key, buffer_t *command_buffer, env_t *env);
-} binding_t;
 
 typedef struct env_s
 {
@@ -40,6 +39,7 @@ typedef struct env_s
     char **vars;
     history_t *history;
     binding_t *bindings;
+    WINDOW *window;
 } env_t;
 
 void start_shell(env_t *env);
@@ -66,5 +66,3 @@ bool envvar_is_valid(const char *str);
 "setenv: Variable name must contain alphanumeric characters.\n"
 
 #define ERROR 84
-
-extern const binding_t emacs_bindings[];
