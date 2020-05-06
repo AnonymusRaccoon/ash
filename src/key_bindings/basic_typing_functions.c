@@ -15,8 +15,8 @@
 int self_insert_command(int key, buffer_t *buffer, env_t *env)
 {
     const char *chars = unctrl(key);
-    int charlens = strlen(chars);
-    int len = (buffer->buffer ? strlen(buffer->buffer) : 0) + charlens;
+    int charslen = strlen(chars);
+    int len = (buffer->buffer ? strlen(buffer->buffer) : 0) + charslen;
 
     if (len > buffer->size || !buffer->buffer) {
         buffer->buffer = realloc(buffer->buffer, buffer->size + 100);
@@ -25,8 +25,8 @@ int self_insert_command(int key, buffer_t *buffer, env_t *env)
     if (!buffer->buffer)
         return (-1);
     for (int i = len - 1; i >= buffer->pos; i--)
-        buffer->buffer[i] = buffer->buffer[i - charlens];
+        buffer->buffer[i] = buffer->buffer[i - charslen];
     strcpy(buffer->buffer + buffer->pos, chars);
-    buffer->pos++;
+    buffer->pos += charslen;
     return (0);
 }
