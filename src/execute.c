@@ -36,6 +36,8 @@ char *eval(char *cmd, char **argv, env_t* env)
     char *path = NULL;
     char **envpath = NULL;
 
+    if (!pathstr)
+        pathstr = "/usr/bin";
     if (pathstr) {
         pathstr = strdup(pathstr);
         if (pathstr)
