@@ -46,6 +46,15 @@ int backward_delete_char_command(int key, buffer_t *buffer, env_t *env)
     return (0);
 }
 
+int delete_char_command(int key, buffer_t *buffer, env_t *env)
+{
+    int len = buffer->buffer ? strlen(buffer->buffer) : 0;
+
+    for (int i = buffer->pos; i < len; i++)
+        buffer->buffer[i] = buffer->buffer[i + 1];
+    return (0);
+}
+
 int newline_command(int key, buffer_t *buffer, env_t *env)
 {
     int ret;

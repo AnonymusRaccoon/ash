@@ -32,4 +32,11 @@ int buffer_get_display_pos(buffer_t *buffer);
 int self_insert_command(int key, buffer_t *buffer, env_t *env);
 int newline_command(int key, buffer_t *buffer, env_t *env);
 int eof_command(int key, buffer_t *buffer, env_t *env);
+
 int backward_delete_char_command(int key, buffer_t *buffer, env_t *env);
+int delete_char_command(int key, buffer_t *buffer, env_t *env);
+
+int forward_char_command(int key, buffer_t *buffer, env_t *env);
+int backward_char_command(int key, buffer_t *buffer, env_t *env);
+int beginning_of_line_command(int key, buffer_t *buffer, env_t *env);
+int end_of_line_command(int key, buffer_t *buffer, env_t *env);
