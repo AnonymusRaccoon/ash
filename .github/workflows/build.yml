@@ -1,0 +1,12 @@
+name: Check if the app builds
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v1
+      - name: Build with Makefile
+        run: make fclean && make clean && make re && make

@@ -2,7 +2,7 @@
 ** EPITECH PROJECT, 2020
 ** ash
 ** File description:
-** get return
+** get_return
 */
 
 #include <stdlib.h>
