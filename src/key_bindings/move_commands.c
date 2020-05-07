@@ -7,6 +7,7 @@
 
 #include "shell.h"
 #include "key_functions.h"
+#include <string.h>
 
 int backward_char_command(int key, buffer_t *buffer, env_t *env)
 {
