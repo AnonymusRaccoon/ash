@@ -34,7 +34,7 @@ int prompt_run(char *cmd, redirection *inout[2], env_t *env)
     }
     if (!argv[0])
         return (0);
-    if (inout[1] == NULL)
+    if (env->window && inout[1] == NULL)
         inout[1] = new_ncurses_pty();
     if (**argv == '!' && argv[0][1] && argv[0][1] != ' ')
         return (run_builtin(&builtins[5], argv, inout, env));

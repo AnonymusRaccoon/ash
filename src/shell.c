@@ -14,6 +14,7 @@
 #include <string.h>
 #include <errno.h>
 #include <ncurses.h>
+#include <unistd.h>
 
 int process_key(int key, buffer_t *buffer, env_t *env)
 {
@@ -35,6 +36,8 @@ WINDOW *window_create()
 
 void window_destroy(WINDOW *window)
 {
+    if (!window)
+        return;
     delwin(window);
     noraw();
     endwin();
@@ -46,14 +49,18 @@ void start_shell(env_t *env)
     int key;
     int y;
 
-    env->window = window_create();
+    if (isatty(0))
+        env->window = window_create();
     prompt_prepare(env);
     do {
-        refresh();
-        y = getcury(env->window);
-        mvaddstr(y, buffer.startx, buffer.buffer);
-        move(y, buffer.pos + buffer.startx);
-        key = getch();
+        if (env->window) {
+            refresh();
+            y = getcury(env->window);
+            mvaddstr(y, buffer.startx, buffer.buffer);
+            move(y, buffer.pos + buffer.startx);
+            key = getch();
+        } else
+            key = fgetc(stdin);
         if (key == ERR)
             break;
     } while (process_key(key, &buffer, env) >= 0);
