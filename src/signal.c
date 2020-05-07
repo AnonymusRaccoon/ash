@@ -54,7 +54,7 @@ void handle_signal(int status, env_t *env)
     free(stat);
     if (!WIFSIGNALED(status))
         return;
-    dprintf(2, "%s %s\nerr", err, WCOREDUMP(status) ? " (core dumped)" : "");
+    dprintf(2, "%s%s\n", err, WCOREDUMP(status) ? " (core dumped)" : "");
 }
 
 void exec_error(char *path, char *cmd)
