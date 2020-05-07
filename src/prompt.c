@@ -46,13 +46,12 @@ int prompt_run(char *cmd, redirection *inout[2], env_t *env)
     return (0);
 }
 
-void prompt_prepare(env_t *env)
+void prompt_prepare(buffer_t *buffer, env_t *env)
 {
     char *prompt = my_getenv(env->vars, "PS1");
 
-    if (isatty(0)) {
-        if (!prompt)
-            prompt = "$ ";
-        write(1, prompt, strlen(prompt));
-    }
+    if (!prompt)
+        prompt = "$ ";
+    mvaddstr(getcury(env->window), 0, prompt);
+    buffer->startx = strlen(prompt);
 }

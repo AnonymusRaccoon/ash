@@ -40,9 +40,12 @@ int newline_command(int key, buffer_t *buffer, env_t *env)
     if (!buffer->buffer)
         return (0);
     add_to_history(buffer->buffer, env);
-    move(getcury(env->window) + 1, 0);
+    if (env->window)
+        move(getcury(env->window) + 1, 0);
     ret = eval_raw_cmd(buffer->buffer, env);
     buffer->buffer[0] = '\0';
     buffer->pos = 0;
+    if (env->window)
+        prompt_prepare(buffer, env);
     return (ret);
 }

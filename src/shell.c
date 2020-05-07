@@ -49,9 +49,10 @@ void start_shell(env_t *env)
     int key;
     int y;
 
-    if (isatty(0))
+    if (isatty(0)) {
         env->window = window_create();
-    prompt_prepare(env);
+        prompt_prepare(&buffer, env);
+    }
     do {
         if (env->window) {
             refresh();
