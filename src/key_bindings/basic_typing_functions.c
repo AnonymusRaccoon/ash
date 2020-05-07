@@ -16,7 +16,7 @@
 
 int self_insert_command(int key, buffer_t *buffer, env_t *env)
 {
-    const char *chars = unctrl(key);
+    const char *chars = key == '\t' ? "        " : unctrl(key);
     int charslen = strlen(chars);
     int len = (buffer->buffer ? strlen(buffer->buffer) : 0) + charslen;
 
