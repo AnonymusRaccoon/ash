@@ -24,7 +24,8 @@ int builtin_history(char **args, env_t *env)
         if (!strcmp(args[1], "-c"))
             return (clear_history(env));
     }
-    return (1);
+    env->vars = my_setenv(env->vars, "?", "1");
+    return (0);
 }
 
 int add_to_history(char *cmd, env_t *env)
@@ -78,6 +79,7 @@ int execute_from_history(char **args, env_t *env)
             return (execute_command_history(tmp, last, args, env));
     }
     printf("%s: Event not found.\n", &args[0][1]);
+    env->vars = my_setenv(env->vars, "?", "1");
     return (0);
 }
 
