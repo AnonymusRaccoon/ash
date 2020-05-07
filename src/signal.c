@@ -54,22 +54,16 @@ void handle_signal(int status, env_t *env)
     free(stat);
     if (!WIFSIGNALED(status))
         return;
-    write(2, err, strlen(err));
-    if (WCOREDUMP(status))
-        write(2, " (core dumped)", 15);
-    write(2, "\n", 1);
+    dprintf(2, "%s %s\nerr", err, WCOREDUMP(status) ? " (core dumped)" : "");
 }
 
 void exec_error(char *path, char *cmd)
 {
-    if (errno == ENOEXEC) {
-        printf("%s: Exec format error. Wrong Architecture.\n", cmd);
-    } else if (access(path, F_OK) == 0) {
-        write(2, cmd, strlen(cmd));
-        write(2, ": Permission denied.\n", 22);
-    } else {
-        write(2, cmd, strlen(cmd));
-        write(2, ": Command not found.\n", 21);
-    }
+    if (errno == ENOEXEC)
+        dprintf(2, "%s: Exec format error. Wrong Architecture.\n", cmd);
+    else if (access(path, F_OK) == 0)
+        dprintf(2, "%s: Permission denied.\n", cmd);
+    else
+        dprintf(2, "%s: Command not found.\n", cmd);
     exit(1);
 }
