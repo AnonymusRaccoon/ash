@@ -36,12 +36,13 @@ int get_nb_commands(char *cmd)
 int *get_return_separator(char *cmd)
 {
     int len = get_nb_commands(cmd);
-    int *array = malloc(sizeof(int) * len);
+    int *array = malloc(sizeof(int) * (len + 1));
     int pos = 1;
 
     if (!array)
         return (NULL);
     array[0] = -1;
+    array[len] = -2;
     for (int i = 0; cmd[i + 1]; i++) {
         if (cmd[i] == ';')
             array[pos] = -1;
@@ -76,4 +77,21 @@ char **split_commands(char *cmd)
             cmd += 2;
     }
     return (array);
+}
+
+int split_is_invalid(char **cmds, int *return_values, int i)
+{
+    if (return_values[i] != 0 && return_values[i] != 1)
+        return (0);
+    if (i != 0) {
+        if (return_values[i] == 1 && !strlen(cmds[i - 1]))
+            return (1);
+        if (return_values[i] == 0 && !strlen(cmds[i]) && !strlen(cmds[i - 1]))
+            return (0);
+        if (return_values[i] == 0 && !strlen(cmds[i]))
+            return (1);
+    }
+    if (return_values[i] != -1 && !strlen(cmds[i]))
+        return (1);
+    return (0);
 }
