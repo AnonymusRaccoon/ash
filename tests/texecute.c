@@ -9,7 +9,7 @@
 #include <criterion/redirect.h>
 #include "shell.h"
 
-void eval(char *cmd, char **argv, env_t* env);
+char *eval(char *cmd, char **argv, env_t* env);
 
 extern char **environ;
 

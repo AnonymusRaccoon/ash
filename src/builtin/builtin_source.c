@@ -16,27 +16,27 @@
 #include "utility.h"
 #include "shell.h"
 
-static void start_script(char *path, env_t *env)
+static void start_script(char **argv, env_t *env, int len_argv)
 {
     char *str = NULL;
     char **arr = NULL;
-    int fd = open(path, O_RDONLY);
+    int fd = open(argv[1], O_RDONLY);
     bool should_close = false;
     struct stat st_buff;
 
     if (fd == -1)
         return;
-    stat(path, &st_buff);
-    str = malloc(st_buff.st_size);
-    if (!str) {
-        close(fd);
-        return;
+    stat(argv[1], &st_buff);
+    str = malloc(st_buff.st_size + 1);
+    if (str) {
+        read(fd, str, st_buff.st_size);
+        arr = split_str(str, '\n');
+        if (arr)
+            for (int i = 0; arr[i] && !should_close; i++)
+                should_close = (eval_raw_cmd(parse_source_cmd(arr[i],
+                                argv, len_argv), env) < 0);
+        free(str);
     }
-    read(fd, str, st_buff.st_size);
-    arr = split_str(str, '\n');
-    if (arr)
-        for (int i = 0; arr[i] && !should_close; i++)
-            should_close = (eval_raw_cmd(strdup(arr[i]), env) < 0);
     close(fd);
 }
 
@@ -72,6 +72,6 @@ int builtin_source(char **argv, env_t *env)
         return (0);
     }
     if (file_is_accessible(argv[1]))
-        start_script(argv[1], env);
+        start_script(argv, env, len);
     return (0);
 }

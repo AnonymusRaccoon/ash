@@ -19,6 +19,7 @@ SRC = src/shell.c \
 	src/builtin/builtin_manager.c \
 	src/builtin/builtin_env.c \
 	src/builtin/builtin_source.c \
+	src/builtin/builtin_source_two.c \
 	src/builtin/builtin_which.c \
 	src/builtin/builtin_where.c \
 	src/signal.c \
@@ -32,6 +33,7 @@ SRC = src/shell.c \
 	src/utility/envpath.c \
 	src/utility/fusion.c	\
 	src/utility/split_commands.c \
+	src/utility/get_return.c \
 
 OBJ = $(SRC:%.c=%.o)
 OBJ += src/main.o
@@ -39,7 +41,8 @@ OBJ += src/main.o
 TESTS = tests/tenv.c \
 	tests/targc.c \
 	tests/texecute.c \
-	tests/tcd.c
+	tests/tcd.c \
+	tests/tsource.c \
 
 COVERAGE = -lcriterion --coverage
 
