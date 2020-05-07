@@ -78,8 +78,6 @@ void start_shell(env_t *env)
             key = getch();
         } else
             key = fgetc(stdin);
-        if (key == ERR)
-            break;
-    } while (process_key(key, &buffer, env) >= 0);
+    } while (key != ERR && process_key(key, &buffer, env) >= 0);
     window_destroy(env->window);
 }
