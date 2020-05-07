@@ -73,6 +73,7 @@ void start_shell(env_t *env)
             refresh();
             y = getcury(env->window);
             mvaddstr(y, buffer.startx, buffer.buffer);
+            clrtoeol();
             move(y, buffer_get_display_pos(&buffer));
             key = getch();
         } else
