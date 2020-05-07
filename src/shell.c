@@ -43,6 +43,21 @@ void window_destroy(WINDOW *window)
     endwin();
 }
 
+int buffer_get_display_pos(buffer_t *buffer)
+{
+    int pos = buffer->startx;
+    int tmp;
+
+    for (int i = 0; i < buffer->pos; i++) {
+        if (buffer->buffer[i] == '\t') {
+            tmp = TABSIZE - pos % TABSIZE;
+            pos += tmp == 0 ? TABSIZE : tmp;
+        } else
+            pos++;
+    }
+    return pos;
+}
+
 void start_shell(env_t *env)
 {
     buffer_t buffer = {.size = 0, .buffer = NULL, .pos = 0, .startx = 0};
@@ -58,7 +73,7 @@ void start_shell(env_t *env)
             refresh();
             y = getcury(env->window);
             mvaddstr(y, buffer.startx, buffer.buffer);
-            move(y, buffer.pos + buffer.startx);
+            move(y, buffer_get_display_pos(&buffer));
             key = getch();
         } else
             key = fgetc(stdin);

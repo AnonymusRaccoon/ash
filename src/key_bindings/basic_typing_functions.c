@@ -8,6 +8,7 @@
 #include "shell.h"
 #include "builtin.h"
 #include "key_functions.h"
+#include "utility.h"
 #include <termios.h>
 #include <malloc.h>
 #include <stddef.h>
@@ -16,7 +17,7 @@
 
 int self_insert_command(int key, buffer_t *buffer, env_t *env)
 {
-    const char *chars = key == '\t' ? "        " : unctrl(key);
+    const char *chars = key == '\t' ? "\t" : unctrl(key);
     int charslen = strlen(chars);
     int len = (buffer->buffer ? strlen(buffer->buffer) : 0) + charslen;
 
