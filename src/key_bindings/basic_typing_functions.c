@@ -63,7 +63,7 @@ int newline_command(int key, buffer_t *buffer, env_t *env)
         return (0);
     add_to_history(buffer->buffer, env);
     if (env->window)
-        move(getcury(env->window) + 1, 0);
+        mvaddch(getcury(env->window), getmaxx(env->window) - 1, '\n');
     ret = eval_raw_cmd(buffer->buffer, env);
     buffer->buffer[0] = '\0';
     buffer->pos = 0;

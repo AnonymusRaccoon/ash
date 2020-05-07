@@ -84,11 +84,10 @@ void pty_get_output(redirection *pty, env_t *env)
     char *line = NULL;
     size_t size = 0;
     FILE *file = fdopen(pty->extra_data, "r");
-    int y = getcury(env->window);
 
     close(pty->fd);
     while (getline(&line, &size, file) > 0)
-        mvaddstr(y++, 0, line);
+        addstr(line);
     if (line)
         free(line);
     fclose(file);

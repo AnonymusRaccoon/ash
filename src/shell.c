@@ -31,6 +31,7 @@ WINDOW *window_create()
     raw();
     noecho();
     keypad(window, true);
+    scrollok(window, true);
     return (window);
 }
 
