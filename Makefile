@@ -8,6 +8,7 @@
 SRC = src/shell.c \
 	src/prompt.c \
 	src/execute.c \
+	src/glob.c \
 	src/redirections/redirection_manager.c \
 	src/redirections/redirections.c \
 	src/redirections/redirections_functions.c \
@@ -29,7 +30,6 @@ SRC = src/shell.c \
 	src/utility/fusion.c	\
 	src/utility/split_commands.c \
 	src/utility/get_return.c	\
-	src/glob.c
 
 OBJ = $(SRC:%.c=%.o)
 OBJ += src/main.o
