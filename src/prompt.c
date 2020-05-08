@@ -26,7 +26,7 @@ const builtin builtins[] = {
 
 int prompt_run(char *cmd, redirection *inout[2], env_t *env)
 {
-    char **argv = split_str(cmd, ' ');
+    char **argv = get_argv(cmd);
 
     if (!argv) {
         perror("mysh");
