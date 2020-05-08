@@ -28,6 +28,7 @@ int prompt_run(char *cmd, redirection *inout[2], env_t *env)
 {
     char **argv = split_str(cmd, ' ');
 
+    argv = globbing(argv);
     if (!argv) {
         perror("mysh");
         return (-1);
