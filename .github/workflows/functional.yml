@@ -1,0 +1,12 @@
+name: Run functional tests
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v1
+      - name: Build with Makefile & Execute tests
+        run: make func

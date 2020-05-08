@@ -20,6 +20,7 @@ const builtin builtins[] = {
     {"unsetenv", &builtin_unsetenv},
     {"exit", &builtin_exit},
     {"cd", &builtin_cd},
+    {"history", &builtin_history},
     {NULL, NULL}
 };
 
@@ -33,6 +34,8 @@ int prompt_run(char *cmd, redirection *inout[2], env_t *env)
     }
     if (!argv[0])
         return (0);
+    if (**argv == '!' && argv[0][1] && argv[0][1] != ' ')
+        return (run_builtin(&builtins[5], argv, inout, env));
     for (int i = 0; builtins[i].name; i++)
         if (!strcmp(argv[0], builtins[i].name))
             return (run_builtin(&builtins[i], argv, inout, env));

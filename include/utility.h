@@ -17,3 +17,7 @@ bool envvar_is_valid(const char *str);
 int count_str(char *str, char *delim);
 char **split_str(char *str, char delim);
 char *same_var(char *str, const char *to_find);
+char *fusion(char *command, char **args);
+char **split_commands(char *cmd);
+int *get_return_separator(char *cmd);
+int split_is_invalid(char **cmds, int *return_values, int i);

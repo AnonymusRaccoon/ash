@@ -5,26 +5,31 @@
 ## Makefile
 ##
 
-SRC = src/shell.c								\
-	src/prompt.c								\
-	src/execute.c								\
-	src/glob.c									\
-	src/redirections/redirection_manager.c		\
-	src/redirections/redirections.c				\
-	src/redirections/redirections_functions.c	\
-	src/redirections/redirection_validator.c	\
-	src/env.c									\
-	src/args.c									\
-	src/builtin/builtin_manager.c				\
-	src/builtin/builtin_env.c					\
-	src/signal.c								\
-	src/free_env.c								\
-	src/utility/same_var.c						\
-	src/utility/tostr.c							\
-	src/utility/envvar_is_valid.c				\
-	src/utility/to_array.c						\
-	src/utility/catpath.c						\
-	src/utility/split_str.c
+SRC = src/shell.c \
+	src/prompt.c \
+	src/execute.c \
+	src/redirections/redirection_manager.c \
+	src/redirections/redirections.c \
+	src/redirections/redirections_functions.c \
+	src/redirections/redirection_validator.c \
+	src/env.c \
+	src/args.c \
+	src/builtin/builtin_history.c \
+	src/builtin/builtin_history_two.c \
+	src/builtin/builtin_manager.c \
+	src/builtin/builtin_env.c \
+	src/signal.c \
+	src/free_env.c \
+	src/utility/same_var.c \
+	src/utility/tostr.c \
+	src/utility/envvar_is_valid.c \
+	src/utility/to_array.c \
+	src/utility/catpath.c \
+	src/utility/split_str.c \
+	src/utility/fusion.c	\
+	src/utility/split_commands.c \
+	src/utility/get_return.c	\
+	src/glob.c
 
 OBJ = $(SRC:%.c=%.o)
 OBJ += src/main.o
@@ -58,8 +63,8 @@ tests_run: clean
 	$(UT)
 
 func: all
-	cd tests/tester/ && cp ../../mysh mysh && ./tester.sh
-	rm tests/tester/mysh
+	cd tests/tester/ && cp ../../$(NAME) $(NAME) && ./tester.sh
+	rm tests/tester/$(NAME)
 
 clean:
 	$(RM) $(OBJ)

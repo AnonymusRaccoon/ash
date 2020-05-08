@@ -14,6 +14,7 @@
 #include <sys/wait.h>
 #include <string.h>
 #include "utility.h"
+#include "builtin.h"
 
 const redirection_map redirections[] = {
     {"|", &get_pipe_fd, &handle_pipe, OUTPUT | PIPE | EX_PIPE},
@@ -77,19 +78,37 @@ int run_with_redirections(char *cmd, env_t *env, redirection *input)
     return (prompt_run(cmd, inout, env));
 }
 
-int eval_raw_cmd(char *cmd, env_t *env)
+int command_format_is_invalid(char **cmds, env_t *env, int *return_values)
 {
-    char **cmds = split_str(cmd, ';');
-    int ret = 0;
-
     for (int i = 0; cmds[i]; i++) {
         if (redirections_are_invalid(cmds[i])) {
-            my_setenv(env->vars, "?", "1");
-            return (0);
+            env->env = my_setenv(env->vars, "?", "1");
+            return (1);
+        } else if (split_is_invalid(cmds, return_values, i)) {
+            write(2, "Invalid null command\n", 22);
+            env->vars = my_setenv(env->vars, "?", "1");
+            return (1);
         }
     }
-    for (int i = 0; cmds[i]; i++)
-        if (run_with_redirections(cmds[i], env, NULL))
+    return (0);
+}
+
+int eval_raw_cmd(char *cmd, env_t *env)
+{
+    int *return_values = get_return_separator(cmd);
+    char **cmds = split_commands(cmd);
+    int ret = 0;
+
+    if (!cmds)
+        return (-1);
+    if (command_format_is_invalid(cmds, env, return_values))
+        return (0);
+    for (int i = 0; cmds[i]; i++) {
+        if ((return_values[i] == 0 && get_return(my_getenv(env->vars, "?"))) ||
+        (return_values[i] == 1 && !get_return(my_getenv(env->vars, "?")))){
+            for (; return_values[i + 1] != -1 && cmds[i + 1]; i++);
+        } else if (run_with_redirections(cmds[i], env, NULL))
             ret = -1;
+    }
     return (ret);
 }

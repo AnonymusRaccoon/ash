@@ -11,13 +11,6 @@
 #include <stddef.h>
 #include <string.h>
 
-int get_return(char *ret)
-{
-    if (!ret)
-        return (0);
-    return (atoi(ret));
-}
-
 int main(int argc, char **argv, char **env)
 {
     env_t *envt = malloc(sizeof(*envt));
@@ -31,6 +24,7 @@ int main(int argc, char **argv, char **env)
     envcp[env_get_length(env)] = NULL;
     envt->env = envcp;
     envt->vars = NULL;
+    envt->history = NULL;
     start_shell(envt);
     ret = get_return(my_getenv(envt->vars, "?"));
     (void)argc;
