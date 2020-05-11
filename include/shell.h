@@ -47,6 +47,8 @@ char **my_setenv(char **env, char *name, char *value);
 char **my_unsetenv(char **env, char *name);
 bool envvar_is_valid(const char *str);
 
+char **globbing(char **argv);
+
 #define INVALID_ENV_VAR \
 "setenv: Variable name must contain alphanumeric characters.\n"
 

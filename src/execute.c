@@ -50,7 +50,8 @@ char *eval(char *cmd, char **argv, env_t* env)
             path = find_binary(cmd, envpath[i]);
     } else
         path = cmd;
-    execve(path, argv, env->env);
+    if (path != NULL)
+        execve(path, argv, env->env);
     return (path);
 }
 
