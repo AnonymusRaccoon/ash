@@ -20,11 +20,20 @@ typedef struct history_s
     struct history_s *next;
 } history_t;
 
+typedef struct alias_s
+{
+    char print;
+    char *alias;
+    char *command;
+    struct alias_s *next;
+} alias_t;
+
 typedef struct env_s
 {
     char **env;
     char **vars;
     history_t *history;
+    alias_t *alias;
 } env_t;
 
 void start_shell(env_t *env);
@@ -53,5 +62,8 @@ char **globbing(char **argv);
 
 #define INVALID_ENV_VAR \
 "setenv: Variable name must contain alphanumeric characters.\n"
+
+int exec_alias(char **argv, env_t *env);
+
 
 #define ERROR 84
