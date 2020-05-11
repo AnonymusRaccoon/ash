@@ -30,12 +30,14 @@ char *find_binary(char *cmd, char *folder)
     return (path);
 }
 
-char *eval(char *cmd, char **argv, env_t* env)
+char *eval(char *cmd, char **argv, env_t *env)
 {
-    char *pathstr= my_getenv(env->env, "PATH");
+    char *pathstr = my_getenv(env->env, "PATH");
     char *path = NULL;
     char **envpath = NULL;
 
+    if (!pathstr)
+        pathstr = "/usr/bin";
     if (pathstr) {
         pathstr = strdup(pathstr);
         if (pathstr)
@@ -48,7 +50,8 @@ char *eval(char *cmd, char **argv, env_t* env)
             path = find_binary(cmd, envpath[i]);
     } else
         path = cmd;
-    execve(path, argv, env->env);
+    if (path != NULL)
+        execve(path, argv, env->env);
     return (path);
 }
 

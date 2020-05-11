@@ -35,6 +35,8 @@ void prompt_prepare(env_t *env);
 int eval_raw_cmd(char *cmd, env_t *env);
 int run_with_redirections(char *cmd, env_t *env, redirection *input);
 void run_cmd(char **argv, redirection *inout[2], env_t *env);
+char *eval(char *cmd, char **argv, env_t *env);
+char *find_binary(char *cmd, char *folder);
 void handle_signal(int status, env_t *env);
 char **get_argv(char *cmd);
 int get_argc(char **argv);
@@ -46,6 +48,8 @@ char *my_getenv(char **env, char *name);
 char **my_setenv(char **env, char *name, char *value);
 char **my_unsetenv(char **env, char *name);
 bool envvar_is_valid(const char *str);
+
+char **globbing(char **argv);
 
 #define INVALID_ENV_VAR \
 "setenv: Variable name must contain alphanumeric characters.\n"
