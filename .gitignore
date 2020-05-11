@@ -5,3 +5,5 @@
 **/*.gcda
 **/*.gcno
 unit_tests
+test_shell/
+func_tests
