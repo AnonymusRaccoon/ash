@@ -30,7 +30,7 @@ char *find_binary(char *cmd, char *folder)
     return (path);
 }
 
-char *eval(char *cmd, char **argv, env_t* env)
+char *eval(char *cmd, char **argv, env_t *env)
 {
     char *pathstr = my_getenv(env->env, "PATH");
     char *path = NULL;

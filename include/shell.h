@@ -35,6 +35,8 @@ void prompt_prepare(env_t *env);
 int eval_raw_cmd(char *cmd, env_t *env);
 int run_with_redirections(char *cmd, env_t *env, redirection *input);
 void run_cmd(char **argv, redirection *inout[2], env_t *env);
+char *eval(char *cmd, char **argv, env_t *env);
+char *find_binary(char *cmd, char *folder);
 void handle_signal(int status, env_t *env);
 char **get_argv(char *cmd);
 int get_argc(char **argv);

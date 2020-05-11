@@ -21,6 +21,9 @@ const builtin builtins[] = {
     {"exit", &builtin_exit},
     {"cd", &builtin_cd},
     {"history", &builtin_history},
+    {"which", &builtin_which},
+    {"where", &builtin_where},
+    {"source", &builtin_source},
     {NULL, NULL}
 };
 

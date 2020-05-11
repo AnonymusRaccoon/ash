@@ -5,3 +5,4 @@
 **/*.gcda
 **/*.gcno
 unit_tests
+.vscode

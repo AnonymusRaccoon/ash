@@ -19,6 +19,10 @@ SRC = src/shell.c \
 	src/builtin/builtin_history_two.c \
 	src/builtin/builtin_manager.c \
 	src/builtin/builtin_env.c \
+	src/builtin/builtin_source.c \
+	src/builtin/builtin_source_two.c \
+	src/builtin/builtin_which.c \
+	src/builtin/builtin_where.c \
 	src/signal.c \
 	src/free_env.c \
 	src/utility/same_var.c \
@@ -27,6 +31,7 @@ SRC = src/shell.c \
 	src/utility/to_array.c \
 	src/utility/catpath.c \
 	src/utility/split_str.c \
+	src/utility/envpath.c \
 	src/utility/fusion.c	\
 	src/utility/split_commands.c \
 	src/utility/get_return.c	\
@@ -37,7 +42,8 @@ OBJ += src/main.o
 TESTS = tests/tenv.c \
 	tests/targc.c \
 	tests/texecute.c \
-	tests/tcd.c
+	tests/tcd.c \
+	tests/tsource.c \
 
 COVERAGE = -lcriterion --coverage
 
@@ -51,7 +57,7 @@ INCLUDE = -I ./include
 
 CFLAGS = $(INCLUDE) -Wall -Wextra -Wshadow
 
-LDFLAGS = 
+LDFLAGS = \
 
 all: $(NAME)
 
