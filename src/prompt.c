@@ -73,7 +73,7 @@ char **get_alias(char **argv, env_t *env)
     if (!argv)
         return (NULL);
     for (; tmp; tmp = tmp->next) {
-        if (strcmp(argv[0], tmp->alias) || !tmp->print)
+        if (strcmp(argv[0], tmp->alias))
             continue;
         command = fusion(tmp->command, argv);
         if (!command)

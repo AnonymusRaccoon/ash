@@ -49,6 +49,7 @@ char *parse_source_cmd(char *cmd, char **argv, int len_argv);
 int add_alias(alias_t **list, char *alias, char **command);
 char *concatenate(char **command);
 void print_aliases(alias_t *list);
+int add_alias_to_list(alias_t **list, alias_t *elem, char *alias);
 
 //unalias
-void remove_alias(char *alias, alias_t *list);
+void remove_alias(char *alias, alias_t **list);

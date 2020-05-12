@@ -22,7 +22,6 @@ typedef struct history_s
 
 typedef struct alias_s
 {
-    char print;
     char *alias;
     char *command;
     struct alias_s *next;
