@@ -85,7 +85,7 @@ int command_format_is_invalid(char **cmds, env_t *env, int *return_values)
             env->env = my_setenv(env->vars, "?", "1");
             return (1);
         } else if (split_is_invalid(cmds, return_values, i)) {
-            write(2, "Invalid null command\n", 22);
+            write(2, "Invalid null command.\n", 22);
             env->vars = my_setenv(env->vars, "?", "1");
             return (1);
         }
