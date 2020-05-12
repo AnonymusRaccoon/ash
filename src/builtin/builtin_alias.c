@@ -10,20 +10,19 @@
 #include <utility.h>
 #include <stdlib.h>
 #include <string.h>
-#include <stdio.h>
+#include <unistd.h>
 
 int builtin_alias(char **argv, env_t *env)
 {
     if (!argv[1])
         print_aliases(env->alias);
     if (argv[1])
-        return(add_alias(&(env->alias), argv[1], &argv[2]));
+        return (add_alias(&(env->alias), argv[1], &argv[2]));
     return (0);
 }
 
 int add_alias(alias_t **list, char *alias, char **command)
 {
-    alias_t *tmp = *list;
     alias_t *elem = NULL;
 
     if (!command[0])
@@ -38,6 +37,13 @@ int add_alias(alias_t **list, char *alias, char **command)
         *list = elem;
         return (0);
     }
+    return (add_alias_to_list(list, elem, alias));
+}
+
+int add_alias_to_list(alias_t **list, alias_t *elem, char *alias)
+{
+    alias_t *tmp = *list;
+
     for (tmp = *list; tmp; tmp = tmp->next) {
         if (!strcmp(alias, tmp->alias)) {
             tmp->command = elem->command;
@@ -79,7 +85,7 @@ char *concatenate(char **command)
     for (int i = 0; command[i]; i++) {
         for (int k = 0; command[i][k]; k++)
             concatened[pos++] = command[i][k];
-        concatened[pos++] = command[i + 1] ?  ' ' : ')';
+        concatened[pos++] = command[i + 1] ? ' ' : ')';
     }
     return (concatened);
 }
@@ -87,6 +93,10 @@ char *concatenate(char **command)
 void print_aliases(alias_t *list)
 {
     for (alias_t *tmp = list; tmp; tmp = tmp->next)
-        if (tmp->print)
-            printf("%s\t%s\n", tmp->alias, tmp->command);
+        if (tmp->print) {
+            write(1, tmp->alias, strlen(tmp->alias));
+            write(1, "\t", 1);
+            write(1, tmp->command, strlen(tmp->command));
+            write(1, "\n", 1);
+        }
 }

@@ -41,10 +41,9 @@ int prompt_run(char *cmd, redirection *inout[2], env_t *env)
     if (!argv[0])
         return (0);
     argv = globbing(argv);
+    argv = get_alias(argv, env);
     if (!argv)
         return (0);
-    if (exec_alias(argv, env))
-        return (1);
     if (**argv == '!' && argv[0][1] && argv[0][1] != ' ')
         return (run_builtin(&builtins[5], argv, inout, env));
     for (int i = 0; builtins[i].name; i++)
@@ -66,18 +65,20 @@ void prompt_prepare(env_t *env)
     }
 }
 
-int exec_alias(char **argv, env_t *env)
+char **get_alias(char **argv, env_t *env)
 {
     alias_t *tmp = env->alias;
     char *command = NULL;
 
-    for(; tmp; tmp = tmp->next) {
-        if (strcmp(argv[0], tmp->alias))
+    if (!argv)
+        return (NULL);
+    for (; tmp; tmp = tmp->next) {
+        if (strcmp(argv[0], tmp->alias) || !tmp->print)
             continue;
         command = fusion(tmp->command, argv);
         if (!command)
-            return (1);
-        return (eval_raw_cmd(command, env));
+            return (NULL);
+        return (get_argv(command));
     }
-    return (0);
+    return (argv);
 }

@@ -63,7 +63,7 @@ char **globbing(char **argv);
 #define INVALID_ENV_VAR \
 "setenv: Variable name must contain alphanumeric characters.\n"
 
-int exec_alias(char **argv, env_t *env);
+char **get_alias(char **argv, env_t *env);
 
 
 #define ERROR 84
