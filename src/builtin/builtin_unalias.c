@@ -32,7 +32,6 @@ void free_alias(alias_t *alias)
 
 void remove_alias(char *alias, alias_t **list)
 {
-
     alias_t *tmp = *list;
 
     if (!tmp)
@@ -52,5 +51,5 @@ void remove_alias(char *alias, alias_t **list)
     }
     for (tmp = *list; tmp; tmp = tmp->next->next);
     free_alias(tmp->next);
-    tmp->next = 0;
+    tmp->next = NULL;
 }

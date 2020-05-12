@@ -30,7 +30,7 @@ char **globbing(char **argv)
     int ret = 0;
 
     for (int i = 0; argv[i] && ret == 0; i++) {
-        flags |= (i > 0 ?  GLOB_APPEND : 0);
+        flags |= (i > 0 ? GLOB_APPEND : 0);
         ret = glob(argv[i], flags, NULL, &results);
     }
     if (ret != 0) {
