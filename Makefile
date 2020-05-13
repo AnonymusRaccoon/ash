@@ -23,6 +23,8 @@ SRC = src/shell.c \
 	src/builtin/builtin_source_two.c \
 	src/builtin/builtin_which.c \
 	src/builtin/builtin_where.c \
+	src/builtin/builtin_alias.c \
+	src/builtin/builtin_unalias.c \
 	src/signal.c \
 	src/free_env.c \
 	src/utility/same_var.c \

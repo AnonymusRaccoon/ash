@@ -26,6 +26,8 @@ int builtin_which(char **argv, env_t *env);
 int builtin_where(char **argv, env_t *env);
 int builtin_source(char **argv, env_t *env);
 int builtin_history(char **args, env_t *env);
+int builtin_alias(char **args, env_t *env);
+int builtin_unalias(char **args, env_t *env);
 //utility
 bool find_path_in_builtins(char *cmd);
 char **get_envpath(env_t *env);
@@ -42,3 +44,12 @@ int execute_command_history(history_t *old, history_t *new,
 char **args, env_t *env);
 //source
 char *parse_source_cmd(char *cmd, char **argv, int len_argv);
+
+//alias
+int add_alias(alias_t **list, char *alias, char **command);
+char *concatenate(char **command);
+void print_aliases(alias_t *list);
+int add_alias_to_list(alias_t **list, alias_t *elem, char *alias);
+
+//unalias
+void remove_alias(char *alias, alias_t **list);

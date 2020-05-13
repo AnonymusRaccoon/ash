@@ -15,7 +15,7 @@ int count_char_in_str(char *str, char c)
 {
     int res = 0;
 
-    for(int i = 0; str[i]; i++)
+    for (int i = 0; str[i]; i++)
         if (str[i] == c)
             res++;
     return (res);
