@@ -21,8 +21,8 @@ char *get_alias(char *cmd, alias_t *alias)
     if (!array)
         return (cmd);
     for (int i = 0; array[i]; i++) {
-        if (strlen(array[i]) && (strncmp("alias", array[i], 5)
-            && strncmp("unalias", array[i], 7)))
+        if (strlen(array[i]) && (strncmp("alias ", array[i], 6)
+            && strncmp("unalias ", array[i], 8)))
             array[i] = replace_alias(array[i], alias);
         array[i] = add_separator(array[i], return_values, i);
         if (!array[i])
