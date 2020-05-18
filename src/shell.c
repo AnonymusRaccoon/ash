@@ -15,6 +15,7 @@
 #include <errno.h>
 #include <ncurses.h>
 #include <unistd.h>
+#include <termios.h>
 
 int process_key(int key, buffer_t *buffer, env_t *env)
 {
@@ -26,13 +27,21 @@ int process_key(int key, buffer_t *buffer, env_t *env)
 
 WINDOW *window_create()
 {
-    WINDOW *window = initscr();
+    // WINDOW *window = initscr();
 
-    raw();
-    noecho();
-    keypad(window, true);
-    scrollok(window, true);
-    return (window);
+    // raw();
+    // noecho();
+    // keypad(window, true);
+    // scrollok(window, true);
+    // idlok(window, true);
+    // return (window);
+    struct termios term;
+
+    tcgetattr(0, &term);
+    term.c_iflag &= ~(IXON | ICRNL);
+    term.c_lflag &= ~(ECHO | ICANON | ISIG | IEXTEN);
+    tcsetattr(0, TCSANOW, &term);
+    return (NULL);
 }
 
 void window_destroy(WINDOW *window)
@@ -70,15 +79,19 @@ void start_shell(env_t *env)
         prompt_prepare(&buffer, env);
     }
     do {
-        if (env->window) {
-            refresh();
-            y = getcury(env->window);
-            mvaddstr(y, buffer.startx, buffer.buffer);
-            clrtoeol();
-            move(y, buffer_get_display_pos(&buffer));
-            key = getch();
-        } else
-            key = fgetc(stdin);
+
+        key = fgetc(stdin);
+        printf("%c (%d)\n", key, key);
+        printf("Buffer: %s\n", buffer.buffer);
+        // if (env->window) {
+            // refresh();
+            // y = getcury(env->window);
+            // mvaddstr(y, buffer.startx, buffer.buffer);
+            // clrtoeol();
+            // move(y, buffer_get_display_pos(&buffer));
+            // key = getch();
+        // } else
+            // key = fgetc(stdin);
     } while (key != ERR && process_key(key, &buffer, env) >= 0);
-    window_destroy(env->window);
+    // window_destroy(env->window);
 }
