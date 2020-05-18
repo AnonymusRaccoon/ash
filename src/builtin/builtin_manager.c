@@ -70,3 +70,12 @@ int builtin_exit(char **argv, env_t *env)
     (void)env;
     return (-1);
 }
+
+int get_argc(char **argv)
+{
+    int i = 0;
+
+    while (argv[i])
+        i++;
+    return (i);
+}

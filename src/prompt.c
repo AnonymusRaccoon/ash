@@ -57,11 +57,10 @@ bool matched_quotes(char *cmd)
 
 int prompt_run(char *cmd, redirection *inout[2], env_t *env)
 {
-    char **argv = NULL;
+    char **argv = get_argv(strdup(cmd));
 
     if (!matched_quotes(cmd))
         return (0);
-    argv = get_argv(cmd);
     if (!argv) {
         perror("mysh");
         return (-1);

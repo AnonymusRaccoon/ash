@@ -9,6 +9,7 @@
 #include <malloc.h>
 #include <stdbool.h>
 #include <string.h>
+#include <shell.h>
 
 int get_arg_count(char *cmd)
 {
@@ -21,26 +22,37 @@ int get_arg_count(char *cmd)
     return (count);
 }
 
-int get_argc(char **argv)
+char **get_argv(char *cmd)
 {
-    int i = 0;
+    char **argv = calloc(get_arg_count(cmd) + 2, sizeof(char *));
 
-    while (argv[i])
-        i++;
-    return (i);
+    if (!argv)
+        return (NULL);
+    argv = split_args(cmd, argv, 0, 0);
+    return (argv);
 }
 
-char **remove_quotes(char **argv)
+char **split_args(char *cmd, char **argv, int nb_simple, int nb_double)
 {
-    int len = 0;
-    for (int i = 0; argv[i]; i++) {
-        len = strlen(argv[i]);
-        if ((argv[i][0] == '\"' && argv[i][len - 1] == '\"')
-        || (argv[i][0] == '\'' && argv[i][len - 1] == '\'')) {
-            argv[i][len - 1] = 0;
-            argv[i]++;
-        }
+    int i = 0;
+    int j = 0;
+
+    for (i = 0; cmd[i]; i++) {
+        if (cmd[i] == '\\')
+            i += 2;
+        nb_simple += cmd[i] == '\'' ? 1 : 0;
+        nb_double += cmd[i] == '\"' ? 1 : 0;
+        if ((nb_double % 2 == 1 || nb_simple % 2 == 1)
+            || (cmd[i] != ' ' && cmd[i] != '\t'))
+            continue;
+        cmd[i] = '\0';
+        if (i > 0)
+            argv[j++] = remove_backslash(cmd);
+        cmd += i + 1;
+        i = -1;
     }
+    if (i > 0)
+        argv[j++] = remove_backslash(cmd);
     return (argv);
 }
 
@@ -66,33 +78,16 @@ char *remove_backslash(char *cmd)
     return (cmd);
 }
 
-char **get_argv(char *cmd)
+char **remove_quotes(char **argv)
 {
-    char **argv = calloc(get_arg_count(cmd) + 2, sizeof(char *));
-    int i;
-    int j = 0;
-    int nb_simple = 0;
-    int nb_double = 0;
-
-    if (!argv)
-        return (NULL);
-    for (i = 0; cmd[i]; i++) {
-        if (cmd[i] == '\\') {
-            i++;
-            continue;
+    int len = 0;
+    for (int i = 0; argv[i]; i++) {
+        len = strlen(argv[i]);
+        if ((argv[i][0] == '\"' && argv[i][len - 1] == '\"')
+        || (argv[i][0] == '\'' && argv[i][len - 1] == '\'')) {
+            argv[i][len - 1] = 0;
+            argv[i]++;
         }
-        nb_simple += cmd[i] == '\'' ? 1 : 0;
-        nb_double += cmd[i] == '\"' ? 1 : 0;
-        if ((nb_double % 2 == 1 || nb_simple % 2 == 1)
-            || (cmd[i] != ' ' && cmd[i] != '\t'))
-            continue;
-        cmd[i] = '\0';
-        if (i > 0)
-            argv[j++] = remove_backslash(cmd);
-        cmd += i + 1;
-        i = -1;
     }
-    if (i > 0)
-        argv[j++] = remove_backslash(cmd);
     return (argv);
 }

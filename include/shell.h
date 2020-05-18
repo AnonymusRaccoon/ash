@@ -69,5 +69,7 @@ char *get_alias_command(char *cmd, alias_t *alias);
 
 char **remove_quotes(char **argv);
 bool matched_quotes(char *cmd);
+char **split_args(char *cmd, char **argv, int nb_simple, int nb_double);
+char *remove_backslash(char *cmd);
 
 #define ERROR 84
