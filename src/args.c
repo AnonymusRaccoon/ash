@@ -58,7 +58,7 @@ char *remove_backslash(char *cmd)
         if (cmd[i + 1] == 'v')
             cmd[i + 1] = '\v';
         if (cmd[i + 1] != 'v' && cmd[i + 1] != 'n'
-        && cmd[i + 1] != 'b' && cmd[i + 1] != 't')
+            && cmd[i + 1] != 'b' && cmd[i + 1] != 't')
             cmd[i] = cmd[i + 1];
         for (int k = i; cmd[k]; k++)
             cmd[k] = cmd[k + 1];
@@ -68,11 +68,14 @@ char *remove_backslash(char *cmd)
 
 char **get_argv(char *cmd)
 {
-    char **argv = malloc(sizeof(char *) * (get_arg_count(cmd) + 2));
+    char **argv = calloc(get_arg_count(cmd) + 2, sizeof(char *));
     int i;
     int j = 0;
     int nb_simple = 0;
     int nb_double = 0;
+
+    if (!argv)
+        return (NULL);
     for (i = 0; cmd[i]; i++) {
         if (cmd[i] == '\\') {
             i++;
@@ -81,7 +84,7 @@ char **get_argv(char *cmd)
         nb_simple += cmd[i] == '\'' ? 1 : 0;
         nb_double += cmd[i] == '\"' ? 1 : 0;
         if ((nb_double % 2 == 1 || nb_simple % 2 == 1)
-        || (cmd[i] != ' ' && cmd[i] != '\t'))
+            || (cmd[i] != ' ' && cmd[i] != '\t'))
             continue;
         cmd[i] = '\0';
         if (i > 0)
@@ -91,6 +94,5 @@ char **get_argv(char *cmd)
     }
     if (i > 0)
         argv[j++] = remove_backslash(cmd);
-    argv[j] = NULL;
     return (argv);
 }

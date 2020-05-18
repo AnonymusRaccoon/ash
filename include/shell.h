@@ -47,7 +47,6 @@ char *eval(char *cmd, char **argv, env_t *env);
 char *find_binary(char *cmd, char *folder);
 void handle_signal(int status, env_t *env);
 char **get_argv(char *cmd);
-bool matched_quotes(char *cmd);
 int get_argc(char **argv);
 void exec_error(char *path, char *cmd);
 
@@ -68,5 +67,7 @@ char *add_separator(char *cmd, int *return_values, int index);
 char *replace_alias(char *cmd, alias_t *alias);
 char *get_alias_command(char *cmd, alias_t *alias);
 
+char **remove_quotes(char **argv);
+bool matched_quotes(char *cmd);
 
 #define ERROR 84
