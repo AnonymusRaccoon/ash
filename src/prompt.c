@@ -41,7 +41,6 @@ int prompt_run(char *cmd, redirection *inout[2], env_t *env)
     if (!argv[0])
         return (0);
     argv = globbing(argv);
-    argv = get_alias(argv, env);
     if (!argv)
         return (0);
     if (**argv == '!' && argv[0][1] && argv[0][1] != ' ')
@@ -63,22 +62,4 @@ void prompt_prepare(env_t *env)
             prompt = "$ ";
         write(1, prompt, strlen(prompt));
     }
-}
-
-char **get_alias(char **argv, env_t *env)
-{
-    alias_t *tmp = env->alias;
-    char *command = NULL;
-
-    if (!argv)
-        return (NULL);
-    for (; tmp; tmp = tmp->next) {
-        if (strcmp(argv[0], tmp->alias))
-            continue;
-        command = fusion(tmp->command, argv);
-        if (!command)
-            return (NULL);
-        return (get_argv(command));
-    }
-    return (argv);
 }

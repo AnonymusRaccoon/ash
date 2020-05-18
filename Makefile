@@ -7,6 +7,7 @@
 
 SRC = src/shell.c \
 	src/prompt.c \
+	src/alias.c \
 	src/execute.c \
 	src/glob.c \
 	src/redirections/redirection_manager.c \
