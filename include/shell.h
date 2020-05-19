@@ -33,6 +33,13 @@ typedef struct buffer
     int startx;
 } buffer_t;
 
+typedef struct alias_s
+{
+    char *alias;
+    char *command;
+    struct alias_s *next;
+} alias_t;
+
 typedef struct env_s
 {
     char **env;
@@ -40,6 +47,7 @@ typedef struct env_s
     history_t *history;
     binding_t *bindings;
     my_window *window;
+    alias_t *alias;
 } env_t;
 
 void start_shell(env_t *env);
@@ -50,6 +58,8 @@ void prompt_prepare(buffer_t *buffer, env_t *env);
 int eval_raw_cmd(char *cmd, env_t *env);
 int run_with_redirections(char *cmd, env_t *env, redirection *input);
 void run_cmd(char **argv, redirection *inout[2], env_t *env);
+char *eval(char *cmd, char **argv, env_t *env);
+char *find_binary(char *cmd, char *folder);
 void handle_signal(int status, env_t *env);
 char **get_argv(char *cmd);
 int get_argc(char **argv);
@@ -62,7 +72,15 @@ char **my_setenv(char **env, char *name, char *value);
 char **my_unsetenv(char **env, char *name);
 bool envvar_is_valid(const char *str);
 
+char **globbing(char **argv);
+
 #define INVALID_ENV_VAR \
 "setenv: Variable name must contain alphanumeric characters.\n"
+
+char *get_alias(char *cmd, alias_t *alias);
+char *add_separator(char *cmd, int *return_values, int index);
+char *replace_alias(char *cmd, alias_t *alias);
+char *get_alias_command(char *cmd, alias_t *alias);
+
 
 #define ERROR 84

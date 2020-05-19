@@ -61,7 +61,7 @@ void exec_error(char *path, char *cmd)
 {
     if (errno == ENOEXEC)
         dprintf(2, "%s: Exec format error. Wrong Architecture.\n", cmd);
-    else if (access(path, F_OK) == 0)
+    else if (path != NULL && access(path, F_OK) == 0)
         dprintf(2, "%s: Permission denied.\n", cmd);
     else
         dprintf(2, "%s: Command not found.\n", cmd);

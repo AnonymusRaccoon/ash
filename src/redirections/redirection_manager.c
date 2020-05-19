@@ -85,7 +85,7 @@ int command_format_is_invalid(char **cmds, env_t *env, int *return_values)
             env->env = my_setenv(env->vars, "?", "1");
             return (1);
         } else if (split_is_invalid(cmds, return_values, i)) {
-            write(2, "Invalid null command\n", 22);
+            write(2, "Invalid null command.\n", 22);
             env->vars = my_setenv(env->vars, "?", "1");
             return (1);
         }
@@ -95,10 +95,15 @@ int command_format_is_invalid(char **cmds, env_t *env, int *return_values)
 
 int eval_raw_cmd(char *cmd, env_t *env)
 {
-    int *return_values = get_return_separator(cmd);
-    char **cmds = split_commands(cmd);
+    int *return_values = NULL;
+    char **cmds = NULL;
     int ret = 0;
 
+    cmd = get_alias(cmd, env->alias);
+    if (!cmd)
+        return (0);
+    return_values = get_return_separator(cmd);
+    cmds = split_commands(cmd);
     if (!cmds)
         return (-1);
     if (command_format_is_invalid(cmds, env, return_values))

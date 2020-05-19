@@ -10,6 +10,7 @@
 #include "shell.h"
 #include "builtin.h"
 #include "redirections.h"
+#include "utility.h"
 #include <unistd.h>
 #include <malloc.h>
 #include <string.h>
@@ -21,6 +22,11 @@ const builtin builtins[] = {
     {"exit", &builtin_exit},
     {"cd", &builtin_cd},
     {"history", &builtin_history},
+    {"which", &builtin_which},
+    {"where", &builtin_where},
+    {"source", &builtin_source},
+    {"alias", &builtin_alias},
+    {"unalias", &builtin_unalias},
     {NULL, NULL}
 };
 
@@ -33,6 +39,9 @@ int prompt_run(char *cmd, redirection *inout[2], env_t *env)
         return (-1);
     }
     if (!argv[0])
+        return (0);
+    argv = globbing(argv);
+    if (!argv)
         return (0);
     if (env->window && inout[1] == NULL)
         inout[1] = new_ncurses_pty();

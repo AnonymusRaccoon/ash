@@ -27,6 +27,7 @@ env_t *create_env(char **env)
     envt->history = NULL;
     envt->bindings = &emacs_bindings;
     envt->window = NULL;
+    envt->alias = NULL;
     return (envt);
 }
 
