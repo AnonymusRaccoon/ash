@@ -76,7 +76,7 @@ char *get_var_value(char *var, env_t *env)
     if (value)
         return (value);
     printf("%s: Undefined variable.\n", var);
-    my_setenv(env->vars, "?", "1");
+    env->vars = my_setenv(env->vars, "?", "1");
     return (NULL);
 }
 
