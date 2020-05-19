@@ -27,9 +27,10 @@ int self_insert_command(int key, buffer_t *buffer, env_t *env)
     }
     if (!buffer->buffer)
         return (-1);
-    for (int i = len - 1; i >= buffer->pos; i--)
+    for (int i = len - 1; i > buffer->pos; i--)
         buffer->buffer[i] = buffer->buffer[i - charslen];
-    strcpy(buffer->buffer + buffer->pos, chars);
+    memcpy(buffer->buffer + buffer->pos, chars, charslen);
+    buffer->buffer[len] = '\0';
     buffer->pos += charslen;
     return (0);
 }
