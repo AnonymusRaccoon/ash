@@ -22,7 +22,7 @@
 
 #include <termios.h>
 
-typedef struct 
+typedef struct
 {
     struct termios old_termios;
     int x;

@@ -53,6 +53,6 @@ bool handle_redirections(redirection *inout[2], env_t *env, bool builtin);
 bool handle_parent_inout(redirection *inout[2], env_t *env, bool builtin);
 
 
-struct redirection *new_ncurses_pty();
+struct redirection *new_ncurses_pty(void);
 int pyt_get_fd(redirection *pty);
 void pty_get_output(redirection *pty, env_t *env);

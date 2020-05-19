@@ -17,7 +17,7 @@
 #include <sys/ioctl.h>
 #define _XOPEN_SOURCE 600
 #define __USE_XOPEN_EXTENDED
-#include <stdlib.h> 
+#include <stdlib.h>
 
 
 const struct redirection_map pty_type = {
@@ -35,7 +35,7 @@ int pty_open(char **slave_name)
     *slave_name = NULL;
     if (master < 0)
         return (-1);
-    if (grantpt(master) < 0 || unlockpt(master) < 0 
+    if (grantpt(master) < 0 || unlockpt(master) < 0
     || !(*slave_name = ptsname(master))) {
         my_errno = errno;
         close(master);
@@ -45,7 +45,7 @@ int pty_open(char **slave_name)
     return (master);
 }
 
-struct redirection *new_ncurses_pty()
+struct redirection *new_ncurses_pty(void)
 {
     struct redirection *pty = malloc(sizeof(*pty));
     char *slave;
