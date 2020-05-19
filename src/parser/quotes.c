@@ -23,9 +23,9 @@ int parse_quotes(char *ptr, char **data)
     int length = 0;
 
     for (; ptr[length]; length++)
-        if (ptr[length] == '\'')
+        if (ptr[length] == ' ')
             break;
-    if (ptr[length] != '\'') {
+    if (ptr[length] != '\'' && ptr[length] != ' ') {
         dprintf(2, "Unmatched '''.\n");
         return (-1);
     }

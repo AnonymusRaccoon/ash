@@ -14,9 +14,29 @@
 #include <sys/wait.h>
 #include <string.h>
 #include "utility.h"
+#include "parser.h"
 #include "builtin.h"
 
-int parse_input(char *cmd)
+const parser_map parsers[] = {
+    {"'", &parse_quotes},
+    {NULL, NULL}
+};
+
+char **parse_input(char *cmd)
 {
-    char *ret;
+    char *data;
+    char **ret = malloc(sizeof(char *) * 2);
+    int return_val = 0;
+    int inc = 0;
+
+    for (int i = 0; cmd[i]; i++) {
+        for (int j = 0; parsers[j].key; j++) {
+            if (cmd[i] == parsers[j].key)
+                return_val = parsers[j].parser(&cmd[i], &data);
+            if (return_val == -1)
+                return (NULL);
+            ret[inc++] = data;
+            i += return_val;
+        }
+    }
 }

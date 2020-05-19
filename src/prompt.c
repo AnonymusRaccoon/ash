@@ -38,6 +38,8 @@ int prompt_run(char *cmd, redirection *inout[2], env_t *env)
         perror("mysh");
         return (-1);
     }
+    for (int i = 0; argv[i]; i++)
+        printf("argv[%i] : %s\n", i , argv[i]);
     if (!argv[0])
         return (0);
     argv = globbing(argv);

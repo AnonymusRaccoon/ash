@@ -18,7 +18,6 @@ typedef enum redirection_type {
     EX_PIPE = 1 << 3
 } redirection_type;
 
-
 typedef struct redirection_map {
     char *key;
     int (*get_fd)(redirection *);
