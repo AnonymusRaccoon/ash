@@ -54,8 +54,8 @@ char *get_alias_command(char *cmd, alias_t *alias)
 
     tmp = alias;
     for (; tmp; tmp = tmp->next) {
-        if (!strcmp(cmd, alias->alias)) {
-            cmd = strdup(alias->command);
+        if (!strcmp(cmd, tmp->alias)) {
+            cmd = strdup(tmp->command);
             tmp = alias;
         }
     }
