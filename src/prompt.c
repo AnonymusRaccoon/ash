@@ -61,6 +61,13 @@ int prompt_run(char *cmd, redirection *inout[2], env_t *env)
 
     if (!matched_quotes(cmd))
         return (0);
+    for (int i = 0; argv[i]; i++) {
+        argv[i] = get_inhibitor(argv[i]);
+        argv[i] = get_var(argv[i], env);
+        if (!argv[i])
+            return (0);
+    }
+    argv = remove_quotes(argv);
     if (!argv) {
         perror("mysh");
         return (-1);
@@ -75,7 +82,7 @@ int prompt_run(char *cmd, redirection *inout[2], env_t *env)
     for (int i = 0; builtins[i].name; i++)
         if (!strcmp(argv[0], builtins[i].name))
             return (run_builtin(&builtins[i], argv, inout, env));
-    run_cmd(remove_quotes(argv), inout, env);
+    run_cmd(argv, inout, env);
     free(argv);
     return (0);
 }

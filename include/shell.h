@@ -69,7 +69,10 @@ char *get_alias_command(char *cmd, alias_t *alias);
 
 char **remove_quotes(char **argv);
 bool matched_quotes(char *cmd);
-char **split_args(char *cmd, char **argv, int nb_simple, int nb_double);
-char *remove_backslash(char *cmd);
+char **split_args(char *cmd, char **argv);
+char * get_var(char *cmd, env_t *env);
+char *get_inhibitor(char *cmd);
+char *get_var_value(char *var, env_t *env);
+
 
 #define ERROR 84

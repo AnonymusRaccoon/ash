@@ -54,9 +54,3 @@ int add_alias_to_list(alias_t **list, alias_t *elem, char *alias);
 
 //unalias
 void remove_alias(char *alias, alias_t **list);
-
-//echo
-void print_echo_arg(char *arg, env_t *env);
-void print_var(char *var, env_t *env);
-void print_unhibited(char c);
-char *get_var_value(char *var, env_t *env);

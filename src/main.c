@@ -26,6 +26,7 @@ int main(int argc, char **argv, char **env)
     envt->vars = NULL;
     envt->history = NULL;
     envt->alias = NULL;
+    envt->vars = my_setenv(envt->vars, "?", "0");
     start_shell(envt);
     ret = get_return(my_getenv(envt->vars, "?"));
     (void)argc;

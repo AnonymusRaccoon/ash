@@ -25,10 +25,7 @@ int run_builtin(const builtin *cmd, char **a, redirection *inout[2], env_t *env)
         perror("mysh");
         return (-1);
     }
-    if (!handle_redirections(inout, env, true) && strcmp(cmd->name, "echo"))
-        ret = cmd->run(remove_quotes(a), env);
-    else if (!handle_redirections(inout, env, true)
-        && !strcmp(cmd->name, "echo"))
+    if (!handle_redirections(inout, env, true))
         ret = cmd->run(a, env);
     dup2(saved_fd[0], 0);
     dup2(saved_fd[1], 1);
