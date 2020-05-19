@@ -13,7 +13,7 @@ typedef struct binding binding_t;
 #define SHELL_NAME "42sh"
 
 #include <stdbool.h>
-#include <ncurses.h>
+#include "my_ncurses.h"
 
 typedef struct history_s
 {
@@ -39,7 +39,7 @@ typedef struct env_s
     char **vars;
     history_t *history;
     binding_t *bindings;
-    WINDOW *window;
+    my_window *window;
 } env_t;
 
 void start_shell(env_t *env);

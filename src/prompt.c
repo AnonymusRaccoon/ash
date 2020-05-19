@@ -52,6 +52,6 @@ void prompt_prepare(buffer_t *buffer, env_t *env)
 
     if (!prompt)
         prompt = "$ ";
-    mvaddstr(getcury(env->window), 0, prompt);
+    printf("%s", prompt);
     buffer->startx = strlen(prompt);
 }

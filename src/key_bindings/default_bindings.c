@@ -7,7 +7,7 @@
 
 #include "shell.h"
 #include "key_functions.h"
-#include <ncurses.h>
+#include "my_ncurses.h"
 #include <stddef.h>
 
 const key_function_t key_functions[] = {
@@ -25,9 +25,9 @@ const key_function_t key_functions[] = {
 
 const binding_t emacs_bindings[] = {
     {'\n', &newline_command},
+    {'\r', &newline_command},
     {CTRL('d'), &eof_command},
     {127, &backward_delete_char_command},
-    {KEY_BACKSPACE, &backward_delete_char_command},
     {KEY_DC, &delete_char_command},
     {KEY_LEFT, &backward_char_command},
     {KEY_RIGHT, &forward_char_command},

@@ -13,9 +13,11 @@
 #include <malloc.h>
 #include <string.h>
 #include <errno.h>
-#include <ncurses.h>
 #include <unistd.h>
+#include <sys/select.h>
 #include <termios.h>
+#include <ncurses.h>
+#include "my_ncurses.h"
 
 int process_key(int key, buffer_t *buffer, env_t *env)
 {
@@ -23,34 +25,6 @@ int process_key(int key, buffer_t *buffer, env_t *env)
         if (key == env->bindings[i].key)
             return (env->bindings[i].func(key, buffer, env));
     return (self_insert_command(key, buffer, env));
-}
-
-WINDOW *window_create()
-{
-    // WINDOW *window = initscr();
-
-    // raw();
-    // noecho();
-    // keypad(window, true);
-    // scrollok(window, true);
-    // idlok(window, true);
-    // return (window);
-    struct termios term;
-
-    tcgetattr(0, &term);
-    term.c_iflag &= ~(IXON | ICRNL);
-    term.c_lflag &= ~(ECHO | ICANON | ISIG | IEXTEN);
-    tcsetattr(0, TCSANOW, &term);
-    return (NULL);
-}
-
-void window_destroy(WINDOW *window)
-{
-    if (!window)
-        return;
-    delwin(window);
-    noraw();
-    endwin();
 }
 
 int buffer_get_display_pos(buffer_t *buffer)
@@ -72,26 +46,21 @@ void start_shell(env_t *env)
 {
     buffer_t buffer = {.size = 0, .buffer = NULL, .pos = 0, .startx = 0};
     int key;
-    int y;
 
     if (isatty(0)) {
-        env->window = window_create();
+        env->window = my_initwin();
         prompt_prepare(&buffer, env);
     }
     do {
-
-        key = fgetc(stdin);
-        printf("%c (%d)\n", key, key);
-        printf("Buffer: %s\n", buffer.buffer);
-        // if (env->window) {
-            // refresh();
-            // y = getcury(env->window);
-            // mvaddstr(y, buffer.startx, buffer.buffer);
-            // clrtoeol();
-            // move(y, buffer_get_display_pos(&buffer));
-            // key = getch();
-        // } else
-            // key = fgetc(stdin);
-    } while (key != ERR && process_key(key, &buffer, env) >= 0);
-    // window_destroy(env->window);
+        if (env->window) {
+            if (buffer.buffer)
+                my_mvaddstr(env->window, NO_MOVE, buffer.startx, buffer.buffer);
+            my_clrtoeol();
+            my_move(env->window, NO_MOVE, buffer_get_display_pos(&buffer));
+            my_refresh();
+            key = my_getch();
+        } else
+            key = fgetc(stdin);
+    } while (key != -1 && process_key(key, &buffer, env) >= 0);
+    my_endwin(env->window);
 }

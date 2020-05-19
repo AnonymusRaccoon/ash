@@ -9,8 +9,6 @@
 
 #include "shell.h"
 
-#define CTRL(c) ((c) & 0x1F)
-
 typedef struct key_function
 {
     const char *name;

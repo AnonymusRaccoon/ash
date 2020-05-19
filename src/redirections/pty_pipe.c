@@ -87,7 +87,7 @@ void pty_get_output(redirection *pty, env_t *env)
 
     close(pty->fd);
     while (getline(&line, &size, file) > 0)
-        puts(line);//addstr(line);
+        my_addstr(env->window, line);
     if (line)
         free(line);
     fclose(file);
