@@ -40,8 +40,7 @@ char **split_args(char *cmd, char **argv)
     int nb_double = 0;
 
     for (i = 0; cmd[i]; i++) {
-        if (cmd[i] == '\\')
-            i += 2;
+        i += cmd[i] == '\\' ? 2 : 0;
         nb_simple += cmd[i] == '\'' ? 1 : 0;
         nb_double += cmd[i] == '\"' ? 1 : 0;
         if ((nb_double % 2 == 1 || nb_simple % 2 == 1)

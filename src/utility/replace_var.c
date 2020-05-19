@@ -28,7 +28,7 @@ char * replace_var(char *cmd, env_t *env)
         return (cmd);
     for (; isolated_var[var_len] && isolated_var[var_len] != ' '
     && isolated_var[var_len] != '\t'; var_len++);
-    if (!var_len && cmd[0]  != '\"')
+    if (!var_len && cmd[0] != '\"')
         return (cmd);
     value = get_var_value(isolated_var, env);
     if (!value)
