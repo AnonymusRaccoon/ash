@@ -39,6 +39,7 @@ void my_endwin(my_window *window);
 
 void my_move(my_window *window, int y, int x);
 void my_getcuryx(int *y, int *x);
+void my_getmaxyx(int *y, int *x);
 int my_getch(void);
 
 void my_addstr(my_window *window, const char *str);

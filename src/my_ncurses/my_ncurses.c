@@ -10,12 +10,20 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <sys/ioctl.h>
+#include <signal.h>
+
+my_window *stdwin;
+
+void on_resize(int sig, siginfo_t *info, void *context)
+{
+    my_getmaxyx(&stdwin->h, &stdwin->w);
+}
 
 my_window *my_initwin(void)
 {
     my_window *window = calloc(1, sizeof(*window));
     struct termios term;
-    struct winsize size;
+    struct sigaction sa;
 
     if (!window)
         return (NULL);
@@ -24,21 +32,14 @@ my_window *my_initwin(void)
     term.c_iflag &= ~(IXON | ICRNL);
     term.c_lflag &= ~(ECHO | ICANON | ISIG | IEXTEN);
     tcsetattr(0, TCSANOW, &term);
-    ioctl(STDOUT_FILENO, TIOCGWINSZ, &size);
-    window->h = size.ws_row;
-    window->w = size.ws_col;
+    sa.sa_sigaction = &on_resize;
+    sigemptyset(&sa.sa_mask);
+    sa.sa_flags = SA_RESTART | SA_SIGINFO;
+    sigaction(SIGWINCH, &sa, NULL);
+    my_getmaxyx(&window->h, &window->w);
     my_getcuryx(&window->y, &window->x);
+    stdwin = window;
     return (window);
-}
-
-void my_getcuryx(int *y, int *x)
-{
-    my_refresh();
-    printf("\x1B[6n");
-    fflush(stdout);
-    scanf("\x1B[%d;%dR", y, x);
-    *y -= 1;
-    *x -= 1;
 }
 
 void my_endwin(my_window *window)
@@ -55,6 +56,8 @@ void my_move(my_window *window, int y, int x)
         y = window->y;
     if (x == NO_MOVE)
         x = window->x;
+    window->x = x;
+    window->y = y;
     printf("\x1B[%d;%dH", y + 1, x + 1);
 }
 

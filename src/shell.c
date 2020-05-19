@@ -27,7 +27,7 @@ int process_key(int key, buffer_t *buffer, env_t *env)
     return (self_insert_command(key, buffer, env));
 }
 
-int buffer_get_display_pos(buffer_t *buffer)
+int buf_getx(buffer_t *buffer, env_t *env)
 {
     int pos = buffer->startx;
     int tmp;
@@ -38,8 +38,24 @@ int buffer_get_display_pos(buffer_t *buffer)
             pos += tmp == 0 ? TABSIZE : tmp;
         } else
             pos++;
+        if (pos >= env->window->w)
+            pos = 0;
     }
     return pos;
+}
+
+void shell_refresh(buffer_t *buffer, env_t *env)
+{
+    static int oldbuffer_pos = 0;
+    int y = env->window->y - (oldbuffer_pos + buffer->startx) / env->window->w;
+    int newy = y + (buffer->pos + buffer->startx) / env->window->w;
+
+    if (buffer->buffer)
+        my_mvaddstr(env->window, y, buffer->startx, buffer->buffer);
+    my_clrtoeol();
+    my_move(env->window, newy, buf_getx(buffer, env));
+    my_refresh();
+    oldbuffer_pos = buffer->pos;
 }
 
 void start_shell(env_t *env)
@@ -53,11 +69,7 @@ void start_shell(env_t *env)
     }
     do {
         if (env->window) {
-            if (buffer.buffer)
-                my_mvaddstr(env->window, NO_MOVE, buffer.startx, buffer.buffer);
-            my_clrtoeol();
-            my_move(env->window, NO_MOVE, buffer_get_display_pos(&buffer));
-            my_refresh();
+            shell_refresh(&buffer, env);
             key = my_getch();
         } else
             key = fgetc(stdin);
