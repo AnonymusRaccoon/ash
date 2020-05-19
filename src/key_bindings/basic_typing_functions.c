@@ -21,7 +21,7 @@ int self_insert_command(int key, buffer_t *buffer, env_t *env)
     int charslen = strlen(chars);
     int len = (buffer->buffer ? strlen(buffer->buffer) : 0) + charslen;
 
-    if (len > buffer->size || !buffer->buffer) {
+    if (len >= buffer->size || !buffer->buffer) {
         buffer->buffer = realloc(buffer->buffer, buffer->size + 100);
         buffer->size += 100;
     }
