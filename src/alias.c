@@ -39,11 +39,9 @@ char *replace_alias(char *cmd, alias_t *alias)
 
     if (!arg_array)
         return (NULL);
-    for (int i = 0; arg_array[i]; i++) {
-        arg_array[i] = get_alias_command(arg_array[i], alias);
-        if (!arg_array[i])
-            return (NULL);
-    }
+    arg_array[0] = get_alias_command(arg_array[0], alias);
+    if (!arg_array[0])
+        return (NULL);
     final_str = fusion(arg_array[0], arg_array);
     return (final_str);
 }
