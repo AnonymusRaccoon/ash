@@ -93,11 +93,6 @@ int command_format_is_invalid(char **cmds, env_t *env, int *return_values)
     return (0);
 }
 
-int parser()
-{
-    //did this for init commit
-}
-
 int eval_raw_cmd(char *cmd, env_t *env)
 {
     int *return_values = NULL;

@@ -38,6 +38,8 @@ SRC = src/shell.c \
 	src/utility/fusion.c	\
 	src/utility/split_commands.c \
 	src/utility/get_return.c	\
+	src/parser/parser.c \
+	src/parser/quotes.c
 
 OBJ = $(SRC:%.c=%.o)
 OBJ += src/main.o
