@@ -31,30 +31,6 @@ const builtin builtins[] = {
     {NULL, NULL}
 };
 
-bool matched_quotes(char *cmd)
-{
-    int nb_simple = 0;
-    int nb_double = 0;
-
-    for (int i = 0; cmd[i]; i++) {
-        if (cmd[i] == '\\') {
-            i++;
-            continue;
-        }
-        if (cmd[i] == '\'')
-            nb_simple++;
-        if (cmd[i] == '\"')
-            nb_double++;
-    }
-    if (nb_double % 2 == 1)
-        printf("Unmatched '\"'.\n");
-    else if (nb_simple % 2 == 1)
-        printf("Unmatched '\''.\n");
-    if (nb_double % 2 == 1 || nb_simple % 2 == 1)
-        return (false);
-    return (true);
-}
-
 int prompt_run(char *cmd, redirection *inout[2], env_t *env)
 {
     char **argv = get_argv(strdup(cmd));
@@ -63,7 +39,7 @@ int prompt_run(char *cmd, redirection *inout[2], env_t *env)
         return (0);
     for (int i = 0; argv[i]; i++) {
         argv[i] = get_inhibitor(argv[i]);
-        argv[i] = get_var(argv[i], env);
+        argv[i] = replace_var(argv[i], env);
         if (!argv[i])
             return (0);
     }

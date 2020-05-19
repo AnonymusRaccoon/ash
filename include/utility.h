@@ -22,3 +22,4 @@ char *fusion(char *command, char **args);
 char **split_commands(char *cmd);
 int *get_return_separator(char *cmd);
 int split_is_invalid(char **cmds, int *return_values, int i);
+char *replace_with_value(char *cmd, char *value, int var_len);
