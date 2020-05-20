@@ -41,6 +41,7 @@ SRC = src/shell.c \
 	src/utility/get_return.c	\
 	src/quotes.c \
 	src/utility/replace_var.c	\
+	src/utility/isolate_var.c	\
 	src/utility/get_inhibitor.c	\
 
 OBJ = $(SRC:%.c=%.o)
