@@ -82,6 +82,8 @@ bool handle_redirections(redirection *inout[2], env_t *env, bool builtin)
 
 bool handle_parent_inout(redirection *inout[2], env_t *env, bool builtin)
 {
+    int type;
+
     if (inout[0] && inout[0]->type->type & EX_PIPE && !builtin) {
         if (!fd_is_used(inout[0]->fd, inout[1]))
             close(inout[0]->fd);
@@ -89,8 +91,9 @@ bool handle_parent_inout(redirection *inout[2], env_t *env, bool builtin)
             close(inout[0]->extra_data);
     }
     if (inout[1] && inout[1]->type->run_cmd) {
+        type = inout[1]->type->type;
         inout[1]->type->run_cmd(inout[1], env);
-        return (true);
+        return (!(type & PTY));
     }
     return (false);
 }

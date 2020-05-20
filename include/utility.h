@@ -22,3 +22,5 @@ char *fusion(char *command, char **args);
 char **split_commands(char *cmd);
 int *get_return_separator(char *cmd);
 int split_is_invalid(char **cmds, int *return_values, int i);
+int count_char(const char *str, char c);
+int ncount_char(const char *str, int end, char c);

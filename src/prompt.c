@@ -35,7 +35,7 @@ int prompt_run(char *cmd, redirection *inout[2], env_t *env)
     char **argv = get_argv(cmd);
 
     if (!argv) {
-        perror("mysh");
+        perror(SHELL_NAME);
         return (-1);
     }
     if (!argv[0])
@@ -43,6 +43,8 @@ int prompt_run(char *cmd, redirection *inout[2], env_t *env)
     argv = globbing(argv);
     if (!argv)
         return (0);
+    if (env->window && inout[1] == NULL)
+        inout[1] = new_ncurses_pty();
     if (**argv == '!' && argv[0][1] && argv[0][1] != ' ')
         return (run_builtin(&builtins[5], argv, inout, env));
     for (int i = 0; builtins[i].name; i++)
@@ -53,13 +55,12 @@ int prompt_run(char *cmd, redirection *inout[2], env_t *env)
     return (0);
 }
 
-void prompt_prepare(env_t *env)
+void prompt_prepare(buffer_t *buffer, env_t *env)
 {
     char *prompt = my_getenv(env->vars, "PS1");
 
-    if (isatty(0)) {
-        if (!prompt)
-            prompt = "$ ";
-        write(1, prompt, strlen(prompt));
-    }
+    if (!prompt)
+        prompt = "$ ";
+    printf("%s", prompt);
+    buffer->startx = strlen(prompt);
 }
