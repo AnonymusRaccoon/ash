@@ -57,8 +57,11 @@ bool is_character_valid(char c)
 
 char *add_to_buffer(char *buffer, char *ptr, int nb)
 {
-    char *new = strndup(ptr, nb + 1);
+    char *new;
     
+    if (nb <= 0)
+        return (buffer);
+    new = strndup(ptr, nb + 1);
     if (!new)
         return (NULL);
     new[nb] = '\0';
@@ -92,7 +95,7 @@ int manage_specials_parsers(char *cmd, int index, char **buffer, int *inc, char 
         *buffer = add_to_buffer(*buffer, *ptr, (*inc) - 1);
         *buffer = add_to_buffer(*buffer, data, strlen(data));
         free(data);
-        *inc = 1;
+        *inc = -1;
         *ptr = cmd + index + 1;
         if (!(*buffer))
             return (-1);
