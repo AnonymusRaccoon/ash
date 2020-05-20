@@ -17,18 +17,16 @@
 #include "utility.h"
 #include "builtin.h"
 
-// takes only the data beetween 2 quotes (for now)
 int parse_quotes(char *ptr, char **data)
 {
     int length = 0;
+    char *ptr_end = strchr(&ptr[1], '\'');
 
-    for (; ptr[length]; length++)
-        if (ptr[length] == ' ')
-            break;
-    if (ptr[length] != '\'' && ptr[length] != ' ') {
+    if (!ptr_end) {
         dprintf(2, "Unmatched '''.\n");
         return (-1);
     }
+    length = (ptr_end - ptr) / sizeof(char);
     *data = strndup(&ptr[1], length);
     if (!(*data))
         return (-1);

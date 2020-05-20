@@ -96,6 +96,7 @@ int manage_specials_parsers(char *cmd, int index, char **buffer, int *inc, char 
         *ptr = cmd + index + 1;
         if (!(*buffer))
             return (-1);
+        return (new_index);
     }
     return (0);
 }
