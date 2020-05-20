@@ -9,35 +9,17 @@
 #include "shell.h"
 #include "redirections.h"
 #include <unistd.h>
-#include <stdlib.h>
 #include <stdio.h>
-#include <sys/types.h>
-#include <sys/wait.h>
 #include <string.h>
 #include "utility.h"
 #include "parser.h"
 #include "builtin.h"
+#include <malloc.h>
 
 const parser_map parsers[] = {
     {'\'', &parse_quotes},
     {'\0', NULL}
 };
-
-char *strcat_realloc(char *dest, char *src)
-{
-    if (dest) {
-        dest = realloc(dest, sizeof(char) * (strlen(dest) + strlen(src) + 1));
-        if (!dest)
-            return (NULL);
-    } else {
-        dest = malloc(sizeof(char) * (strlen(src) + 1));
-        if (!dest)
-            return (NULL);
-        dest[0] = '\0';
-    }
-    strcat(dest, src);
-    return (dest);
-}
 
 bool is_character_valid(char c)
 {
@@ -53,21 +35,6 @@ bool is_character_valid(char c)
     if (c >= 33 && c <= 126)
         return (true);
     return (false);
-}
-
-char *add_to_buffer(char *buffer, char *ptr, int nb)
-{
-    char *new;
-    
-    if (nb <= 0)
-        return (buffer);
-    new = strndup(ptr, nb + 1);
-    if (!new)
-        return (NULL);
-    new[nb] = '\0';
-    buffer = strcat_realloc(buffer, new);
-    free(new);
-    return (buffer);
 }
 
 int call_parsers(char *cmd, int index, char **data)

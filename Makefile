@@ -40,6 +40,7 @@ SRC = src/shell.c \
 	src/utility/get_return.c	\
 	src/parser/parser.c \
 	src/parser/quotes.c \
+	src/parser/parser_utilities.c \
 	src/key_bindings/basic_typing_functions.c \
 	src/key_bindings/default_bindings.c \
 	src/key_bindings/control_commands.c \

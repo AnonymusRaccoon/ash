@@ -8,6 +8,8 @@
 #pragma once
 
 #include "shell.h"
+#include <stddef.h>
+#include <string.h>
 
 typedef struct parser_map {
     char key;
@@ -16,3 +18,6 @@ typedef struct parser_map {
 
 char **parse_input(char *cmd);
 int parse_quotes(char *ptr, char **data);
+
+char *strcat_realloc(char *dest, char *src);
+char *add_to_buffer(char *buffer, char *ptr, int nb);
