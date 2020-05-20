@@ -61,7 +61,7 @@ char *add_to_buffer(char *buffer, char *ptr, int nb)
     
     if (!new)
         return (NULL);
-    new[nb - 2] = '\0';
+    new[nb] = '\0';
     buffer = strcat_realloc(buffer, new);
     free(new);
     return (buffer);
@@ -89,7 +89,7 @@ int manage_specials_parsers(char *cmd, int index, char **buffer, int *inc, char 
     if (new_index == -1)
         return (-1);
     if (new_index > 0) {
-        *buffer = add_to_buffer(*buffer, *ptr, (*inc) + 1);
+        *buffer = add_to_buffer(*buffer, *ptr, (*inc) - 1);
         *buffer = add_to_buffer(*buffer, data, strlen(data));
         free(data);
         *inc = 1;
@@ -124,7 +124,7 @@ char **parse_input(char *cmd)
             inc = 0;
             continue;
         }
-        buffer = add_to_buffer(buffer, ptr, inc + 1);
+        buffer = add_to_buffer(buffer, ptr, inc - 1);
         if (!buffer)
             return (NULL);
         ret[ret_inc++] = buffer;
