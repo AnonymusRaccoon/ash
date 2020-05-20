@@ -68,7 +68,7 @@ int newline_command(int key, buffer_t *buffer, env_t *env)
     ret = eval_raw_cmd(buffer->buffer, env);
     buffer->buffer[0] = '\0';
     buffer->pos = 0;
-    if (env->window)
+    if (env->window && ret >= 0)
         prompt_prepare(buffer, env);
     return (ret);
 }
