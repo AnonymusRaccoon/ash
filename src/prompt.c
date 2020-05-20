@@ -39,7 +39,8 @@ int prompt_run(char *cmd, redirection *inout[2], env_t *env)
         return (0);
     for (int i = 0; argv[i]; i++) {
         argv[i] = get_inhibitor(argv[i]);
-        argv[i] = replace_var(argv[i], env);
+        if (argv[i][0] != '\'')
+            argv[i] = replace_var(argv[i], env);
         if (!argv[i])
             return (0);
     }

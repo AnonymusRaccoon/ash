@@ -14,35 +14,53 @@
 
 char *replace_var(char *cmd, env_t *env)
 {
-    char *isolated_var = NULL;
+    char *var = NULL;
     char *value = NULL;
     int var_len = 0;
 
-    if (cmd[0] == '\'')
-            return (cmd);
     for (int i = 0; cmd[i]; i++) {
-        isolated_var = isolate_var(&cmd[i], env);
-        if (!isolated_var)
+        var = isolate_var(&cmd[i], env);
+        if (!var)
             return (NULL);
-        if (isolated_var == &cmd[i] && cmd[i] != '$')
+        if (var == &cmd[i] && cmd[i] != '$')
             continue;
-        for (; isolated_var[var_len] && isolated_var[var_len] != ' '
-        && isolated_var[var_len] != '\t' &&
-        isolated_var[var_len] != '$'; var_len++);
+        for (; var[var_len] && var[var_len] != ' ' && var[var_len] != '\t'
+        && var[var_len] != '$'; var_len++);
         if (!var_len && cmd[i] != '\"')
             return (cmd);
-        value = get_var_value(isolated_var, env);
+        value = get_var_value(var, env);
         if (!value)
-            return ("");
+            return (NULL);
         cmd = replace_with_value(cmd, value, var_len);
         i = -1;
     }
     return (cmd);
 }
 
+char *clean_var(char *var)
+{
+    for (int i = 0; var[i]; i++)
+        if (var[i] == ' ' || var[i] == '\t'
+            || var[i] == '$')
+            var[i] = 0;
+    return (var);
+}
+
+bool var_name_is_correct(char *var, env_t *env)
+{
+    if (!(var[0] >= 'A' && var[0] <= 'Z')
+    && !(var[0] >= 'a' && var[0] <= 'z')
+    && var[0] != '?') {
+        printf("Illegal variable name.\n");
+        env->vars = my_setenv(env->vars, "?", "1");
+        return (false);
+    }
+    return (true);
+}
+
 char *isolate_var(char *cmd, env_t *env)
 {
-    char *isolated_var = NULL;
+    char *var = NULL;
     char *ptr = NULL;
 
     for (int i = 0; cmd[i] && !ptr; i++)
@@ -50,25 +68,18 @@ char *isolate_var(char *cmd, env_t *env)
             ptr = &cmd[i + 1];
     if (!ptr)
         return (cmd);
-    if (ptr[0] == 0)
+    if (!ptr[0])
         return (cmd);
     if ((ptr[0] == ' ' || ptr[0] == '\t' ||
         !ptr[0]) && cmd[0] != '\"')
         return (cmd);
-    isolated_var = strdup(ptr);
-    if (!isolated_var)
+    var = strdup(ptr);
+    if (!var)
         return (NULL);
-    for (int i = 0; isolated_var[i]; i++)
-        if (isolated_var[i] == ' ' || isolated_var[i] == '\t' || isolated_var[i] == '$')
-            isolated_var[i] = 0;
-    if (!(isolated_var[0] >= 'A' && isolated_var[0] <= 'Z')
-    && !(isolated_var[0] >= 'a' && isolated_var[0] <= 'z')
-    && isolated_var[0] != '?') {
-        printf("Illegal variable name.\n");
-        env->vars = my_setenv(env->vars, "?", "1");
+    var = clean_var(var);
+    if (!var_name_is_correct(var, env))
         return (NULL);
-    }
-    return (isolated_var);
+    return (var);
 }
 
 char *replace_with_value(char *cmd, char *value, int var_len)
