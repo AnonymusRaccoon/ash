@@ -25,10 +25,11 @@ int get_arg_count(char *cmd)
 char **get_argv(char *cmd)
 {
     char **argv = calloc(get_arg_count(cmd) + 2, sizeof(char *));
+    char *duplicate = strdup(cmd);
 
-    if (!argv)
+    if (!argv || !duplicate)
         return (NULL);
-    argv = split_args(cmd, argv);
+    argv = split_args(duplicate, argv);
     return (argv);
 }
 

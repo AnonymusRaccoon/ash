@@ -33,7 +33,7 @@ const builtin builtins[] = {
 
 int prompt_run(char *cmd, redirection *inout[2], env_t *env)
 {
-    char **argv = get_argv(strdup(cmd));
+    char **argv = get_argv(cmd);
 
     if (!matched_quotes(cmd))
         return (0);
