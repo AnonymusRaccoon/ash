@@ -28,12 +28,13 @@ int builtin_source(char **argv, env_t *env);
 int builtin_history(char **args, env_t *env);
 int builtin_alias(char **args, env_t *env);
 int builtin_unalias(char **args, env_t *env);
-//utility
+//which / where
 bool find_path_in_builtins(char *cmd);
 char **get_envpath(env_t *env);
 char *check_executable(char *cmd, char *folder);
 char **get_paths_from_envpath(char *cmd, char **envpath);
 char **get_envpath(env_t *env);
+void fill_path_arr(char *cmd, char **envpath, char **res);
 //history
 int add_to_history(char *cmd, env_t *env);
 int show_history(env_t *env);

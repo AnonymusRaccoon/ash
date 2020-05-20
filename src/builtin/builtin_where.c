@@ -15,6 +15,15 @@
 #include "utility.h"
 #include "shell.h"
 
+void print_alias_where(char *cmd, char *aliased)
+{
+    if (aliased[0] == '(') {
+        aliased = &aliased[1];
+        aliased[strlen(aliased) - 1] = 0;
+    }
+    printf("%s is aliased to %s\n", cmd, aliased);
+}
+
 char *check_executable(char *cmd, char *folder)
 {
     struct stat st_buff;
@@ -58,23 +67,14 @@ void fill_path_arr(char *cmd, char **envpath, char **res)
     res[counter] = NULL;
 }
 
-char **get_paths_from_envpath(char *cmd, char **envpath)
+void print_path_no_stop(char *cmd, char **envpath, env_t *env)
 {
-    int len = 0;
-    char **res = NULL;
-
-    for (; envpath[len]; len++);
-    res = malloc(sizeof(char *) * (len + 2));
-    if (!res)
-        return (NULL);
-    fill_path_arr(cmd, envpath, res);
-    return (res);
-}
-
-void print_path_no_stop(char *cmd, char **envpath)
-{
+    char *dup_cmd = strdup(cmd);
     char **paths = NULL;
-    //check_alias_no_stop
+    char *aliased = get_alias_command(cmd, env->alias);
+
+    if (strcmp(aliased, dup_cmd))
+        print_alias_where(dup_cmd, aliased);
     find_path_in_builtins(cmd);
     if (!envpath)
         return;
@@ -101,7 +101,7 @@ int builtin_where(char **argv, env_t *env)
         if (strchr(argv[i], '/'))
             printf("where: / in command makes no sense\n");
         else
-            print_path_no_stop(argv[i], envpath);
+            print_path_no_stop(argv[i], envpath, env);
     }
     free(envpath);
     return (0);
