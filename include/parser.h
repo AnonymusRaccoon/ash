@@ -10,7 +10,7 @@
 #include "shell.h"
 
 typedef struct parser_map {
-    char *key;
+    char key;
     int (*parser)(char *, char **);
 } parser_map;
 

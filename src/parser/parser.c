@@ -19,29 +19,25 @@
 #include "builtin.h"
 
 const parser_map parsers[] = {
-    {"'", &parse_quotes},
-    {NULL, NULL}
+    {'\'', &parse_quotes},
+    {'\0', NULL}
 };
 
-/*char **parse_input(char *cmd)
+char *strcat_realloc(char *dest, char *src)
 {
-    char *data;
-    char **ret = malloc(sizeof(char *) * (strlen(cmd) + 1));
-    int return_val = 0;
-    int inc = 0;
-    char *ptr = cmd;
-    int inc_for = 1;
-
-    for (int i = 0; cmd[i]; i++, inc_for++) {
-        if (cmd[i] >= 33 && cmd[i] <= 126)
-            continue;
-        if (inc_for == 1) {
-            inc_for = 0;
-            continue;
-        }
-        
+    if (dest) {
+        dest = realloc(dest, sizeof(char) * (strlen(dest) + strlen(src) + 1));
+        if (!dest)
+            return (NULL);
+    } else {
+        dest = malloc(sizeof(char) * (strlen(src) + 1));
+        if (!dest)
+            return (NULL);
+        dest[0] = '\0';
     }
-}*/
+    strcat(dest, src);
+    return (dest);
+}
 
 bool is_character_valid(char c)
 {
@@ -59,40 +55,60 @@ bool is_character_valid(char c)
     return (false);
 }
 
-char *manage_specials_parsers(char *cmd, int index)
+int manage_specials_parsers(char *cmd, int index, char **data)
 {
-    char *data;
     int new_index = 0;
 
     for (int i = 0; parsers[i].key; i++) {
         if (cmd[index] != parsers[i].key)
             continue;
-        new_index = parsers[i].parser(&cmd[index], &data);
-        if (new_index == -1)
-            return (NULL);
-        return (data);
+        new_index = parsers[i].parser(&cmd[index], data);
+        return (new_index);
     }
-    return (NULL);
+    return (0);
+}
+
+int is_a_special_parser(char *cmd, int index, char **data)
+{
+
+}
+
+char *add_to_buffer(char *buffer, char *ptr, int nb)
+{
+    char *new = strndup(ptr, nb + 1);
+    
+    if (!new)
+        return (NULL);
+    new[nb - 2] = '\0';
+    buffer = strcat_realloc(buffer, new);
+    free(new);
+    return (buffer);
 }
 
 char **parse_input(char *cmd)
 {
-    int size = strlen(cmd);
-    char **ret = malloc(sizeof(char *) * (size + 1));
+    char **ret = malloc(sizeof(char *) * (strlen(cmd) + 1));
     char *ptr = cmd;
     int ret_inc = 0;
-    char *new;
-    char *data;
-    int size_data;
+    char *buffer = NULL;
+    char *data = NULL;
+    int new_index = 0;
 
-    for (int i = 0, inc = 1; i <= size; i++, inc++) {
+    for (int i = 0, inc = 1; i <= (int)strlen(cmd); i++, inc++) {
         if (is_character_valid(cmd[i])) {
-            data = manage_specials_parsers(cmd, i);
-            if (!data)
-                continue;
-            size_data = strlen(data);
-            i += size_data + 1;
-            inc += size_data + 1;
+            new_index = manage_specials_parsers(cmd, i, &data);
+            if (new_index == -1)
+                return (NULL);
+            i += new_index;
+            if (new_index > 0) {
+                buffer = add_to_buffer(buffer, ptr, inc + 1);
+                buffer = add_to_buffer(buffer, data, strlen(data));
+                free(data);
+                inc = 1;
+                ptr = cmd + i + 1;
+                if (!buffer)
+                    return (NULL);
+            }
             continue;
         }
         if (inc == 1) {
@@ -100,11 +116,11 @@ char **parse_input(char *cmd)
             inc = 0;
             continue;
         }
-        new = strndup(ptr, inc);
-        if (!new)
+        buffer = add_to_buffer(buffer, ptr, inc + 1);
+        if (!buffer)
             return (NULL);
-        new[inc - 1] = '\0';
-        ret[ret_inc++] = new;
+        ret[ret_inc++] = buffer;
+        buffer = NULL;
         ptr = cmd + i + 1;
         inc = 0;
     }
