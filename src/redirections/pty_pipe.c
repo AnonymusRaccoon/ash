@@ -6,15 +6,16 @@
 */
 
 #include "redirections.h"
+#include "my_ncurses.h"
 #include <malloc.h>
 #include <unistd.h>
 #include <fcntl.h>
 #include <stdio.h>
 #include <errno.h>
 #include <stddef.h>
-#include <ncurses.h>
 #include <termios.h>
 #include <sys/ioctl.h>
+#include <string.h>
 #define _XOPEN_SOURCE 600
 #define __USE_XOPEN_EXTENDED
 #include <stdlib.h>
@@ -88,7 +89,14 @@ void pty_get_output(redirection *pty, env_t *env)
     close(pty->fd);
     while (getline(&line, &size, file) > 0)
         my_addstr(env->window, line);
-    if (line)
+    if (line) {
+        if (!strchr(line, '\n')) {
+            my_attron(BACKGROUND_COLOR, WHITE);
+            my_attron(COLOR, BLACK);
+            my_addstr(env->window, "%\n");
+            my_attrreset();
+        }
         free(line);
+    }
     fclose(file);
 }

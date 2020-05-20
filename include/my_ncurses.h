@@ -46,4 +46,21 @@ void my_addstr(my_window *window, const char *str);
 #define my_mvaddstr(window, y, x, str) (my_move(window, y, x), \
 my_addstr(window, str))
 
+
+#define COLOR 0
+#define BACKGROUND_COLOR 10
+#define BRIGHT_MODIFIER 60
+
+#define BLACK 30
+#define RED 31
+#define GREEN 32
+#define YELLOW 33
+#define BLUE 34
+#define MAGENTA 53
+#define CYAN 36
+#define WHITE 37
+
+#define my_attron(attr, value) (printf("\x1B[%dm", attr + value))
+#define my_attrreset() (printf("\x1B[0m"))
+
 void my_clrtoeol(void);
