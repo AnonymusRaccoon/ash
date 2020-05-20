@@ -90,7 +90,7 @@ void pty_get_output(redirection *pty, env_t *env)
     while (getline(&line, &size, file) > 0)
         my_addstr(env->window, line);
     if (line) {
-        if (!strchr(line, '\n')) {
+        if (line[0] && !strchr(line, '\n')) {
             my_attron(BACKGROUND_COLOR, WHITE);
             my_attron(COLOR, BLACK);
             my_addstr(env->window, "%\n");
