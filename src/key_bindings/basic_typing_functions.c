@@ -60,14 +60,14 @@ int newline_command(int key, buffer_t *buffer, env_t *env)
 {
     int ret;
 
-    if (!buffer->buffer)
-        return (0);
-    add_to_history(buffer->buffer, env);
     if (env->window)
         my_addstr(env->window, "\n");
-    ret = eval_raw_cmd(buffer->buffer, env);
-    buffer->buffer[0] = '\0';
-    buffer->pos = 0;
+    if (buffer->buffer) {
+        add_to_history(buffer->buffer, env);
+        ret = eval_raw_cmd(buffer->buffer, env);
+        buffer->buffer[0] = '\0';
+        buffer->pos = 0;
+    }
     if (env->window && ret >= 0)
         prompt_prepare(buffer, env);
     return (ret);
