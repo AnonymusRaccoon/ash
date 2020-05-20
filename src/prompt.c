@@ -10,6 +10,7 @@
 #include "shell.h"
 #include "builtin.h"
 #include "redirections.h"
+#include "parser.h"
 #include "utility.h"
 #include <unistd.h>
 #include <malloc.h>
@@ -32,8 +33,13 @@ const builtin builtins[] = {
 
 int prompt_run(char *cmd, redirection *inout[2], env_t *env)
 {
-    char **argv = get_argv(cmd);
+    //char **argv = get_argv(cmd);
+    char **argv = parse_input(cmd);
 
+    for (int i = 0; argv[i]; i++) {
+        printf("'%s'\n", argv[i]);
+    }
+    return (0);
     if (!argv) {
         perror("mysh");
         return (-1);

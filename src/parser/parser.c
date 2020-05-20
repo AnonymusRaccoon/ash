@@ -10,6 +10,7 @@
 #include "redirections.h"
 #include <unistd.h>
 #include <stdlib.h>
+#include <stdio.h>
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <string.h>
@@ -77,7 +78,7 @@ char **parse_input(char *cmd)
         new = strndup(ptr, inc);
         if (!new)
             return (NULL);
-        new[strlen(new) - 1] = '\0';
+        new[inc - 1] = '\0';
         ret[ret_inc++] = new;
         ptr = cmd + i + 1;
         inc = 0;

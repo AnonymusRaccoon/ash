@@ -14,4 +14,5 @@ typedef struct parser_map {
     int (*parser)(char *, char **);
 } parser_map;
 
+char **parse_input(char *cmd);
 int parse_quotes(char *ptr, char **data);
