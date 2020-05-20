@@ -55,6 +55,18 @@ bool is_character_valid(char c)
     return (false);
 }
 
+char *add_to_buffer(char *buffer, char *ptr, int nb)
+{
+    char *new = strndup(ptr, nb + 1);
+    
+    if (!new)
+        return (NULL);
+    new[nb - 2] = '\0';
+    buffer = strcat_realloc(buffer, new);
+    free(new);
+    return (buffer);
+}
+
 int call_parsers(char *cmd, int index, char **data)
 {
     int new_index = 0;
@@ -62,7 +74,7 @@ int call_parsers(char *cmd, int index, char **data)
     for (int i = 0; parsers[i].key; i++) {
         if (cmd[index] != parsers[i].key)
             continue;
-        new_index = parsers[i].parser(&cmd[index], &data);
+        new_index = parsers[i].parser(&cmd[index], data);
         return (new_index);
     }
     return (0);
@@ -78,7 +90,7 @@ int manage_specials_parsers(char *cmd, int index, char **buffer, int *inc, char 
         return (-1);
     if (new_index > 0) {
         *buffer = add_to_buffer(*buffer, *ptr, (*inc) + 1);
-        *buffer = add_to_buffer(*buffer, *data, strlen(*data));
+        *buffer = add_to_buffer(*buffer, data, strlen(data));
         free(data);
         *inc = 1;
         *ptr = cmd + index + 1;
@@ -86,18 +98,6 @@ int manage_specials_parsers(char *cmd, int index, char **buffer, int *inc, char 
             return (-1);
     }
     return (0);
-}
-
-char *add_to_buffer(char *buffer, char *ptr, int nb)
-{
-    char *new = strndup(ptr, nb + 1);
-    
-    if (!new)
-        return (NULL);
-    new[nb - 2] = '\0';
-    buffer = strcat_realloc(buffer, new);
-    free(new);
-    return (buffer);
 }
 
 char **parse_input(char *cmd)
