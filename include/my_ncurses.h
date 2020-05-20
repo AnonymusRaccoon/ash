@@ -63,4 +63,6 @@ my_addstr(window, str))
 #define my_attron(attr, value) (printf("\x1B[%dm", attr + value))
 #define my_attrreset() (printf("\x1B[0m"))
 
-void my_clrtoeol(void);
+
+#define my_clrtoeol() (printf("\x1B[K"))
+#define my_clrtobot() (printf("\x1B[J"))

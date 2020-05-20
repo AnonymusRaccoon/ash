@@ -21,6 +21,8 @@
 
 int process_key(int key, buffer_t *buffer, env_t *env)
 {
+    if (key <= 0)
+        return (0);
     for (int i = 0; env->bindings[i].func; i++)
         if (key == env->bindings[i].key)
             return (env->bindings[i].func(key, buffer, env));
@@ -47,7 +49,10 @@ int buf_getx(buffer_t *buffer, env_t *env)
 void shell_refresh(buffer_t *buffer, env_t *env)
 {
     static int oldbuffer_pos = 0;
-    int y = env->window->y - (oldbuffer_pos + buffer->startx) / env->window->w;
+    static int oldwidth = -1;
+    if (oldwidth == -1)
+        oldwidth = env->window->w;
+    int y = env->window->y - (oldbuffer_pos + buffer->startx) / oldwidth;
     int newy = y + (buffer->pos + buffer->startx) / env->window->w;
 
     if (buffer->buffer)
@@ -56,6 +61,7 @@ void shell_refresh(buffer_t *buffer, env_t *env)
     my_move(env->window, newy, buf_getx(buffer, env));
     my_refresh();
     oldbuffer_pos = buffer->pos;
+    oldwidth = env->window->w;
 }
 
 void start_shell(env_t *env)

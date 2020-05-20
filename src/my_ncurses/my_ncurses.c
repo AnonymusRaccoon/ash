@@ -10,6 +10,7 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <sys/ioctl.h>
+#include <errno.h>
 #include <signal.h>
 
 my_window *stdwin;
@@ -17,6 +18,8 @@ my_window *stdwin;
 void on_resize(int sig, siginfo_t *info, void *context)
 {
     my_getmaxyx(&stdwin->h, &stdwin->w);
+    my_getcuryx(&stdwin->y, &stdwin->x);
+    my_clrtobot();
 }
 
 my_window *my_initwin(void)
@@ -34,7 +37,7 @@ my_window *my_initwin(void)
     tcsetattr(0, TCSANOW, &term);
     sa.sa_sigaction = &on_resize;
     sigemptyset(&sa.sa_mask);
-    sa.sa_flags = SA_RESTART | SA_SIGINFO;
+    sa.sa_flags = SA_SIGINFO;
     sigaction(SIGWINCH, &sa, NULL);
     my_getmaxyx(&window->h, &window->w);
     my_getcuryx(&window->y, &window->x);
@@ -68,11 +71,11 @@ int my_getch(void)
     int ret = 0;
 
     if (size < 0)
-        return (-1);
+        return (errno == EINTR ? -2 : -1);
     if (size == 1 && c[0] == KEY_ESCAPE)
         size = read(1, &c[1], 3) + 1;
     if (size == 0)
-        return (-1);
+        return (errno == EINTR ? -2 : -1);
     for (int i = 0; i < size; i++)
         ret |= c[i] << (8u * i);
     return (ret);
