@@ -59,6 +59,22 @@ bool is_character_valid(char c)
     return (false);
 }
 
+char *manage_specials_parsers(char *cmd, int index)
+{
+    char *data;
+    int new_index = 0;
+
+    for (int i = 0; parsers[i].key; i++) {
+        if (cmd[index] != parsers[i].key)
+            continue;
+        new_index = parsers[i].parser(&cmd[index], &data);
+        if (new_index == -1)
+            return (NULL);
+        return (data);
+    }
+    return (NULL);
+}
+
 char **parse_input(char *cmd)
 {
     int size = strlen(cmd);
@@ -66,10 +82,19 @@ char **parse_input(char *cmd)
     char *ptr = cmd;
     int ret_inc = 0;
     char *new;
+    char *data;
+    int size_data;
 
     for (int i = 0, inc = 1; i <= size; i++, inc++) {
-        if (is_character_valid(cmd[i]))
+        if (is_character_valid(cmd[i])) {
+            data = manage_specials_parsers(cmd, i);
+            if (!data)
+                continue;
+            size_data = strlen(data);
+            i += size_data + 1;
+            inc += size_data + 1;
             continue;
+        }
         if (inc == 1) {
             ptr = cmd + i + 1;
             inc = 0;
