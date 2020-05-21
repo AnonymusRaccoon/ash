@@ -62,6 +62,7 @@ void init_source_args(char **argv, int len_argv, env_t *env)
 {
     char *str = NULL;
 
+    env->vars = my_setenv(env->vars, "$", tostr(getpid()));
     env->vars = my_setenv(env->vars, "*",
                 len_argv > 2 ? get_special_arg_at(argv, len_argv) : "");
     env->vars = my_setenv(env->vars, "@",
@@ -78,6 +79,9 @@ void reset_source_args(int len_argv, env_t *env)
 {
     char *str = NULL;
 
+    env->vars = my_unsetenv(env->vars, "*");
+    env->vars = my_unsetenv(env->vars, "@");
+    env->vars = my_unsetenv(env->vars, "$");
     env->vars = my_unsetenv(env->vars, "#");
     for (int i = 1; i < len_argv - 1; i++) {
         str = tostr(i);
