@@ -59,8 +59,8 @@ int manage_specials_parsers(char *cmd, int index, char **buffer, int *inc, char 
     if (new_index == -1)
         return (-1);
     if (new_index > 0) {
-        *buffer = add_to_buffer(*buffer, *ptr, (*inc) - 1);
-        *buffer = add_to_buffer(*buffer, data, strlen(data));
+        *buffer = add_to_buffer(*buffer, *ptr, (*inc) - 1, true);
+        *buffer = add_to_buffer(*buffer, data, strlen(data), false);
         free(data);
         *inc = -1;
         *ptr = cmd + index + 1;
@@ -94,7 +94,7 @@ char **parse_input(char *cmd)
             inc = 0;
             continue;
         }
-        buffer = add_to_buffer(buffer, ptr, inc - 1);
+        buffer = add_to_buffer(buffer, ptr, inc - 1, true);
         if (!buffer)
             return (NULL);
         ret[ret_inc++] = buffer;

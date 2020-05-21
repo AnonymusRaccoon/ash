@@ -8,6 +8,8 @@
 #include <malloc.h>
 #include "parser.h"
 
+
+
 char *strcat_realloc(char *dest, char *src)
 {
     if (dest) {
@@ -24,7 +26,7 @@ char *strcat_realloc(char *dest, char *src)
     return (dest);
 }
 
-char *add_to_buffer(char *buffer, char *ptr, int nb)
+char *add_to_buffer(char *buffer, char *ptr, int nb, bool inhibitors)
 {
     char *new;
     
@@ -34,7 +36,21 @@ char *add_to_buffer(char *buffer, char *ptr, int nb)
     if (!new)
         return (NULL);
     new[nb] = '\0';
+    if (inhibitors)
+        remove_inhibitors_symbols_n_limit(new, nb);
     buffer = strcat_realloc(buffer, new);
     free(new);
     return (buffer);
+}
+
+void remove_inhibitors_symbols_n_limit(char *str, int nb)
+{
+    for (int i = 0; str[i] && i < nb; i++) {
+        if (str[i] == '\\') {
+            for (int j = i; str[j]; j++) {
+                str[j] = str[j + 1];
+            }
+            i++;
+        }
+    }
 }

@@ -20,4 +20,6 @@ char **parse_input(char *cmd);
 int parse_quotes(char *ptr, char **data);
 
 char *strcat_realloc(char *dest, char *src);
-char *add_to_buffer(char *buffer, char *ptr, int nb);
+char *add_to_buffer(char *buffer, char *ptr, int nb, bool inhibitors);
+
+void remove_inhibitors_symbols_n_limit(char *str, int nb);
