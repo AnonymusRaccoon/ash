@@ -53,7 +53,7 @@ int call_parsers(char *cmd, int index, char **data, env_t *env)
     return (0);
 }
 
-int manage_specials_parsers(char *cmd, char **buffer, int *inc, char **ptr, env_t *env)
+int manage_specials_parsers(char *cmd, char **buffer, int *inc, env_t *env)
 {
     int new_index = 0;
     char *data = NULL;
@@ -62,11 +62,10 @@ int manage_specials_parsers(char *cmd, char **buffer, int *inc, char **ptr, env_
     if (new_index == -1)
         return (-1);
     if (new_index > 0) {
-        *buffer = add_to_buffer(*buffer, *ptr, (*inc) - 1, true);
+        *buffer = add_to_buffer(*buffer, &cmd[(*inc) * -1], (*inc) - 1, true);
         *buffer = add_to_buffer(*buffer, data, strlen(data), false);
         free(data);
         *inc = 0;
-        *ptr = cmd + new_index + 1;
         if (!(*buffer))
             return (-1);
         return (new_index);
@@ -86,7 +85,7 @@ char **parse_input(char *cmd, env_t *env)
         return (NULL);
     for (int i = 0, inc = 1; i <= (int)strlen(cmd); i++, inc++) {
         if (is_character_valid(cmd[i])) {
-            new_index = manage_specials_parsers(&cmd[i], &buffer, &inc, &ptr, env);
+            new_index = manage_specials_parsers(&cmd[i], &buffer, &inc, env);
             if (new_index == -1)
                 return (NULL);
             i += new_index;
