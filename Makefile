@@ -44,7 +44,8 @@ SRC = src/shell.c \
 	src/key_bindings/move_commands.c \
 	src/my_ncurses/my_ncurses.c \
 	src/my_ncurses/string_utils.c \
-	src/my_ncurses/pause_utils.c
+	src/my_ncurses/pause_utils.c \
+	src/key_bindings/autocompletion.c
 
 OBJ = $(SRC:%.c=%.o)
 OBJ += src/main.o
