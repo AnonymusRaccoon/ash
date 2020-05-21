@@ -66,7 +66,7 @@ void shell_refresh(buffer_t *buffer, env_t *env)
 
 void start_shell(env_t *env)
 {
-    buffer_t buffer = {.size = 0, .buffer = NULL, .pos = 0, .startx = 0};
+    buffer_t buffer = {NULL, 0, 0, 0, 0, NULL};
     int key;
 
     if (isatty(0)) {
@@ -80,5 +80,9 @@ void start_shell(env_t *env)
         } else
             key = fgetc(stdin);
     } while (key != -1 && process_key(key, &buffer, env) >= 0);
+    if (buffer.saved_buffer)
+        free(buffer.saved_buffer);
+    if (buffer.buffer)
+        free(buffer.buffer);
     my_endwin(env->window);
 }
