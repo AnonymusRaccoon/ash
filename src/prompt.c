@@ -33,19 +33,11 @@ const builtin builtins[] = {
 
 int prompt_run(char *cmd, redirection *inout[2], env_t *env)
 {
-    //char **argv = get_argv(cmd);
     char **argv = parse_input(cmd, env);
 
-     if (!argv) {
-        //perror(SHELL_NAME);
+    if (!argv) {
         return (0);
     }
-    for (int i = 0; argv[i]; i++) {
-        printf("'%s'\n", argv[i]);
-    }
-    return (0);
-    for (int i = 0; argv[i]; i++)
-        printf("argv[%i] : %s\n", i , argv[i]);
     if (!argv[0])
         return (0);
     argv = globbing(argv);

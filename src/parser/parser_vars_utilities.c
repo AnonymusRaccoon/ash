@@ -9,6 +9,23 @@
 #include <stdio.h>
 #include <malloc.h>
 
+char *get_var_value(char *var, env_t *env)
+{
+    char *value;
+
+    if (!var)
+        return (NULL);
+    value = my_getenv(env->env, var);
+    if (value)
+        return (value);
+    value = my_getenv(env->vars, var);
+    if (value)
+        return (value);
+    printf("%s: Undefined variable.\n", var);
+    env->vars = my_setenv(env->vars, "?", "1");
+    return (NULL);
+}
+
 int get_var_name(char *ptr, char **name)
 {
     int length = 0;
