@@ -18,6 +18,7 @@
 
 const parser_map parsers[] = {
     {'\'', &parse_quotes},
+    {'"', &parse_double_quotes},
     {'\0', NULL}
 };
 
@@ -37,25 +38,27 @@ bool is_character_valid(char c)
     return (false);
 }
 
-int call_parsers(char *cmd, int index, char **data)
+int call_parsers(char *cmd, int index, char **data, env_t *env)
 {
     int new_index = 0;
 
     for (int i = 0; parsers[i].key; i++) {
         if (cmd[index] != parsers[i].key)
             continue;
-        new_index = parsers[i].parser(&cmd[index], data);
+        new_index = parsers[i].parser(&cmd[index], data, env);
+        if (!(*data))
+            return (-1);
         return (new_index);
     }
     return (0);
 }
 
-int manage_specials_parsers(char *cmd, char **buffer, int *inc, char **ptr)
+int manage_specials_parsers(char *cmd, char **buffer, int *inc, char **ptr, env_t *env)
 {
     int new_index = 0;
     char *data = NULL;
 
-    new_index  = call_parsers(cmd, 0, &data);
+    new_index = call_parsers(cmd, 0, &data, env);
     if (new_index == -1)
         return (-1);
     if (new_index > 0) {
@@ -71,7 +74,7 @@ int manage_specials_parsers(char *cmd, char **buffer, int *inc, char **ptr)
     return (0);
 }
 
-char **parse_input(char *cmd)
+char **parse_input(char *cmd, env_t *env)
 {
     char **ret = malloc(sizeof(char *) * (strlen(cmd) + 1));
     char *ptr = cmd;
@@ -83,13 +86,13 @@ char **parse_input(char *cmd)
         return (NULL);
     for (int i = 0, inc = 1; i <= (int)strlen(cmd); i++, inc++) {
         if (is_character_valid(cmd[i])) {
-            new_index = manage_specials_parsers(&cmd[i], &buffer, &inc, &ptr);
+            new_index = manage_specials_parsers(&cmd[i], &buffer, &inc, &ptr, env);
             if (new_index == -1)
                 return (NULL);
             i += new_index;
             continue;
         }
-        if (inc == 1) {
+        if (inc == 1 && !new_index) {
             ptr = cmd + i + 1;
             inc = 0;
             continue;
@@ -101,6 +104,7 @@ char **parse_input(char *cmd)
         buffer = NULL;
         ptr = cmd + i + 1;
         inc = 0;
+        new_index = 0;
     }
     ret[ret_inc] = NULL;
     return (ret);

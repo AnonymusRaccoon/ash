@@ -34,16 +34,16 @@ const builtin builtins[] = {
 int prompt_run(char *cmd, redirection *inout[2], env_t *env)
 {
     //char **argv = get_argv(cmd);
-    char **argv = parse_input(cmd);
+    char **argv = parse_input(cmd, env);
 
+     if (!argv) {
+        //perror(SHELL_NAME);
+        return (0);
+    }
     for (int i = 0; argv[i]; i++) {
         printf("'%s'\n", argv[i]);
     }
     return (0);
-    if (!argv) {
-        perror(SHELL_NAME);
-        return (-1);
-    }
     for (int i = 0; argv[i]; i++)
         printf("argv[%i] : %s\n", i , argv[i]);
     if (!argv[0])

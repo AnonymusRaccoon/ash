@@ -8,7 +8,22 @@
 #include <malloc.h>
 #include "parser.h"
 
+char *get_var_value(char *var, env_t *env)
+{
+    char *value;
 
+    if (!var)
+        return (NULL);
+    value = my_getenv(env->env, var);
+    if (value)
+        return (value);
+    value = my_getenv(env->vars, var);
+    if (value)
+        return (value);
+    printf("%s: Undefined variable.\n", var);
+    env->vars = my_setenv(env->vars, "?", "1");
+    return (NULL);
+}
 
 char *strcat_realloc(char *dest, char *src)
 {
@@ -53,4 +68,36 @@ void remove_inhibitors_symbols_n_limit(char *str, int nb)
             i++;
         }
     }
+}
+
+char *substring(char *string, int position, int length)
+{
+    char *pointer = malloc(length + 1);
+    int i;
+
+    if(pointer == NULL)
+       return (NULL);
+    for(i = 0; i < length; i++)
+      *(pointer + i) = *((string + position - 1) + i);      
+   *(pointer + i) = '\0';
+   return (pointer);
+}
+
+void insert_substring(char *dest, char *src, int position)
+{
+   char *f;
+   char *e;
+   int length;
+   
+   length = strlen(dest);
+   
+   f = substring(dest, 1, position - 1);      
+   e = substring(dest, position, length - position + 1);
+
+   strcpy(dest, "");
+   strcat(dest, f);
+   free(f);
+   strcat(dest, src);
+   strcat(dest, e);
+   free(e);
 }
