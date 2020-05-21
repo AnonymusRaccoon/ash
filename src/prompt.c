@@ -40,7 +40,7 @@ int prompt_run(char *cmd, redirection *inout[2], env_t *env)
     }
     if (!argv[0])
         return (0);
-    //argv = globbing(argv);
+    argv = globbing(argv);
     if (!argv)
         return (0);
     if (env->window && inout[1] == NULL)
