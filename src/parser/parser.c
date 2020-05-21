@@ -33,9 +33,7 @@ bool is_character_valid(char c)
     if (c == '\\') {
         is_valid = true;
     }
-    if (c >= 33 && c <= 126)
-        return (true);
-    return (false);
+    return (c >= 33 && c <= 126);
 }
 
 int call_parsers(char *cmd, int index, char **data, env_t *env)
@@ -62,10 +60,11 @@ int manage_specials_parsers(char *cmd, char **buffer, int *inc, env_t *env)
     if (new_index == -1)
         return (-1);
     if (new_index > 0) {
-        *buffer = add_to_buffer(*buffer, &cmd[(*inc) * -1], (*inc) - 1, true);
+        (*inc)--;
+        *buffer = add_to_buffer(*buffer, &cmd[(*inc) * -1], (*inc), true);
         *buffer = add_to_buffer(*buffer, data, strlen(data), false);
         free(data);
-        *inc = 0;
+        (*inc) = 0;
         if (!(*buffer))
             return (-1);
         return (new_index);
@@ -85,6 +84,8 @@ int parser_loop(char *cmd, char **buffer, char **ptr, void **pack)
         if ((*new_index) == -1)
             return (-1);
         (*i) += (*new_index);
+        if (*new_index)
+            (*ptr) = cmd + (*i) + 1;
         return (1);
     }
     if (*inc == 1 && !(*new_index)) {
@@ -100,22 +101,22 @@ char **parse_input(char *cmd, env_t *env)
     char **ret = malloc(sizeof(char *) * (strlen(cmd) + 1));
     char *ptr = cmd;
     int idx[3] = {0};
-    char *buffer = NULL;
+    char *buf = NULL;
 
     if (!ret)
         return (NULL);
     for (int i = 0, inc = 1; i <= (int)strlen(cmd); i++, inc++) {
-        idx[2] = parser_loop(cmd, &buffer, &ptr, (void *[4]){&i, &inc, &idx[1], env});
+        idx[2] = parser_loop(cmd, &buf, &ptr, (void *[4]){&i, &inc, &idx[1], env});
         if (idx[2] < 0)
             return (NULL);
         else if (idx[2])
             continue;
-        buffer = add_to_buffer(buffer, ptr, inc - 1, true);
-        if (!buffer)
+        buf = add_to_buffer(buf, ptr, inc - 1, true);
+        if (!buf)
             return (NULL);
-        ret[idx[0]++] = buffer;
+        ret[idx[0]++] = buf;
         ptr = cmd + i + 1;
-        idx[1] = inc = buffer = 0;
+        idx[1] = inc = buf = 0;
     }
     ret[idx[0]] = NULL;
     return (ret);
