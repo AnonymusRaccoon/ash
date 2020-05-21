@@ -22,7 +22,7 @@ int parse_quotes(char *ptr, char **data, env_t *env);
 int parse_double_quotes(char *ptr, char **data, env_t *env);
 
 char *strcat_realloc(char *dest, char *src);
-char *add_to_buffer(char *buffer, char *ptr, int nb, bool inhibitors);
+char *add_to_buffer(char *buffer, char *ptr, int nb, env_t *env);
 char *get_var_value(char *var, env_t *env);
 
 void insert_substring(char *dest, char *src, int position);

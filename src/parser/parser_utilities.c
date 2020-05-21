@@ -41,7 +41,7 @@ char *strcat_realloc(char *dest, char *src)
     return (dest);
 }
 
-char *add_to_buffer(char *buffer, char *ptr, int nb, bool inhibitors)
+char *add_to_buffer(char *buffer, char *ptr, int nb, env_t *env)
 {
     char *new;
     
@@ -51,8 +51,10 @@ char *add_to_buffer(char *buffer, char *ptr, int nb, bool inhibitors)
     if (!new)
         return (NULL);
     new[nb] = '\0';
-    if (inhibitors)
+    if (env) {
         remove_inhibitors_symbols_n_limit(new, nb);
+        new = process_vars(new, env);
+    }
     buffer = strcat_realloc(buffer, new);
     free(new);
     return (buffer);

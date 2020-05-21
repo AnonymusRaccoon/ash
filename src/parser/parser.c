@@ -61,8 +61,8 @@ int manage_specials_parsers(char *cmd, char **buffer, int *inc, env_t *env)
         return (-1);
     if (new_index > 0) {
         (*inc)--;
-        *buffer = add_to_buffer(*buffer, &cmd[(*inc) * -1], (*inc), true);
-        *buffer = add_to_buffer(*buffer, data, strlen(data), false);
+        *buffer = add_to_buffer(*buffer, &cmd[(*inc) * -1], (*inc), env);
+        *buffer = add_to_buffer(*buffer, data, strlen(data), NULL);
         free(data);
         (*inc) = 0;
         if (!(*buffer))
@@ -111,12 +111,11 @@ char **parse_input(char *cmd, env_t *env)
             return (NULL);
         else if (idx[2])
             continue;
-        buf = add_to_buffer(buf, ptr, inc - 1, true);
-        if (!buf)
+        if (!(buf = add_to_buffer(buf, ptr, inc - 1, env)))
             return (NULL);
         ret[idx[0]++] = buf;
         ptr = cmd + i + 1;
-        idx[1] = inc = buf = 0;
+        buf = idx[1] = inc = 0;
     }
     ret[idx[0]] = NULL;
     return (ret);
