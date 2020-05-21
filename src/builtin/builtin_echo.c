@@ -14,7 +14,11 @@
 int builtin_echo(char **argv, env_t *env)
 {
     for (int i = 1; argv[i]; i++) {
-        printf("%s", argv[i]);
+        for (int j = 0; argv[i][j]; j++) {
+            if (argv[i][j] == '\\')
+                j++;
+            printf("%c", argv[i][j]);
+        }
         if (argv[i + 1])
             printf(" ");
     }
