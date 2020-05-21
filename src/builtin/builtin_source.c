@@ -16,27 +16,41 @@
 #include "utility.h"
 #include "shell.h"
 
-static void start_script(char **argv, env_t *env, int len_argv)
+char **get_arr_from_fd(int fd, char *filepath, char *str)
 {
-    char *str = NULL;
-    char **arr = NULL;
-    int fd = open(argv[1], O_RDONLY);
-    bool should_close = false;
     struct stat st_buff;
+    char **arr = NULL;
 
-    if (fd == -1)
-        return;
-    stat(argv[1], &st_buff);
+    stat(filepath, &st_buff);
     str = malloc(st_buff.st_size + 1);
     if (str) {
         read(fd, str, st_buff.st_size);
         arr = split_str(str, '\n');
-        if (arr)
-            for (int i = 0; arr[i] && !should_close; i++)
-                should_close = (eval_raw_cmd(parse_source_cmd(arr[i],
-                                argv, len_argv), env) < 0);
-        free(str);
     }
+    return (arr);
+}
+
+static void start_script(char **argv, env_t *env, int len_argv)
+{
+    int fd = open(argv[1], O_RDONLY);
+    bool should_close = false;
+    char **arr = NULL;
+    char *str = NULL;
+
+    if (fd == -1)
+        return;
+    arr = get_arr_from_fd(fd, argv[1], str);
+    init_source_args(argv, len_argv, env);
+    if (arr) {
+        for (int i = 0; arr[i] && !should_close; i++) {
+            if (arr[i][0] == '#')
+                continue;
+            should_close = (eval_raw_cmd(arr[i], env) < 0);
+        }
+    }
+    reset_source_args(len_argv, env);
+    free(arr);
+    free(str);
     close(fd);
 }
 
@@ -69,9 +83,12 @@ int builtin_source(char **argv, env_t *env)
     for (; argv[len]; len++);
     if (len == 1) {
         printf("%s: Too few arguments.\n", argv[0]);
+        env->vars = my_setenv(env->vars, "?", "1");
         return (0);
     }
     if (file_is_accessible(argv[1]))
         start_script(argv, env, len);
+    else
+        env->vars = my_setenv(env->vars, "?", "1");
     return (0);
 }

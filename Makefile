@@ -54,7 +54,6 @@ TESTS = tests/tenv.c \
 	tests/targc.c \
 	tests/texecute.c \
 	tests/tcd.c \
-	tests/tsource.c \
 
 COVERAGE = -lcriterion --coverage
 
