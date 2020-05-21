@@ -79,7 +79,7 @@ tests_run: clean
 	$(UT)
 
 func: all
-	where bash
+	ls /usr/bin
 	cd tests/tester/ && cp ../../$(NAME) $(NAME) && ./tester.sh
 	rm tests/tester/$(NAME)
 
