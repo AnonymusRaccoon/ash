@@ -21,13 +21,13 @@ int self_insert_command(int key, buffer_t *buffer, env_t *env)
     int charslen = strlen(chars);
     int len = (buffer->buffer ? strlen(buffer->buffer) : 0) + charslen;
 
-    if (len >= buffer->size || !buffer->buffer) {
+    if (len + 1 >= buffer->size || !buffer->buffer) {
         buffer->buffer = realloc(buffer->buffer, buffer->size + 100);
         buffer->size += 100;
     }
     if (!buffer->buffer)
         return (-1);
-    for (int i = len - 1; i > buffer->pos; i--)
+    for (int i = len - 1; i > buffer->pos && i > charslen; i--)
         buffer->buffer[i] = buffer->buffer[i - charslen];
     memcpy(buffer->buffer + buffer->pos, chars, charslen);
     buffer->buffer[len] = '\0';
