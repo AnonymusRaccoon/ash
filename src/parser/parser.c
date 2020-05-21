@@ -62,8 +62,8 @@ int manage_specials_parsers(char *cmd, int index, char **buffer, int *inc, char 
         *buffer = add_to_buffer(*buffer, *ptr, (*inc) - 1, true);
         *buffer = add_to_buffer(*buffer, data, strlen(data), false);
         free(data);
-        *inc = -1;
-        *ptr = cmd + index + 1;
+        *inc = 0;
+        *ptr = cmd + index + new_index + 1;
         if (!(*buffer))
             return (-1);
         return (new_index);
