@@ -26,7 +26,7 @@ char **glob_error(char **argv, int err)
 char **globbing(char **argv)
 {
     static glob_t results;
-    int flags = GLOB_DOOFFS | GLOB_NOMAGIC;
+    int flags = GLOB_DOOFFS | GLOB_NOMAGIC | GLOB_TILDE;
     int ret = 0;
 
     for (int i = 0; argv[i] && ret == 0; i++) {

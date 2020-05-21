@@ -57,7 +57,7 @@ void shell_refresh(buffer_t *buffer, env_t *env)
 
     if (buffer->buffer)
         my_mvaddstr(env->window, y, buffer->startx, buffer->buffer);
-    my_clrtobot();
+    my_clrtoeol();
     my_move(env->window, newy, buf_getx(buffer, env));
     my_refresh();
     oldbuffer_pos = buffer->pos;

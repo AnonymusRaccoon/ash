@@ -19,6 +19,7 @@ void on_resize(int sig, siginfo_t *info, void *context)
 {
     my_getmaxyx(&stdwin->h, &stdwin->w);
     my_getcuryx(&stdwin->y, &stdwin->x);
+    my_clrtobot();
 }
 
 my_window *my_initwin(void)
