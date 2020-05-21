@@ -69,7 +69,8 @@ int newline_command(int key, buffer_t *buffer, env_t *env)
         my_nresume(env->window);
         buffer->buffer[0] = '\0';
         buffer->pos = 0;
-        my_getcuryx(&env->window->y, &env->window->x);
+        if (env->window)
+            my_getcuryx(&env->window->y, &env->window->x);
     }
     if (env->window && ret >= 0)
         prompt_prepare(buffer, env);
