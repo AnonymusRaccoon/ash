@@ -45,6 +45,8 @@ char **args, env_t *env);
 //source
 void init_source_args(char **argv, int len_argv, env_t *env);
 void reset_source_args(int len_argv, env_t *env);
+char *get_special_arg_at(char **argv, int len_argv);
+char *get_special_arg_star(char **argv, int len_argv);
 //alias
 int add_alias(alias_t **list, char *alias, char **command);
 char *concatenate(char **command);
