@@ -25,6 +25,7 @@
 typedef struct
 {
     struct termios old_termios;
+    struct termios saved_termios;
     int x;
     int y;
     int w;
@@ -66,3 +67,6 @@ my_addstr(window, str))
 
 #define my_clrtoeol() (printf("\x1B[K"))
 #define my_clrtobot() (printf("\x1B[J"))
+
+void my_npause(my_window *window);
+void my_nresume(my_window *window);
