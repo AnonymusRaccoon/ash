@@ -1,4 +1,0 @@
-cd ..
-alias history ls
-history -la
-unalias history

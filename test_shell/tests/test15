@@ -1,8 +1,0 @@
-alias ls ls -l
-alias
-alias ls "ls -l"
-alias
-alias ls 'ls -l'
-alias
-alias ls ls\ -l
-alias

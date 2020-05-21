@@ -1,2 +1,0 @@
-cd ..
-ls null; ls ok && ls; ls || ls -l; ls
