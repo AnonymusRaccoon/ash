@@ -1,0 +1,4 @@
+cd ..
+setenv a s
+setenv b rc
+ls $a$b

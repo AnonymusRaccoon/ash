@@ -1,0 +1,16 @@
+unalias ls
+alias ls cd
+alias
+ls ..
+unalias ls
+ls
+alias a a
+alias b b
+alias L L
+alias
+unalias b
+alias
+unalias a
+alias
+unalias L
+alias

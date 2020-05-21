@@ -1,0 +1,4 @@
+alias ls cd ..
+alias | grep cd
+alias ls cd
+alias | grep cd

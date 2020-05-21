@@ -1,0 +1,2 @@
+setenv ok lol
+echo $ok bye

@@ -1,0 +1,7 @@
+cd ../../..
+cd 'Semestre 2'
+ls; cd ..
+cd "Semestre 2"
+ls; cd ..
+cd Semestre\ 2
+ls
