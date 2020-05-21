@@ -17,6 +17,7 @@ void init_source_args(char **argv, int len_argv, env_t *env)
 {
     char *str = NULL;
 
+    env->vars = my_setenv(env->vars, "#", tostr(len_argv - 2));
     for (int i = 1; i < len_argv - 1; i++) {
         str = tostr(i);
         env->vars = my_setenv(env->vars, str, strdup(argv[i + 1]));
@@ -28,6 +29,7 @@ void reset_source_args(int len_argv, env_t *env)
 {
     char *str = NULL;
 
+    env->vars = my_unsetenv(env->vars, "#");
     for (int i = 1; i < len_argv - 1; i++) {
         str = tostr(i);
         env->vars = my_unsetenv(env->vars, str);
