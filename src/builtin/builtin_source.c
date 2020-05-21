@@ -40,14 +40,15 @@ static void start_script(char **argv, env_t *env, int len_argv)
     if (fd == -1)
         return;
     arr = get_arr_from_fd(fd, argv[1], str);
+    init_source_args(argv, len_argv, env);
     if (arr) {
         for (int i = 0; arr[i] && !should_close; i++) {
             if (arr[i][0] == '#')
                 continue;
-            should_close = (eval_raw_cmd(parse_source_cmd(arr[i],
-                            argv, len_argv), env) < 0);
+            should_close = (eval_raw_cmd(arr[i], env) < 0);
         }
     }
+    reset_source_args(len_argv, env);
     free(arr);
     free(str);
     close(fd);
@@ -82,9 +83,12 @@ int builtin_source(char **argv, env_t *env)
     for (; argv[len]; len++);
     if (len == 1) {
         printf("%s: Too few arguments.\n", argv[0]);
+        env->vars = my_setenv(env->vars, "?", "1");
         return (0);
     }
     if (file_is_accessible(argv[1]))
         start_script(argv, env, len);
+    else
+        env->vars = my_setenv(env->vars, "?", "1");
     return (0);
 }
