@@ -96,25 +96,25 @@ int parser_loop(char *cmd, char **buffer, char **ptr, void **pack)
     return (0);
 }
 
-char **parse_input(char *cmd, env_t *env)
+char **parse_input(char *cmd, env_t *e)
 {
     char **ret = malloc(sizeof(char *) * (strlen(cmd) + 1));
-    char *ptr = cmd;
+    char *p = cmd;
     int idx[3] = {0};
     char *buf = NULL;
 
     if (!ret)
         return (NULL);
     for (int i = 0, inc = 1; i <= (int)strlen(cmd); i++, inc++) {
-        idx[2] = parser_loop(cmd, &buf, &ptr, (void *[4]){&i, &inc, &idx[1], env});
+        idx[2] = parser_loop(cmd, &buf, &p, (void *[4]){&i, &inc, &idx[1], e});
         if (idx[2] < 0)
             return (NULL);
         else if (idx[2])
             continue;
-        if (!(buf = add_to_buffer(buf, ptr, inc - 1, env)))
+        if (!(buf = add_to_buffer(buf, p, inc - 1, e)))
             return (NULL);
         ret[idx[0]++] = buf;
-        ptr = cmd + i + 1;
+        p = cmd + i + 1;
         buf = idx[1] = inc = 0;
     }
     ret[idx[0]] = NULL;
