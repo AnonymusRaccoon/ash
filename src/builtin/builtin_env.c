@@ -18,6 +18,7 @@ int builtin_env(char **argv, env_t *env)
         write(1, "\n", 1);
     }
     free(argv);
+    env->vars = my_setenv(env->vars, "?", "0");
     return (0);
 }
 
@@ -37,6 +38,7 @@ int builtin_setenv(char **argv, env_t *env)
         return (0);
     }
     env->env = my_setenv(env->env, argv[1], argv[2]);
+    env->vars = my_setenv(env->vars, "?", "0");
     free(argv);
     return (0);
 }
@@ -52,6 +54,7 @@ int builtin_unsetenv(char **argv, env_t *env)
     for (int i = 1; argv[i]; i++)
         if (!strchr(argv[i], '='))
             env->env = my_unsetenv(env->env, argv[i]);
+    env->vars = my_setenv(env->vars, "?", "0");
     free(argv);
     return (0);
 }

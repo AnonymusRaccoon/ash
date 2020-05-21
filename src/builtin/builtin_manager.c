@@ -54,8 +54,10 @@ int builtin_cd(char **argv, env_t *env)
     if (chdir(path) < 0) {
         printf("%s: %s.\n", path, strerror(errno));
         env->vars = my_setenv(env->vars, "?", "1");
-    } else
+    } else {
         env->env = my_setenv(env->env, "OLDPWD", old);
+        env->vars = my_setenv(env->vars, "?", "0");
+    }
     free(old);
     free(argv);
     return (0);

@@ -20,6 +20,6 @@ int builtin_echo(char **argv, env_t *env)
     }
     printf("\n");
     fflush(stdout);
-    env = (env_t *)(void *)env;
+    env->vars = my_setenv(env->vars, "?", "0");
     return (0);
 }
