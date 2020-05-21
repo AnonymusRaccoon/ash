@@ -71,3 +71,11 @@ char *process_vars(char *cmd, env_t *env)
     }
     return (cmd);
 }
+
+void free_array(char **array)
+{
+    for (int i = 0; array[i]; i++) {
+        free(array[i]);
+    }
+    free(array);
+}

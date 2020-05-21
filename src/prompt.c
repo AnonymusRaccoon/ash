@@ -40,7 +40,7 @@ int prompt_run(char *cmd, redirection *inout[2], env_t *env)
     }
     if (!argv[0])
         return (0);
-    argv = globbing(argv);
+    //argv = globbing(argv);
     if (!argv)
         return (0);
     if (env->window && inout[1] == NULL)
@@ -51,7 +51,7 @@ int prompt_run(char *cmd, redirection *inout[2], env_t *env)
         if (!strcmp(argv[0], builtins[i].name))
             return (run_builtin(&builtins[i], argv, inout, env));
     run_cmd(argv, inout, env);
-    free(argv);
+    free_array(argv);
     return (0);
 }
 

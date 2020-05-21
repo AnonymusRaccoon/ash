@@ -17,6 +17,7 @@ typedef struct parser_map {
 } parser_map;
 
 char **parse_input(char *cmd, env_t *env);
+void free_array(char **array);
 
 int parse_quotes(char *ptr, char **data, env_t *env);
 int parse_double_quotes(char *ptr, char **data, env_t *env);
