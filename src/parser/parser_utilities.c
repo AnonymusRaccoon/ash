@@ -44,6 +44,7 @@ char *strcat_realloc(char *dest, char *src)
 char *add_to_buffer(char *buffer, char *ptr, int nb, env_t *env)
 {
     char *new;
+    char *tmp;
     
     if (nb <= 0)
         return (buffer);
@@ -53,7 +54,9 @@ char *add_to_buffer(char *buffer, char *ptr, int nb, env_t *env)
     new[nb] = '\0';
     if (env) {
         remove_inhibitors_symbols_n_limit(new, nb);
-        new = process_vars(new, env);
+        tmp = process_vars(new, env);
+        if (tmp)
+            new = tmp;
     }
     buffer = strcat_realloc(buffer, new);
     free(new);
