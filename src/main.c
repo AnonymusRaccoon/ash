@@ -5,6 +5,7 @@
 ** main
 */
 
+#include "builtin.h"
 #include "shell.h"
 #include "key_functions.h"
 #include <stdlib.h>
@@ -38,9 +39,10 @@ int main(int argc, char **argv, char **env)
 
     if (!envt)
         return (ERROR);
-    start_shell(envt);
-    (void)argc;
-    (void)argv;
+    if (argc >= 2)
+        builtin_source(argv, envt);
+    else
+        start_shell(envt);
     ret = get_return(my_getenv(envt->vars, "?"));
     free_env(envt);
     return (ret);

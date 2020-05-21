@@ -43,8 +43,8 @@ void remove_duplicate_history(env_t *env);
 int execute_command_history(history_t *old, history_t *new,
 char **args, env_t *env);
 //source
-char *parse_source_cmd(char *cmd, char **argv, int len_argv);
-
+void init_source_args(char **argv, int len_argv, env_t *env);
+void reset_source_args(int len_argv, env_t *env);
 //alias
 int add_alias(alias_t **list, char *alias, char **command);
 char *concatenate(char **command);
