@@ -73,38 +73,50 @@ int manage_specials_parsers(char *cmd, char **buffer, int *inc, env_t *env)
     return (0);
 }
 
+int parser_loop(char *cmd, char **buffer, char **ptr, void **pack)
+{
+    int *i = pack[0];
+    int *inc = pack[1];
+    int *new_index = pack[2];
+    env_t *env = pack[3];
+
+    if (is_character_valid(cmd[*i])) {
+        (*new_index) = manage_specials_parsers(&cmd[(*i)], buffer, inc, env);
+        if ((*new_index) == -1)
+            return (-1);
+        (*i) += (*new_index);
+        return (1);
+    }
+    if (*inc == 1 && !(*new_index)) {
+        (*ptr) = cmd + (*i) + 1;
+        (*inc) = 0;
+        return (1);
+    }
+    return (0);
+}
+
 char **parse_input(char *cmd, env_t *env)
 {
     char **ret = malloc(sizeof(char *) * (strlen(cmd) + 1));
     char *ptr = cmd;
-    int ret_inc = 0;
+    int idx[3] = {0};
     char *buffer = NULL;
-    int new_index = 0;
 
     if (!ret)
         return (NULL);
     for (int i = 0, inc = 1; i <= (int)strlen(cmd); i++, inc++) {
-        if (is_character_valid(cmd[i])) {
-            new_index = manage_specials_parsers(&cmd[i], &buffer, &inc, env);
-            if (new_index == -1)
-                return (NULL);
-            i += new_index;
+        idx[2] = parser_loop(cmd, &buffer, &ptr, (void *[4]){&i, &inc, &idx[1], env});
+        if (idx[2] < 0)
+            return (NULL);
+        else if (idx[2])
             continue;
-        }
-        if (inc == 1 && !new_index) {
-            ptr = cmd + i + 1;
-            inc = 0;
-            continue;
-        }
         buffer = add_to_buffer(buffer, ptr, inc - 1, true);
         if (!buffer)
             return (NULL);
-        ret[ret_inc++] = buffer;
-        buffer = NULL;
+        ret[idx[0]++] = buffer;
         ptr = cmd + i + 1;
-        inc = 0;
-        new_index = 0;
+        idx[1] = inc = buffer = 0;
     }
-    ret[ret_inc] = NULL;
+    ret[idx[0]] = NULL;
     return (ret);
 }
