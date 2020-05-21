@@ -7,7 +7,7 @@ for file in test_shell/tests/*; do
     echo 'CLEAN=""'
     echo "TESTS="
     cat $file | sed s/^/"echo '"/ | sed s/$/\'/
-    echo "'"
+    echo ""
     echo "["$i"-END]"
     echo ""
     ((i++))
