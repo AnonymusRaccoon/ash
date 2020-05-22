@@ -115,7 +115,7 @@ char **parse_input(char *cmd, env_t *e)
             return (NULL);
         ret[idx[0]++] = buf;
         p = cmd + i + 1;
-        buf = idx[1] = inc = 0;
+        idx[1] = inc = (long)(buf = NULL);
     }
     ret[idx[0]] = NULL;
     return (ret);
