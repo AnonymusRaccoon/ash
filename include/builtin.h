@@ -28,6 +28,7 @@ int builtin_source(char **argv, env_t *env);
 int builtin_history(char **args, env_t *env);
 int builtin_alias(char **args, env_t *env);
 int builtin_unalias(char **args, env_t *env);
+int builtin_echo(char **args, env_t *env);
 //utility
 bool find_path_in_builtins(char *cmd);
 char **get_envpath(env_t *env);
@@ -53,3 +54,6 @@ int add_alias_to_list(alias_t **list, alias_t *elem, char *alias);
 
 //unalias
 void remove_alias(char *alias, alias_t **list);
+
+//echo
+int print_char(char *str, int i);

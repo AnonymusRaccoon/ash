@@ -17,6 +17,8 @@ EXPR=`which expr`
 MKDIR=`which mkdir`
 CP=`which cp`
 
+ko=1
+
 for i in `env | grep BASH_FUNC_ | cut -d= -f1`; do
     f=`echo $i | sed s/BASH_FUNC_//g | sed s/%%//g`
     unset -f $f
@@ -104,6 +106,7 @@ load_test()
       echo "OK"
     fi
   else
+    ko=0
     if [ $debug -ge 1 ]
     then
       echo "Test $id ($NAME) : KO - Check output in /tmp/test.$$/$id/" 
@@ -168,4 +171,9 @@ else
       load_test $1 2
     fi
   fi
+fi
+
+if [ $ko -eq 0 ]
+then
+  exit 1
 fi

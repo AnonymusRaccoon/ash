@@ -38,3 +38,6 @@ int forward_char_command(int key, buffer_t *buffer, env_t *env);
 int backward_char_command(int key, buffer_t *buffer, env_t *env);
 int beginning_of_line_command(int key, buffer_t *buffer, env_t *env);
 int end_of_line_command(int key, buffer_t *buffer, env_t *env);
+
+int up_history_command(int key, buffer_t *buffer, env_t *env);
+int down_history_command(int key, buffer_t *buffer, env_t *env);

@@ -21,6 +21,8 @@
 
 int process_key(int key, buffer_t *buffer, env_t *env)
 {
+    if (key <= 0)
+        return (0);
     for (int i = 0; env->bindings[i].func; i++)
         if (key == env->bindings[i].key)
             return (env->bindings[i].func(key, buffer, env));
@@ -47,20 +49,24 @@ int buf_getx(buffer_t *buffer, env_t *env)
 void shell_refresh(buffer_t *buffer, env_t *env)
 {
     static int oldbuffer_pos = 0;
-    int y = env->window->y - (oldbuffer_pos + buffer->startx) / env->window->w;
+    static int oldwidth = -1;
+    if (oldwidth == -1)
+        oldwidth = env->window->w;
+    int y = env->window->y - (oldbuffer_pos + buffer->startx) / oldwidth;
     int newy = y + (buffer->pos + buffer->startx) / env->window->w;
 
     if (buffer->buffer)
         my_mvaddstr(env->window, y, buffer->startx, buffer->buffer);
-    my_clrtoeol();
+    my_clrtobot();
     my_move(env->window, newy, buf_getx(buffer, env));
     my_refresh();
     oldbuffer_pos = buffer->pos;
+    oldwidth = env->window->w;
 }
 
 void start_shell(env_t *env)
 {
-    buffer_t buffer = {.size = 0, .buffer = NULL, .pos = 0, .startx = 0};
+    buffer_t buffer = {NULL, 0, 0, 0, 0, NULL};
     int key;
 
     if (isatty(0)) {
@@ -74,5 +80,9 @@ void start_shell(env_t *env)
         } else
             key = fgetc(stdin);
     } while (key != -1 && process_key(key, &buffer, env) >= 0);
+    if (buffer.saved_buffer)
+        free(buffer.saved_buffer);
+    if (buffer.buffer)
+        free(buffer.buffer);
     my_endwin(env->window);
 }
