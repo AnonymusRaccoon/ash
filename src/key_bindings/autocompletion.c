@@ -24,17 +24,21 @@ void print_results(my_window *window, unsigned count, char **results)
 {
     unsigned size = 0;
     int per_line;
+    int prefix_length = 0;
+    char *p = memrchr(results[0], '/', strlen(results[0]) - 1);
 
+    if (p)
+        prefix_length = p - results[0] + 1;
     putchar('\n');
     my_clrtobot();
     for (unsigned i = 0; i < count; i++)
-        size = MAX(size, strlen(results[i]));
+        size = MAX(size, strlen(results[i]) - prefix_length);
     size++;
     per_line = window->w / size;
     for (unsigned i = 0; i < count; i += per_line) {
         for (int j = 0; j < per_line && i + j < count; j++)
-            printf("%-*s", size, results[i + j]);
-        printf("\n");
+            printf("%-*s", size, results[i + j] + prefix_length);
+        putchar('\n');
     }
 }
 
