@@ -32,16 +32,19 @@ int skip_eof(buffer_t *buffer, env_t *env)
 
 int eof_command(int key, buffer_t *buffer, env_t *env)
 {
-    static unsigned count = 0;
-    unsigned max = 26;
     char *ignoreeof = my_getenv(env->vars, "ignoreeof");
+    char *eof = my_getenv(env->vars, "eof");
+    char new[20];
+    unsigned count = eof ? strtol(eof, NULL, 10) : 1;
+    unsigned max = 26;
 
     if (env->window && buffer->buffer && *buffer->buffer)
         return (skip_eof(buffer, env));
     if (!ignoreeof || !env->window)
         return (-1);
     max = get_max_eof(ignoreeof);
-    count++;
+    sprintf(new, "%u", ++count);
+    env->vars = my_setenv(env->vars, "eof", new);
     if (count >= max)
         return (-1);
     my_addstr(env->window, "\n");

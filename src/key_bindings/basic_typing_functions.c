@@ -62,6 +62,7 @@ int newline_command(int key, buffer_t *buffer, env_t *env)
 
     if (!buffer->buffer)
         return (0);
+    env->vars = my_unsetenv(env->vars, "eof");
     add_to_history(buffer->buffer, env);
     if (env->window)
         my_addstr(env->window, "\n");
