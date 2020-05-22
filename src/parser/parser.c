@@ -5,7 +5,6 @@
 ** redirections
 */
 
-
 #include "shell.h"
 #include "redirections.h"
 #include <unistd.h>
