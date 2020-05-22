@@ -66,7 +66,7 @@ char *substring(char *string, int position, int length)
        return (NULL);
     for (i = 0; i < length; i++)
         *(pointer + i) = *((string + position - 1) + i);
-        *(pointer + i) = '\0';
+    *(pointer + i) = '\0';
    return (pointer);
 }
 
