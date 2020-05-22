@@ -42,9 +42,12 @@ void buffer_replace(buffer_t *buffer, char *to_replace, int start, int end)
         buffer->buffer = realloc(buffer->buffer, total  + 50);
         buffer->size = total + 50;
     }
-    for (int i = strlen(buffer->buffer); i > end; i--)
-        buffer->buffer[i + len] = buffer->buffer[i];
+    if (!buffer->buffer)
+        return;
+    for (int i = strlen(buffer->buffer); i >= end; i--)
+        buffer->buffer[i + len - 1] = buffer->buffer[i];
     memcpy(buffer->buffer + start, to_replace, len);
+    buffer->buffer[total - (end - start)] = '\0';
 }
 
 void complete_current(buffer_t *buffer, char *cmd)
@@ -70,7 +73,8 @@ int complete_command(int key, buffer_t *buffer, env_t *env)
     if (!buffer->buffer || !p)
         return (0);
     str = malloc(buffer->pos - (p - buffer->buffer) + 2);
-    strncpy(str, p, buffer->pos - (p - buffer->buffer) + 1);
+    strncpy(str, p, buffer->pos - (p - buffer->buffer));
+    str[buffer->pos - (p - buffer->buffer)] = '\0';
     strcat(str, "*");
     if (!glob(str, GLOB_MARK | GLOB_BRACE, NULL, &result)) {
         if (result.gl_pathc == 1)
