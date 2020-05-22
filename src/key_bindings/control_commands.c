@@ -6,8 +6,54 @@
 */
 
 #include "shell.h"
+#include <stddef.h>
+#include <string.h>
+#include <malloc.h>
 
 int eof_command(int key, buffer_t *buffer, env_t *env)
 {
     return (-1);
+}
+
+bool set_buffer_to_history(buffer_t *buffer, env_t *env)
+{
+    history_t *hist = env->history;
+    char *cmd = NULL;
+    int len;
+
+    if (buffer->history_index == 0)
+        cmd = buffer->saved_buffer != NULL ? buffer->saved_buffer : "";
+    else
+        for (int i = 1; i < buffer->history_index && hist; i++)
+            hist = hist->next;
+    if (!cmd && (!hist || !(cmd = hist->command)))
+        return (false);
+    if (!buffer->buffer || buffer->size < (len = strlen(cmd))) {
+        buffer->buffer = realloc(buffer->buffer, buffer->size + len);
+        buffer->size += len;
+    }
+    if (!buffer->buffer)
+        return (false);
+    strcpy(buffer->buffer, cmd);
+    buffer->pos = strlen(buffer->buffer);
+    return (true);
+}
+
+int up_history_command(int key, buffer_t *buffer, env_t *env)
+{
+    if (buffer->buffer && buffer->history_index == 0)
+        buffer->saved_buffer = strdup(buffer->buffer);
+    buffer->history_index++;
+    if (!set_buffer_to_history(buffer, env))
+        buffer->history_index--;
+    return (0);
+}
+
+int down_history_command(int key, buffer_t *buffer, env_t *env)
+{
+    if (buffer->history_index <= 0)
+        return (0);
+    buffer->history_index--;
+    set_buffer_to_history(buffer, env);
+    return (0);
 }

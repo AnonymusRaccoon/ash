@@ -123,3 +123,255 @@ TESTS=
   echo 'ls -l'
   echo 'exit 45|cat /etc/resolv.conf'
 [912-END]
+
+[913]
+NAME="913"
+SETUP=""
+CLEAN=""
+TESTS=
+  echo 'cd ..'
+  echo 'ls null; ls ok && ls; ls || ls -l; ls'
+[913-END]
+
+[914]
+NAME="914"
+SETUP=""
+CLEAN=""
+TESTS=
+  echo 'cd ..'
+  echo 'alias history ls'
+  echo 'history -la'
+  echo 'unalias history'
+[914-END]
+
+[915]
+NAME="915"
+SETUP=""
+CLEAN=""
+TESTS=
+  echo 'unalias && ls'
+[915-END]
+
+[916]
+NAME="916"
+SETUP=""
+CLEAN=""
+TESTS=
+  echo 'unalias || ls ..'
+[916-END]
+
+[917]
+NAME="917"
+SETUP=""
+CLEAN=""
+TESTS=
+  echo 'unalias ls'
+  echo 'alias ls cd'
+  echo 'alias'
+  echo 'ls ..'
+  echo 'unalias ls'
+  echo 'ls'
+  echo 'alias a a'
+  echo 'alias b b'
+  echo 'alias L L'
+  echo 'alias'
+  echo 'unalias b'
+  echo 'alias'
+  echo 'unalias a'
+  echo 'alias'
+  echo 'unalias L'
+  echo 'alias'
+[917-END]
+
+[918]
+NAME="918"
+SETUP=""
+CLEAN=""
+TESTS=
+  echo 'alias ls cd ..'
+  echo 'alias | grep cd'
+  echo 'alias ls cd'
+  echo 'alias | grep cd'
+[918-END]
+
+[919]
+NAME="919"
+SETUP=""
+CLEAN=""
+TESTS=
+  echo 'alias ls ls -l'
+  echo 'alias'
+  echo 'alias ls "ls -l"'
+  echo 'alias'
+  echo 'alias ls 'ls -l''
+  echo 'alias'
+  echo 'alias ls ls\ -l'
+  echo 'alias'
+[919-END]
+
+[920]
+NAME="920"
+SETUP=""
+CLEAN=""
+TESTS=
+  echo 'ls ''
+[920-END]
+
+[921]
+NAME="921"
+SETUP=""
+CLEAN=""
+TESTS=
+  echo 'cd ../../..'
+  echo 'cd 'Semestre 2''
+  echo 'ls; cd ..'
+  echo 'cd "Semestre 2"'
+  echo 'ls; cd ..'
+  echo 'cd Semestre\ 2'
+  echo 'ls'
+[921-END]
+
+[922]
+NAME="922"
+SETUP=""
+CLEAN=""
+TESTS=
+  echo 'echo ok bye'
+[922-END]
+
+[923]
+NAME="923"
+SETUP=""
+CLEAN=""
+TESTS=
+  echo 'setenv ok lol'
+  echo 'echo $ok bye'
+[923-END]
+
+[924]
+NAME="924"
+SETUP=""
+CLEAN=""
+TESTS=
+  echo 'ls l && cd ok'
+  echo 'ls &&'
+[924-END]
+
+[925]
+NAME="925"
+SETUP=""
+CLEAN=""
+TESTS=
+  echo 'echo \n'
+[925-END]
+
+[926]
+NAME="926"
+SETUP=""
+CLEAN=""
+TESTS=
+  echo 'echo'
+[926-END]
+
+[927]
+NAME="927"
+SETUP=""
+CLEAN=""
+TESTS=
+  echo 'echo "\n"'
+[927-END]
+
+[928]
+NAME="928"
+SETUP=""
+CLEAN=""
+TESTS=
+  echo 'echo "$"'
+[928-END]
+
+[929]
+NAME="929"
+SETUP=""
+CLEAN=""
+TESTS=
+  echo 'echo "\t"'
+  echo 'echo $'
+  echo 'echo $?'
+[929-END]
+
+[930]
+NAME="930"
+SETUP=""
+CLEAN=""
+TESTS=
+  echo 'cd ..'
+  echo 'setenv a s'
+  echo 'setenv b rc'
+  echo 'ls $a$b'
+[930-END]
+
+[931]
+NAME="931"
+SETUP=""
+CLEAN=""
+TESTS=
+  echo 'cd ..'
+  echo ' && ls'
+[931-END]
+
+[932]
+NAME="932"
+SETUP=""
+CLEAN=""
+TESTS=
+  echo 'ls ||'
+[932-END]
+
+[933]
+NAME="933"
+SETUP=""
+CLEAN=""
+TESTS=
+  echo ' || ls'
+[933-END]
+
+[934]
+NAME="934"
+SETUP=""
+CLEAN=""
+TESTS=
+  echo ' ||   '
+[934-END]
+
+[935]
+NAME="935"
+SETUP=""
+CLEAN=""
+TESTS=
+  echo ' &&     '
+[935-END]
+
+[936]
+NAME="936"
+SETUP=""
+CLEAN=""
+TESTS=
+  echo ' &&     '
+  echo 'ls ; || ; &&; ls'
+[936-END]
+
+[937]
+NAME="937"
+SETUP=""
+CLEAN=""
+TESTS=
+  echo 'alias a a'
+  echo 'alias b b'
+  echo 'alias L L'
+  echo 'alias'
+  echo 'alias ok bye'
+  echo 'alias a bye'
+  echo 'alias'
+  echo 'unalias ok;alias'
+[937-END]
+

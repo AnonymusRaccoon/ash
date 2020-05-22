@@ -50,6 +50,7 @@ int builtin_cd(char **argv, env_t *env)
         env->vars = my_setenv(env->vars, "?", "1");
         return (0);
     }
+    env->vars = my_setenv(env->vars, "?", "0");
     if (!argv[1])
         path = my_getenv(env->env, "HOME");
     else if (argv[1] && !strcmp(argv[1], "-"))
@@ -66,7 +67,8 @@ int builtin_cd(char **argv, env_t *env)
 
 int builtin_exit(char **argv, env_t *env)
 {
+    if (argv[1])
+        env->vars = my_setenv(env->vars, "?", "1");
     free(argv);
-    (void)env;
     return (-1);
 }
