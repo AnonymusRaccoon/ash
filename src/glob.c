@@ -19,7 +19,7 @@ char **glob_error(char **argv, int err)
         fprintf(stderr, "%s: %s\n", argv[0], "No match.");
     if (err == GLOB_NOSPACE)
         fprintf(stderr, "%s: %s\n", argv[0], "No space.");
-    free(argv);
+    free(argv[0]);
     return (NULL);
 }
 
@@ -37,6 +37,6 @@ char **globbing(char **argv)
         globfree(&results);
         return (glob_error(argv, ret));
     }
-    free(argv);
+    //free(argv);
     return (&results.gl_pathv[0]);
 }

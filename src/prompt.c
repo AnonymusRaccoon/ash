@@ -41,7 +41,7 @@ int prompt_run(char *cmd, redirection *inout[2], env_t *env)
     }
     if (!argv[0])
         return (0);
-    argv = globbing(argv);
+    //argv = globbing(argv);
     if (!argv)
         return (0);
     if (**argv == '!' && argv[0][1] && argv[0][1] != ' ')

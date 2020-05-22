@@ -6,7 +6,11 @@
 */
 
 #include <malloc.h>
+#include <glob.h>
+#include "shell.h"
 #include "parser.h"
+
+char **glob_error(char **argv, int err);
 
 char *strcat_realloc(char *dest, char *src)
 {
@@ -27,7 +31,10 @@ char *strcat_realloc(char *dest, char *src)
 char *add_to_buffer(char *buffer, char *ptr, int nb, env_t *env)
 {
     char *new;
-    
+    static glob_t results;
+    int flags = GLOB_DOOFFS | GLOB_NOMAGIC | GLOB_NOCHECK;
+    int ret = 0;
+  
     if (nb <= 0)
         return (buffer);
     new = strndup(ptr, nb + 1);
@@ -35,6 +42,13 @@ char *add_to_buffer(char *buffer, char *ptr, int nb, env_t *env)
         return (NULL);
     new[nb] = '\0';
     if (env) {
+        ret = glob(new, flags, NULL, &results);
+        if (ret != 0) {
+            globfree(&results);
+            return ((char *)glob_error(&new, ret));
+        }
+        free(new);
+        new = results.gl_pathv[0];
         remove_inhibitors_symbols_n_limit(new, nb);
         new = process_vars(new, env);
         if (!new)
