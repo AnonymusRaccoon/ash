@@ -20,17 +20,22 @@ char *get_start_of_current_arg(buffer_t *buffer)
     return (memrchr(buffer->buffer, ' ', buffer->pos) + 1);
 }
 
-void print_results(unsigned count, char **results)
+void print_results(my_window *window, unsigned count, char **results)
 {
     unsigned size = 0;
+    int per_line;
 
     putchar('\n');
     my_clrtobot();
     for (unsigned i = 0; i < count; i++)
         size = MAX(size, strlen(results[i]));
     size++;
-    for (unsigned i = 0; i < count; i++)
-        printf("%-*s", size, results[i]);
+    per_line = window->w / size;
+    for (unsigned i = 0; i < count; i += per_line) {
+        for (int j = 0; j < per_line && i + j < count; j++)
+            printf("%-*s", size, results[i + j]);
+        printf("\n");
+    }
 }
 
 void buffer_replace(buffer_t *buffer, char *to_replace, int start, int end)
@@ -80,7 +85,7 @@ int complete_command(int key, buffer_t *buffer, env_t *env)
         if (result.gl_pathc == 1)
             complete_current(buffer, result.gl_pathv[0]);
         else
-            print_results(result.gl_pathc, result.gl_pathv);
+            print_results(env->window, result.gl_pathc, result.gl_pathv);
     }
     globfree(&result);
     free(str);
