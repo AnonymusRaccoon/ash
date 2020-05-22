@@ -33,6 +33,7 @@ int show_history(env_t *env)
             printf("%6d\t%d:%02d\t%s\n", tmp->index, tmp->hour,
             tmp->minute, tmp->command);
     }
+    env->vars = my_setenv(env->vars, "?", "0");
     return (0);
 }
 
@@ -42,5 +43,6 @@ int clear_history(env_t *env)
 
     for (tmp = env->history; tmp; tmp = tmp->next)
         tmp->print = 0;
+    env->vars = my_setenv(env->vars, "?", "0");
     return (0);
 }

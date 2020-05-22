@@ -14,10 +14,13 @@
 
 int builtin_alias(char **argv, env_t *env)
 {
-    if (!argv[1])
+    if (!argv[1]) {
         print_aliases(env->alias);
-    if (argv[1])
+        env->vars = my_setenv(env->vars, "?", "0");
+    } else if (argv[1]) {
+        env->vars = my_setenv(env->vars, "?", "0");
         return (add_alias(&(env->alias), argv[1], &argv[2]));
+    }
     return (0);
 }
 

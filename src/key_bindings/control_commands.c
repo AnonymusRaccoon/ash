@@ -5,30 +5,11 @@
 ** control_commands
 */
 
-#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdio.h>
 #include "shell.h"
 #include "utility.h"
-
-int get_max_eof(char *ignoreeof)
-{
-    bool correct = true;
-
-    for (int i = 0; ignoreeof[i] && correct; i++)
-        if(!is_num(ignoreeof[i]))
-            correct = false;
-    if (correct && strcmp(ignoreeof, "0") && strcmp(ignoreeof, ""))
-        return(strtol(ignoreeof, NULL, 10));
-    return (26);
-}
-
-int skip_eof(buffer_t *buffer, env_t *env)
-{
-    my_addstr(env->window, "\n");
-    prompt_prepare(buffer, env);
-    return (0);
-}
 
 int eof_command(int key, buffer_t *buffer, env_t *env)
 {
@@ -51,5 +32,48 @@ int eof_command(int key, buffer_t *buffer, env_t *env)
     clearerr(stdin);
     fprintf(stdout, "Use \"exit\" to leave %s.\n", SHELL_NAME);
     prompt_prepare(buffer, env);
+    return (0);
+}
+
+bool set_buffer_to_history(buffer_t *buffer, env_t *env)
+{
+    history_t *hist = env->history;
+    char *cmd = NULL;
+    int len;
+
+    if (buffer->history_index == 0)
+        cmd = buffer->saved_buffer != NULL ? buffer->saved_buffer : "";
+    else
+        for (int i = 1; i < buffer->history_index && hist; i++)
+            hist = hist->next;
+    if (!cmd && (!hist || !(cmd = hist->command)))
+        return (false);
+    if (!buffer->buffer || buffer->size < (len = strlen(cmd))) {
+        buffer->buffer = realloc(buffer->buffer, buffer->size + len);
+        buffer->size += len;
+    }
+    if (!buffer->buffer)
+        return (false);
+    strcpy(buffer->buffer, cmd);
+    buffer->pos = strlen(buffer->buffer);
+    return (true);
+}
+
+int up_history_command(int key, buffer_t *buffer, env_t *env)
+{
+    if (buffer->buffer && buffer->history_index == 0)
+        buffer->saved_buffer = strdup(buffer->buffer);
+    buffer->history_index++;
+    if (!set_buffer_to_history(buffer, env))
+        buffer->history_index--;
+    return (0);
+}
+
+int down_history_command(int key, buffer_t *buffer, env_t *env)
+{
+    if (buffer->history_index <= 0)
+        return (0);
+    buffer->history_index--;
+    set_buffer_to_history(buffer, env);
     return (0);
 }
