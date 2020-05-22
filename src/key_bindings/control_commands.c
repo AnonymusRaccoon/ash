@@ -28,9 +28,8 @@ int eof_command(int key, buffer_t *buffer, env_t *env)
     env->vars = my_setenv(env->vars, "eof", new);
     if (count >= max)
         return (-1);
-    my_addstr(env->window, "\n");
+    my_addstr(env->window, "\nUse \"exit\" to leave " SHELL_NAME ".\n");
     clearerr(stdin);
-    fprintf(stdout, "Use \"exit\" to leave %s.\n", SHELL_NAME);
     prompt_prepare(buffer, env);
     return (0);
 }
