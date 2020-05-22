@@ -22,15 +22,15 @@ Test(echo, with_simple_backslash, .init = cr_redirect_stdout)
     env_t env = {};
     char *av[] = {"echo", "\\n", NULL};
     builtin_echo(av, &env);
-    cr_assert_stdout_eq_str("n\n");
+    cr_assert_stdout_eq_str("\n\n");
 }
 
-Test(echo, with_double_backslash, .init = cr_redirect_stdout)
+Test(echo, incorrect_ascii, .init = cr_redirect_stdout)
 {
     env_t env = {};
-    char *av[] = {"echo", "\\\\n", NULL};
+    char *av[] = {"echo", "\\q", NULL};
     builtin_echo(av, &env);
-    cr_assert_stdout_eq_str("\\n\n");
+    cr_assert_stdout_eq_str("\\q\n");
 }
 
 Test(echo, multiple_args, .init = cr_redirect_stdout)

@@ -54,3 +54,6 @@ int add_alias_to_list(alias_t **list, alias_t *elem, char *alias);
 
 //unalias
 void remove_alias(char *alias, alias_t **list);
+
+//echo
+int print_char(char *str, int i);
