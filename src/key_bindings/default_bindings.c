@@ -33,5 +33,7 @@ const binding_t emacs_bindings[] = {
     {KEY_RIGHT, &forward_char_command},
     {KEY_HOME, &beginning_of_line_command},
     {KEY_END, &end_of_line_command},
+    {KEY_UP, &up_history_command},
+    {KEY_DOWN, &down_history_command},
     {0, NULL}
 };

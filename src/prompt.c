@@ -44,8 +44,6 @@ int prompt_run(char *cmd, redirection *inout[2], env_t *env)
     argv = globbing(argv);
     if (!argv)
         return (0);
-    if (env->window && inout[1] == NULL)
-        inout[1] = new_ncurses_pty();
     if (**argv == '!' && argv[0][1] && argv[0][1] != ' ')
         return (run_builtin(&builtins[5], argv, inout, env));
     for (int i = 0; builtins[i].name; i++)

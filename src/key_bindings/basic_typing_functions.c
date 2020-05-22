@@ -21,13 +21,13 @@ int self_insert_command(int key, buffer_t *buffer, env_t *env)
     int charslen = strlen(chars);
     int len = (buffer->buffer ? strlen(buffer->buffer) : 0) + charslen;
 
-    if (len >= buffer->size || !buffer->buffer) {
+    if (len + 1 >= buffer->size || !buffer->buffer) {
         buffer->buffer = realloc(buffer->buffer, buffer->size + 100);
         buffer->size += 100;
     }
     if (!buffer->buffer)
         return (-1);
-    for (int i = len - 1; i > buffer->pos; i--)
+    for (int i = len - 1; i > buffer->pos && i > charslen; i--)
         buffer->buffer[i] = buffer->buffer[i - charslen];
     memcpy(buffer->buffer + buffer->pos, chars, charslen);
     buffer->buffer[len] = '\0';
@@ -60,14 +60,19 @@ int newline_command(int key, buffer_t *buffer, env_t *env)
 {
     int ret;
 
-    if (!buffer->buffer)
-        return (0);
-    add_to_history(buffer->buffer, env);
     if (env->window)
         my_addstr(env->window, "\n");
-    ret = eval_raw_cmd(buffer->buffer, env);
-    buffer->buffer[0] = '\0';
-    buffer->pos = 0;
+    if (buffer->buffer) {
+        add_to_history(buffer->buffer, env);
+        my_npause(env->window);
+        ret = eval_raw_cmd(buffer->buffer, env);
+        my_nresume(env->window);
+        buffer->buffer[0] = '\0';
+        buffer->pos = 0;
+        buffer->history_index = 0;
+        if (env->window)
+            my_getcuryx(&env->window->y, &env->window->x);
+    }
     if (env->window && ret >= 0)
         prompt_prepare(buffer, env);
     return (ret);

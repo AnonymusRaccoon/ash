@@ -9,6 +9,6 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - name: Install the ncurses
-        run: sudo apt-get install --yes libncurses5-dev libncursesw5-dev
+        run: sudo apt-get install --yes libncurses5-dev libncursesw5-dev tcsh
       - name: Build with Makefile & Execute tests
         run: make func

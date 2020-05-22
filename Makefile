@@ -42,11 +42,10 @@ SRC = src/shell.c \
 	src/key_bindings/basic_typing_functions.c \
 	src/key_bindings/default_bindings.c \
 	src/key_bindings/control_commands.c \
-	src/redirections/pty_pipe.c \
 	src/key_bindings/move_commands.c \
 	src/my_ncurses/my_ncurses.c \
-	src/my_ncurses/clear_utils.c \
-	src/my_ncurses/string_utils.c
+	src/my_ncurses/string_utils.c \
+	src/my_ncurses/pause_utils.c
 
 OBJ = $(SRC:%.c=%.o)
 OBJ += src/main.o
