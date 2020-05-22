@@ -8,3 +8,4 @@ unit_tests
 test_shell/
 func_tests
 .vscode
+scri.sh
