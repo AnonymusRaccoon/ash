@@ -26,9 +26,11 @@ char **glob_error(char **argv, int err)
 char **globbing(char **argv)
 {
     static glob_t results;
-    int flags = GLOB_DOOFFS | GLOB_NOMAGIC;
+    int flags = GLOB_DOOFFS | GLOB_NOMAGIC | GLOB_NOCHECK;
     int ret = 0;
 
+    if (!argv)
+        return (NULL);
     for (int i = 0; argv[i] && ret == 0; i++) {
         flags |= (i > 0 ? GLOB_APPEND : 0);
         ret = glob(argv[i], flags, NULL, &results);
@@ -37,6 +39,6 @@ char **globbing(char **argv)
         globfree(&results);
         return (glob_error(argv, ret));
     }
-    //free(argv);
+    free(argv);
     return (&results.gl_pathv[0]);
 }

@@ -30,7 +30,7 @@ char *strcat_realloc(char *dest, char *src)
 
 char *process_str(char *new, int nb, env_t *env)
 {
-    static glob_t results;
+    /*static glob_t results;
     int flags = GLOB_DOOFFS | GLOB_NOMAGIC | GLOB_NOCHECK;
     int ret = 0;
 
@@ -40,7 +40,7 @@ char *process_str(char *new, int nb, env_t *env)
         return ((char *)glob_error(&new, ret));
     }
     free(new);
-    new = results.gl_pathv[0];
+    new = results.gl_pathv[0];*/
     remove_inhibitors_symbols_n_limit(new, nb);
     new = process_vars(new, env);
     return (new);
