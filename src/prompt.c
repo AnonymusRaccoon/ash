@@ -38,6 +38,7 @@ int prompt_run(char *cmd, redirection *inout[2], env_t *env)
 
     if (!argv)
         return (0);
+    free(cmd);
     cmd = fusion(argv[0], argv);
     free(argv);
     if (!cmd)
