@@ -40,7 +40,7 @@ void print_results(my_window *window, unsigned count, char **results)
             printf("%-*s", size, results[i + j] + prefix_length);
         putchar('\n');
     }
-    window->y -= MAX(0, (window->y + 2 + ((int)count / per_line) + 1 - window->h));
+    window->y -= MAX(0, (window->y + ((int)count / per_line) + 3 - window->h));
 }
 
 void buffer_replace(buffer_t *buffer, char *to_replace, int start, int end)
@@ -49,7 +49,7 @@ void buffer_replace(buffer_t *buffer, char *to_replace, int start, int end)
     int total = len + (buffer->buffer ? strlen(buffer->buffer) : 0);
 
     if (buffer->size < total) {
-        buffer->buffer = realloc(buffer->buffer, total  + 50);
+        buffer->buffer = realloc(buffer->buffer, total + 50);
         buffer->size = total + 50;
     }
     if (!buffer->buffer)
