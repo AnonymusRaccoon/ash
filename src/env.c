@@ -73,7 +73,7 @@ char **my_unsetenv(char **env, char *name)
 {
     int max = env_get_length(env);
 
-    for (int i = 0; env[i]; i++) {
+    for (int i = 0; env && env[i]; i++) {
         if (same_var(env[i], name) == env[i]) {
             free(env[i]);
             env[i] = env[max - 1];

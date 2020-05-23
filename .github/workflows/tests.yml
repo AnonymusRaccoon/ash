@@ -12,6 +12,8 @@ jobs:
         uses: actions/setup-python@v1
         with:
           python-version: '3.x'
+      - name: Install the ncurses
+        run: sudo apt-get install --yes libncurses5-dev libncursesw5-dev
       - name: Install Criterion
         run: sudo add-apt-repository ppa:snaipewastaken/ppa &&
           sudo apt-get update &&

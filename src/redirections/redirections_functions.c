@@ -25,7 +25,7 @@ void redirection_ctr(redirection *red, char *cmd, const redirection_map *type)
     red->fd = -1;
     if (type->type & EX_PIPE) {
         if (pipe(fd) != 0) {
-            perror("mysh");
+            perror(SHELL_NAME);
             red->fd = -1;
             red->extra_data = -1;
             return;

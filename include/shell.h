@@ -6,9 +6,14 @@
 */
 
 typedef struct redirection redirection;
+typedef struct env_s env_t;
+typedef struct binding binding_t;
 #pragma once
 
+#define SHELL_NAME "42sh"
+
 #include <stdbool.h>
+#include "my_ncurses.h"
 
 typedef struct history_s
 {
@@ -19,6 +24,16 @@ typedef struct history_s
     int print;
     struct history_s *next;
 } history_t;
+
+typedef struct buffer
+{
+    char *buffer;
+    int size;
+    int pos;
+    int startx;
+    int history_index;
+    char *saved_buffer;
+} buffer_t;
 
 typedef struct alias_s
 {
@@ -32,13 +47,15 @@ typedef struct env_s
     char **env;
     char **vars;
     history_t *history;
+    binding_t *bindings;
+    my_window *window;
     alias_t *alias;
 } env_t;
 
 void start_shell(env_t *env);
 void free_env(env_t *env);
 int prompt_run(char *cmd, redirection *inout[2], env_t *env);
-void prompt_prepare(env_t *env);
+void prompt_prepare(buffer_t *buffer, env_t *env);
 
 int eval_raw_cmd(char *cmd, env_t *env);
 int run_with_redirections(char *cmd, env_t *env, redirection *input);

@@ -28,6 +28,7 @@ int builtin_source(char **argv, env_t *env);
 int builtin_history(char **args, env_t *env);
 int builtin_alias(char **args, env_t *env);
 int builtin_unalias(char **args, env_t *env);
+int builtin_echo(char **args, env_t *env);
 //which / where
 bool find_path_in_builtins(char *cmd);
 char **get_envpath(env_t *env);
@@ -44,8 +45,10 @@ void remove_duplicate_history(env_t *env);
 int execute_command_history(history_t *old, history_t *new,
 char **args, env_t *env);
 //source
-char *parse_source_cmd(char *cmd, char **argv, int len_argv);
-
+void init_source_args(char **argv, int len_argv, env_t *env);
+void reset_source_args(int len_argv, env_t *env);
+char *get_special_arg_at(char **argv, int len_argv);
+char *get_special_arg_star(char **argv, int len_argv);
 //alias
 int add_alias(alias_t **list, char *alias, char **command);
 char *concatenate(char **command);
@@ -54,3 +57,6 @@ int add_alias_to_list(alias_t **list, alias_t *elem, char *alias);
 
 //unalias
 void remove_alias(char *alias, alias_t **list);
+
+//echo
+int print_char(char *str, int i);

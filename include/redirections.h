@@ -15,7 +15,8 @@ typedef enum redirection_type {
     INPUT = 1 << 0,
     OUTPUT = 1 << 1,
     PIPE = 1 << 2,
-    EX_PIPE = 1 << 3
+    EX_PIPE = 1 << 3,
+    PTY = 1 << 4
 } redirection_type;
 
 
@@ -50,3 +51,8 @@ bool fd_is_used(int fd, redirection *inout);
 
 bool handle_redirections(redirection *inout[2], env_t *env, bool builtin);
 bool handle_parent_inout(redirection *inout[2], env_t *env, bool builtin);
+
+
+struct redirection *new_ncurses_pty(void);
+int pyt_get_fd(redirection *pty);
+void pty_get_output(redirection *pty, env_t *env);

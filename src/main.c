@@ -5,31 +5,45 @@
 ** main
 */
 
+#include "builtin.h"
 #include "shell.h"
+#include "key_functions.h"
 #include <stdlib.h>
 #include <malloc.h>
 #include <stddef.h>
 #include <string.h>
 
-int main(int argc, char **argv, char **env)
+env_t *create_env(char **env)
 {
     env_t *envt = malloc(sizeof(*envt));
     char **envcp = malloc(sizeof(char *) * (env_get_length(env) + 1));
-    int ret;
 
     if (!env || !envcp)
-        return (84);
+        return (NULL);
     for (int i = 0; env[i]; i++)
         envcp[i] = strdup(env[i]);
     envcp[env_get_length(env)] = NULL;
     envt->env = envcp;
     envt->vars = NULL;
     envt->history = NULL;
+    envt->bindings = &emacs_bindings;
+    envt->window = NULL;
     envt->alias = NULL;
-    start_shell(envt);
+    return (envt);
+}
+
+int main(int argc, char **argv, char **env)
+{
+    env_t *envt = create_env(env);
+    int ret;
+
+    if (!envt)
+        return (ERROR);
+    if (argc >= 2)
+        builtin_source(argv, envt);
+    else
+        start_shell(envt);
     ret = get_return(my_getenv(envt->vars, "?"));
-    (void)argc;
-    (void)argv;
     free_env(envt);
     return (ret);
 }

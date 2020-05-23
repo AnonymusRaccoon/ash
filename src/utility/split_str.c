@@ -9,12 +9,26 @@
 #include <stddef.h>
 #include <string.h>
 
-int count_char(char *str, char c)
+int ncount_char(const char *str, int end, char c)
 {
     int count = 0;
 
-    while (*(str++))
-        if (*str == c)
+    if (str == NULL)
+        return (0);
+    while (*str && end-- > 0)
+        if (*(str++) == c)
+            count++;
+    return (count);
+}
+
+int count_char(const char *str, char c)
+{
+    int count = 0;
+
+    if (str == NULL)
+        return (0);
+    while (*str)
+        if (*(str++) == c)
             count++;
     return (count);
 }

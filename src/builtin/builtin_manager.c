@@ -17,10 +17,11 @@
 int run_builtin(const builtin *cmd, char **a, redirection *inout[2], env_t *env)
 {
     int ret = 0;
-    int saved_fd[2];
+    int saved_fd[3];
 
     saved_fd[0] = dup(0);
     saved_fd[1] = dup(1);
+    saved_fd[2] = dup(2);
     if (saved_fd[0] < 0 || saved_fd[1] < 0) {
         perror("mysh");
         return (-1);
@@ -29,8 +30,10 @@ int run_builtin(const builtin *cmd, char **a, redirection *inout[2], env_t *env)
         ret = cmd->run(a, env);
     dup2(saved_fd[0], 0);
     dup2(saved_fd[1], 1);
+    dup2(saved_fd[2], 2);
     close(saved_fd[0]);
     close(saved_fd[1]);
+    close(saved_fd[2]);
     if (handle_parent_inout(inout, env, true))
         ret = 0;
     return (ret);
@@ -47,6 +50,7 @@ int builtin_cd(char **argv, env_t *env)
         env->vars = my_setenv(env->vars, "?", "1");
         return (0);
     }
+    env->vars = my_setenv(env->vars, "?", "0");
     if (!argv[1])
         path = my_getenv(env->env, "HOME");
     else if (argv[1] && !strcmp(argv[1], "-"))
@@ -63,7 +67,8 @@ int builtin_cd(char **argv, env_t *env)
 
 int builtin_exit(char **argv, env_t *env)
 {
+    if (argv[1])
+        env->vars = my_setenv(env->vars, "?", "1");
     free(argv);
-    (void)env;
     return (-1);
 }
