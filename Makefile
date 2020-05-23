@@ -83,7 +83,7 @@ $(NAME): $(OBJ)
 	$(CC) -o $(NAME) $(OBJ) $(LDFLAGS)
 
 tests_run: clean
-	$(CC) -o $(UT) $(TESTS) $(SRC) $(COVERAGE) $(CFLAGS) $(LDFLAGS)
+	$(CC) -o $(UT) $(TESTS) $(SRC) $(COVERAGE) -g $(CFLAGS) $(LDFLAGS)
 	$(UT)
 
 func: all
