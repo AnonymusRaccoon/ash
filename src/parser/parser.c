@@ -7,15 +7,17 @@
 
 #define _XOPEN_SOURCE
 
+#include "parser.h"
 #include "shell.h"
 #include "redirections.h"
+#include "utility.h"
+#include "builtin.h"
 #include <unistd.h>
 #include <stdio.h>
 #include <string.h>
-#include "utility.h"
-#include "parser.h"
-#include "builtin.h"
 #include <malloc.h>
+
+char *strdup(const char *);
 
 const parser_map parsers[] = {
     {'\'', &parse_quotes},
@@ -101,6 +103,7 @@ char **parse_input(char *cmd, env_t *env, wordexp_t *parser)
 {
     int bin_len;
 
+    cmd = strdup(cmd);
     for (bin_len = 0; cmd[bin_len]; bin_len++) {
         if (cmd[bin_len] == ' ' || cmd[bin_len] == '\t')
             break;
