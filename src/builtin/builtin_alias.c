@@ -33,8 +33,10 @@ int add_alias(alias_t **list, char *alias, char **command)
     elem = malloc(sizeof(alias_t));
     if (!elem)
         return (-1);
-    *elem = (alias_t){alias, concatenate(command), NULL};
-    if (!elem->command)
+    elem->alias = strdup(alias);
+    elem->command = concatenate(command);
+    elem->next = NULL;
+    if (!elem->command || !elem->alias)
         return (-1);
     if (*list == NULL) {
         *list = elem;
@@ -75,7 +77,7 @@ char *concatenate(char **command)
     int pos = 0;
 
     if (!command[1])
-        return (command[0]);
+        return (strdup(command[0]));
     for (int i = 0; command[i]; i++)
         total_len += strlen(command[i]) + 1;
     concatened = calloc(total_len + 1, sizeof(char));
@@ -93,8 +95,6 @@ char *concatenate(char **command)
 
 void print_aliases(alias_t *list)
 {
-    for (alias_t *tmp = list; tmp; tmp = tmp->next) {
+    for (alias_t *tmp = list; tmp; tmp = tmp->next)
         printf("%s\t%s\n", tmp->alias, tmp->command);
-        fflush(stdout);
-    }
 }

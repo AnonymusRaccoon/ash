@@ -97,15 +97,26 @@ int parser_loop(char *cmd, char **buffer, char **ptr, void **pack)
     return (0);
 }
 
-char **parse_input(char *cmd, env_t *e, wordexp_t *parser)
+char **parse_input(char *cmd, env_t *env, wordexp_t *parser)
 {
-    int ret;
+    int bin_len;
 
-    cmd = process_vars(cmd, e);
-    ret = wordexp(cmd, parser, WRDE_SHOWERR);
-    if (ret) {
-        perror("Wordexp");
+    for (bin_len = 0; cmd[bin_len]; bin_len++) {
+        if (cmd[bin_len] == ' ' || cmd[bin_len] == '\t')
+            break;
+    }
+    cmd = process_vars(cmd, env);
+    for (alias_t *al = env->alias; al; al = al->next) {
+        if (!strncmp(al->alias, cmd, bin_len)) {
+            cmd = realloc(cmd, strlen(cmd) + strlen(al->command) + 1 - bin_len);
+            rm_n_char(cmd, bin_len);
+            insert_substring(cmd, al->command, 1);
+        }
+    }
+    if (wordexp(cmd, parser, WRDE_SHOWERR)) {
+        perror(SHELL_NAME);
         return (NULL);
     }
+    free(cmd);
     return (parser->we_wordv);
 }

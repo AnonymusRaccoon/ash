@@ -50,7 +50,6 @@ int prompt_run(char *cmd, redirection *inout[2], env_t *env, redirection *cmds)
         ret = 0;
     }
     wordfree(&parser);
-    free(cmd);
     if (cmds)
         free(cmds);
     return (ret);

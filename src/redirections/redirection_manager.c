@@ -13,6 +13,7 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <string.h>
+#include <stdio.h>
 #include "utility.h"
 #include "builtin.h"
 
@@ -85,7 +86,7 @@ int command_format_is_invalid(char **cmds, env_t *env, int *return_values)
             env->env = my_setenv(env->vars, "?", "1");
             return (1);
         } else if (split_is_invalid(cmds, return_values, i)) {
-            write(2, "Invalid null command.\n", 22);
+            dprintf(2, "Invalid null command.\n");
             env->vars = my_setenv(env->vars, "?", "1");
             return (1);
         }
@@ -99,11 +100,8 @@ int eval_raw_cmd(char *cmd, env_t *env)
     char **cmds = NULL;
     int ret = 0;
 
-    cmd = get_alias(cmd, env->alias);
-    if (!cmd)
-        return (0);
     return_values = get_return_separator(cmd);
-    cmds = split_commands(cmd);
+    cmds = split_str(cmd, (char *[]){";", "||", "&&", NULL});
     if (!cmds)
         return (-1);
     if (command_format_is_invalid(cmds, env, return_values))

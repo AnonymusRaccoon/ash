@@ -66,7 +66,7 @@ int newline_command(int key, buffer_t *buffer, env_t *env)
     if (buffer->buffer) {
         add_to_history(buffer->buffer, env);
         my_npause(env->window);
-        ret = eval_raw_cmd(buffer->buffer, env);
+        ret = eval_raw_cmd(strdup(buffer->buffer), env);
         my_nresume(env->window);
         buffer->buffer[0] = '\0';
         buffer->pos = 0;

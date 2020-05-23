@@ -12,41 +12,6 @@
 #include <string.h>
 #include <stdlib.h>
 
-char *get_alias(char *cmd, alias_t *alias)
-{
-    char **array = split_commands(cmd);
-    int *return_values = get_return_separator(cmd);
-    char *final_command = NULL;
-
-    if (!array)
-        return (cmd);
-    for (int i = 0; array[i]; i++) {
-        if (strlen(array[i]) && (strncmp("alias ", array[i], 6)
-            && strncmp("unalias ", array[i], 8)))
-            array[i] = replace_alias(array[i], alias);
-        array[i] = add_separator(array[i], return_values, i);
-        if (!array[i])
-            return (NULL);
-    }
-    final_command = fusion(array[0], array);
-    return (final_command);
-}
-
-char *replace_alias(char *cmd, alias_t *alias)
-{
-    char **arg_array = split_str(cmd, ' ');
-    char *final_str = NULL;
-
-    if (!arg_array)
-        return (NULL);
-    for (int i = 0; arg_array[i]; i++) {
-        arg_array[i] = get_alias_command(arg_array[i], alias);
-        if (!arg_array[i])
-            return (NULL);
-    }
-    final_str = fusion(arg_array[0], arg_array);
-    return (final_str);
-}
 
 char *get_alias_command(char *cmd, alias_t *alias)
 {

@@ -81,7 +81,6 @@ char **globbing(char **argv);
 
 char *get_alias(char *cmd, alias_t *alias);
 char *add_separator(char *cmd, int *return_values, int index);
-char *replace_alias(char *cmd, alias_t *alias);
 char *get_alias_command(char *cmd, alias_t *alias);
 
 
