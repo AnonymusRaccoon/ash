@@ -60,6 +60,7 @@ int newline_command(int key, buffer_t *buffer, env_t *env)
 {
     int ret;
 
+    env->vars = my_unsetenv(env->vars, "eof");
     if (env->window)
         my_addstr(env->window, "\n");
     if (buffer->buffer) {

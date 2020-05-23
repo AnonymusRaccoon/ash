@@ -34,15 +34,15 @@ const builtin builtins[] = {
 
 int prompt_run(char *cmd, redirection *inout[2], env_t *env)
 {
-    char **argv = globbing(get_argv(cmd));
-
-    if (!argv)
-        return (0);
-    free(cmd);
-    cmd = fusion(argv[0], argv);
-    free(argv);
-    if (!cmd)
-        return (-1);
+    //char **argv = globbing(get_argv(cmd));
+    char **argv;
+   // if (!argv)
+     //   return (0);
+    //free(cmd);
+   // cmd = fusion(argv[0], argv);
+    //free(argv);
+    //if (!cmd)
+      //  return (-1);
     argv = parse_input(cmd, env);
     if (!argv)
         return (0);

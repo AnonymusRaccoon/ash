@@ -5,14 +5,33 @@
 ** control_commands
 */
 
-#include "shell.h"
-#include <stddef.h>
+#include <stdlib.h>
 #include <string.h>
-#include <malloc.h>
+#include <stdio.h>
+#include "shell.h"
+#include "utility.h"
 
 int eof_command(int key, buffer_t *buffer, env_t *env)
 {
-    return (-1);
+    char *ignoreeof = my_getenv(env->vars, "ignoreeof");
+    char *eof = my_getenv(env->vars, "eof");
+    char new[20];
+    unsigned count = eof ? strtol(eof, NULL, 10) : 1;
+    unsigned max = 26;
+
+    if (env->window && buffer->buffer && *buffer->buffer)
+        return (skip_eof(buffer, env));
+    if (!ignoreeof || !env->window)
+        return (-1);
+    max = get_max_eof(ignoreeof);
+    sprintf(new, "%u", ++count);
+    env->vars = my_setenv(env->vars, "eof", new);
+    if (count >= max)
+        return (-1);
+    my_addstr(env->window, "\nUse \"exit\" to leave " SHELL_NAME ".\n");
+    clearerr(stdin);
+    prompt_prepare(buffer, env);
+    return (0);
 }
 
 bool set_buffer_to_history(buffer_t *buffer, env_t *env)

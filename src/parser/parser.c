@@ -5,6 +5,8 @@
 ** redirections
 */
 
+#define _XOPEN_SOURCE
+
 #include "shell.h"
 #include "redirections.h"
 #include <unistd.h>
@@ -14,6 +16,7 @@
 #include "parser.h"
 #include "builtin.h"
 #include <malloc.h>
+#include <wordexp.h>
 
 const parser_map parsers[] = {
     {'\'', &parse_quotes},
@@ -97,25 +100,12 @@ int parser_loop(char *cmd, char **buffer, char **ptr, void **pack)
 
 char **parse_input(char *cmd, env_t *e)
 {
-    char **ret = malloc(sizeof(char *) * (strlen(cmd) + 1));
-    char *p = cmd;
-    int idx[3] = {0};
-    char *buf = NULL;
+    wordexp_t truc;
+    int ret = wordexp(cmd, &truc, WRDE_SHOWERR);
 
-    if (!ret)
+    if (ret) {
+        perror("Wordexp");
         return (NULL);
-    for (int i = 0, inc = 1; i <= (int)strlen(cmd); i++, inc++) {
-        idx[2] = parser_loop(cmd, &buf, &p, (void *[4]){&i, &inc, &idx[1], e});
-        if (idx[2] < 0)
-            return (NULL);
-        else if (idx[2])
-            continue;
-        if (!(buf = add_to_buffer(buf, p, inc - 1, e)))
-            return (NULL);
-        ret[idx[0]++] = buf;
-        p = cmd + i + 1;
-        idx[1] = inc = (long)(buf = NULL);
     }
-    ret[idx[0]] = NULL;
-    return (ret);
+    return (truc.we_wordv);
 }
