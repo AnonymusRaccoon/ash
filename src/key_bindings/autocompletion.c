@@ -15,9 +15,14 @@
 
 char *get_start_of_current_arg(buffer_t *buffer)
 {
+    char *p;
+
     if (!buffer->buffer)
         return (NULL);
-    return (memrchr(buffer->buffer, ' ', buffer->pos) + 1);
+    p = memrchr(buffer->buffer, ' ', buffer->pos);
+    if (!p)
+        return (NULL);
+    return (p + 1);
 }
 
 void print_results(my_window *window, unsigned count, char **results)
@@ -83,6 +88,8 @@ int complete_command(int key, buffer_t *buffer, env_t *env)
     if (!buffer->buffer || !p)
         return (0);
     str = malloc(buffer->pos - (p - buffer->buffer) + 2);
+    if (!str)
+        return (0);
     strncpy(str, p, buffer->pos - (p - buffer->buffer));
     str[buffer->pos - (p - buffer->buffer)] = '\0';
     strcat(str, "*");
