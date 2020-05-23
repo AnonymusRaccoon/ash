@@ -46,7 +46,6 @@ int builtin_cd(char **argv, env_t *env)
 
     if (get_argc(argv) > 2) {
         write(2, "cd: Too many arguments.\n", 25);
-        free(argv);
         env->vars = my_setenv(env->vars, "?", "1");
         return (0);
     }
@@ -61,7 +60,6 @@ int builtin_cd(char **argv, env_t *env)
     } else
         env->env = my_setenv(env->env, "OLDPWD", old);
     free(old);
-    free(argv);
     return (0);
 }
 
@@ -69,6 +67,5 @@ int builtin_exit(char **argv, env_t *env)
 {
     if (argv[1])
         env->vars = my_setenv(env->vars, "?", "1");
-    free(argv);
     return (-1);
 }

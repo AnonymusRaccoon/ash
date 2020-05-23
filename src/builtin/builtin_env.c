@@ -18,7 +18,6 @@ int builtin_env(char **argv, env_t *env)
         write(1, "\n", 1);
     }
     env->vars = my_setenv(env->vars, "?", "0");
-    free(argv);
     return (0);
 }
 
@@ -39,7 +38,6 @@ int builtin_setenv(char **argv, env_t *env)
     }
     env->env = my_setenv(env->env, argv[1], argv[2]);
     env->vars = my_setenv(env->vars, "?", "0");
-    free(argv);
     return (0);
 }
 
@@ -48,13 +46,11 @@ int builtin_unsetenv(char **argv, env_t *env)
     if (!argv[1]) {
         write(2, "unsetenv: Too few arguments.\n", 29);
         env->vars = my_setenv(env->vars, "?", "1");
-        free(argv);
         return (0);
     }
     for (int i = 1; argv[i]; i++)
         if (!strchr(argv[i], '='))
             env->env = my_unsetenv(env->env, argv[i]);
     env->vars = my_setenv(env->vars, "?", "0");
-    free(argv);
     return (0);
 }

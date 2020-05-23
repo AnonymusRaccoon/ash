@@ -36,18 +36,24 @@ int prompt_run(char *cmd, redirection *inout[2], env_t *env)
 {
     char **argv;
     wordexp_t parser;
+    int ret;
 
     argv = parse_input(cmd, env, &parser);
     if (!argv)
         return (0);
-    if (**argv == '!' && argv[0][1] && argv[0][1] != ' ')
-        return (run_builtin(&builtins[5], argv, inout, env));
+    if (**argv == '!' && argv[0][1] && argv[0][1] != ' ') {
+        ret = run_builtin(&builtins[5], argv, inout, env);
+        wordfree(&parser);
+        return (ret);
+    }
     for (int i = 0; builtins[i].name; i++)
-        if (!strcmp(argv[0], builtins[i].name))
-            return (run_builtin(&builtins[i], argv, inout, env));
+        if (!strcmp(argv[0], builtins[i].name)) {
+            ret = run_builtin(&builtins[i], argv, inout, env);
+            wordfree(&parser);
+            return (ret);
+        }
     run_cmd(argv, inout, env);
-    free_array(argv);
-  //  wordfree(&parser);
+    wordfree(&parser);
     return (0);
 }
 
