@@ -12,6 +12,7 @@
 #include <stddef.h>
 #include <string.h>
 
+
 env_t *create_env(char **env)
 {
     env_t *envt = malloc(sizeof(*envt));
@@ -25,7 +26,11 @@ env_t *create_env(char **env)
     envt->env = envcp;
     envt->vars = NULL;
     envt->history = NULL;
-    envt->bindings = &emacs_bindings;
+    envt->bindings = malloc(get_emacs_bindings_size());
+    if (envt->bindings) {
+        for (int i = 0; emacs_bindings[i].func; i++)
+            envt->bindings[i] = emacs_bindings[i];
+    }
     envt->window = NULL;
     envt->alias = NULL;
     return (envt);

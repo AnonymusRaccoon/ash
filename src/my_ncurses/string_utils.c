@@ -7,7 +7,7 @@
 
 #include "my_ncurses.h"
 #include <stdio.h>
-#include <ncurses.h>
+#include <unctrl.h>
 #include <unistd.h>
 #include <sys/ioctl.h>
 
@@ -30,6 +30,23 @@ void my_addstr(my_window *window, const char *str)
         }
     }
     printf("%s", str);
+}
+
+const char *my_unctrl(int c)
+{
+    static char str[5];
+
+    if (c == KEY_DC)
+        return "^?";
+    if ((c & 0xFFFF) == CSI(0)) {
+        str[0] = '^';
+        str[1] = '[';
+        str[2] = c >> 16u;
+        str[3] = c >> 24u;
+        str[4] = '\0';
+        return (str);
+    }
+    return (unctrl(c));
 }
 
 void my_getmaxyx(int *y, int *x)
