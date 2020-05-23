@@ -28,28 +28,10 @@ char *strcat_realloc(char *dest, char *src)
     return (dest);
 }
 
-char *process_str(char *new, int nb, env_t *env)
-{
-    /*static glob_t results;
-    int flags = GLOB_DOOFFS | GLOB_NOMAGIC | GLOB_NOCHECK;
-    int ret = 0;
-
-    ret = glob(new, flags, NULL, &results);
-    if (ret != 0) {
-        globfree(&results);
-        return ((char *)glob_error(&new, ret));
-    }
-    free(new);
-    new = results.gl_pathv[0];*/
-    remove_inhibitors_symbols_n_limit(new, nb);
-    new = process_vars(new, env);
-    return (new);
-}
-
 char *add_to_buffer(char *buffer, char *ptr, int nb, env_t *env)
 {
     char *new;
-  
+
     if (nb <= 0)
         return (buffer);
     new = strndup(ptr, nb + 1);
@@ -57,7 +39,8 @@ char *add_to_buffer(char *buffer, char *ptr, int nb, env_t *env)
         return (NULL);
     new[nb] = '\0';
     if (env) {
-        new = process_str(new, nb, env);
+        remove_inhibitors_symbols_n_limit(new, nb);
+        new = process_vars(new, env);
     }
     buffer = strcat_realloc(buffer, new);
     free(new);
@@ -82,26 +65,26 @@ char *substring(char *string, int position, int length)
     int i;
 
     if (pointer == NULL)
-       return (NULL);
+        return (NULL);
     for (i = 0; i < length; i++)
         *(pointer + i) = *((string + position - 1) + i);
     *(pointer + i) = '\0';
-   return (pointer);
+    return (pointer);
 }
 
 void insert_substring(char *dest, char *src, int position)
 {
-   char *f;
-   char *e;
-   int length;
+    char *f;
+    char *e;
+    int length;
 
-   length = strlen(dest);
-   f = substring(dest, 1, position - 1);
-   e = substring(dest, position, length - position + 1);
-   strcpy(dest, "");
-   strcat(dest, f);
-   free(f);
-   strcat(dest, src);
-   strcat(dest, e);
-   free(e);
+    length = strlen(dest);
+    f = substring(dest, 1, position - 1);
+    e = substring(dest, position, length - position + 1);
+    strcpy(dest, "");
+    strcat(dest, f);
+    free(f);
+    strcat(dest, src);
+    strcat(dest, e);
+    free(e);
 }
