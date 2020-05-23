@@ -101,8 +101,10 @@ int parser_loop(char *cmd, char **buffer, char **ptr, void **pack)
 char **parse_input(char *cmd, env_t *e)
 {
     wordexp_t truc;
-    int ret = wordexp(cmd, &truc, WRDE_SHOWERR);
+    int ret;
 
+    cmd = process_vars(cmd, e);
+    ret = wordexp(cmd, &truc, WRDE_SHOWERR);
     if (ret) {
         perror("Wordexp");
         return (NULL);
