@@ -8,11 +8,13 @@
 #pragma once
 
 #include <stdbool.h>
+#include "shell.h"
 
 char *catpath(char *p1, char *p2);
 char **to_array(char *str);
 char *tostr(int n);
 bool is_alpha(char c);
+bool is_num(char c);
 bool envvar_is_valid(const char *str);
 int count_str(char *str, char *delim);
 char **split_str(char *str, char delim);
@@ -24,5 +26,7 @@ int *get_return_separator(char *cmd);
 int split_is_invalid(char **cmds, int *return_values, int i);
 int count_char(const char *str, char c);
 int ncount_char(const char *str, int end, char c);
+int get_max_eof(char *ignoreeof);
+int skip_eof(buffer_t *buffer, env_t *env);
 
 #define MAX(x, y) ((x) < (y) ? (y) : (x))

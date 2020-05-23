@@ -20,6 +20,7 @@ int builtin_unalias(char **argv, env_t *env)
     }
     for (int i = 1; argv[i]; i++)
         remove_alias(argv[i], &(env->alias));
+    env->vars = my_setenv(env->vars, "?", "0");
     return (0);
 }
 
