@@ -8,6 +8,7 @@
 #pragma once
 
 #include "shell.h"
+#include <wordexp.h>
 #include <stddef.h>
 #include <string.h>
 
@@ -16,7 +17,7 @@ typedef struct parser_map {
     int (*parser)(char *, char **, env_t *);
 } parser_map;
 
-char **parse_input(char *cmd, env_t *env);
+char **parse_input(char *cmd, env_t *env, wordexp_t *parser);
 void free_array(char **array);
 
 int parse_quotes(char *ptr, char **data, env_t *env);

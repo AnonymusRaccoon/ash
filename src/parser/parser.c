@@ -16,7 +16,6 @@
 #include "parser.h"
 #include "builtin.h"
 #include <malloc.h>
-#include <wordexp.h>
 
 const parser_map parsers[] = {
     {'\'', &parse_quotes},
@@ -98,16 +97,15 @@ int parser_loop(char *cmd, char **buffer, char **ptr, void **pack)
     return (0);
 }
 
-char **parse_input(char *cmd, env_t *e)
+char **parse_input(char *cmd, env_t *e, wordexp_t *parser)
 {
-    wordexp_t truc;
     int ret;
 
     cmd = process_vars(cmd, e);
-    ret = wordexp(cmd, &truc, WRDE_SHOWERR);
+    ret = wordexp(cmd, parser, WRDE_SHOWERR);
     if (ret) {
         perror("Wordexp");
         return (NULL);
     }
-    return (truc.we_wordv);
+    return (parser->we_wordv);
 }
