@@ -62,8 +62,8 @@ char **split_str(char *str, char **delims)
             index++;
         i = -1;
     }
-    if (i > 0)
-        arr[index++] = str;
+    // if (i > 0)
+    arr[index++] = str;
     arr[index] = NULL;
     return (arr);
 }

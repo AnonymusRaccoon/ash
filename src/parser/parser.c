@@ -29,23 +29,43 @@ int count_trailing_spaces(char *cmd)
     return (i);
 }
 
-char **parse_input(char *cmd, env_t *env, wordexp_t *parser)
+char **remove_leading_entries(char **cmds)
+{
+    if (!cmds)
+        return (NULL);
+    for (int i = 0; cmds[i]; i++)
+        if (cmds[i][count_trailing_spaces(cmds[i])])
+            return (cmds + i);
+    return (cmds);
+}
+
+char *process_aliases(char *cmd, env_t *env)
 {
     int bin_len;
 
-    cmd = strdup(cmd + count_trailing_spaces(cmd));
     for (bin_len = 0; cmd[bin_len]; bin_len++) {
         if (cmd[bin_len] == ' ' || cmd[bin_len] == '\t')
             break;
     }
-    cmd = process_vars(cmd, env);
     for (alias_t *al = env->alias; al; al = al->next) {
         if (!strncmp(al->alias, cmd, bin_len)) {
             cmd = realloc(cmd, strlen(cmd) + strlen(al->command) + 1 - bin_len);
+            if (!cmd)
+                return (NULL);
             rm_n_char(cmd, bin_len);
             insert_substring(cmd, al->command, 1);
         }
     }
+    return (cmd);
+}
+
+char **parse_input(char *cmd, env_t *env, wordexp_t *parser)
+{
+    if (!(cmd = strdup(cmd + count_trailing_spaces(cmd))))
+        return (NULL);
+    if (!(cmd = process_vars(cmd, env)))
+        return (NULL);
+    cmd = process_aliases(cmd, env);
     if (wordexp(cmd, parser, WRDE_SHOWERR)) {
         perror(SHELL_NAME);
         return (NULL);
