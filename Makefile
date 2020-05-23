@@ -39,15 +39,12 @@ SRC = src/shell.c \
 	src/utility/fusion.c	\
 	src/utility/split_commands.c \
 	src/utility/get_return.c \
-<<<<<<< HEAD
 	src/parser/parser.c \
 	src/parser/quotes.c \
 	src/parser/double_quotes.c \
 	src/parser/parser_utilities.c \
 	src/parser/parser_vars_utilities.c \
-=======
 	src/utility/eof.c \
->>>>>>> d4a4ccaaf7fef237a46420f6f1dc26b0dbf40982
 	src/key_bindings/basic_typing_functions.c \
 	src/key_bindings/default_bindings.c \
 	src/key_bindings/control_commands.c \
