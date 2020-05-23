@@ -66,16 +66,16 @@ int run_with_redirections(char *cmd, env_t *env, redirection *input)
     inout[0] = input;
     inout[1] = NULL;
     if (!cmds || !cmds[0].type)
-        return (prompt_run(cmd, inout, env));
+        return (prompt_run(cmd, inout, env, cmds));
     for (int i = 0; cmds[i].type; i++) {
         if (cmds[i].type->type & INPUT)
             inout[0] = &cmds[i];
         else
             inout[1] = &cmds[i];
         if (cmds[i].type->type & PIPE)
-            return (prompt_run(cmd, inout, env));
+            return (prompt_run(cmd, inout, env, cmds));
     }
-    return (prompt_run(cmd, inout, env));
+    return (prompt_run(cmd, inout, env, cmds));
 }
 
 int command_format_is_invalid(char **cmds, env_t *env, int *return_values)

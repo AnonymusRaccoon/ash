@@ -32,29 +32,28 @@ const builtin builtins[] = {
     {NULL, NULL}
 };
 
-int prompt_run(char *cmd, redirection *inout[2], env_t *env)
+int prompt_run(char *cmd, redirection *inout[2], env_t *env, redirection *cmds)
 {
-    char **argv;
     wordexp_t parser;
-    int ret;
+    char **argv = parse_input(cmd, env, &parser);
+    int ret = -2;
 
-    argv = parse_input(cmd, env, &parser);
     if (!argv)
         return (0);
-    if (**argv == '!' && argv[0][1] && argv[0][1] != ' ') {
+    if (**argv == '!' && argv[0][1] && argv[0][1] != ' ')
         ret = run_builtin(&builtins[5], argv, inout, env);
-        wordfree(&parser);
-        return (ret);
-    }
     for (int i = 0; builtins[i].name; i++)
-        if (!strcmp(argv[0], builtins[i].name)) {
+        if (!strcmp(argv[0], builtins[i].name))
             ret = run_builtin(&builtins[i], argv, inout, env);
-            wordfree(&parser);
-            return (ret);
-        }
-    run_cmd(argv, inout, env);
+    if (ret == -2) {
+        run_cmd(argv, inout, env);
+        ret = 0;
+    }
     wordfree(&parser);
-    return (0);
+    free(cmd);
+    if (cmds)
+        free(cmds);
+    return (ret);
 }
 
 void prompt_prepare(buffer_t *buffer, env_t *env)

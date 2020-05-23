@@ -54,7 +54,7 @@ typedef struct env_s
 
 void start_shell(env_t *env);
 void free_env(env_t *env);
-int prompt_run(char *cmd, redirection *inout[2], env_t *env);
+int prompt_run(char *cmd, redirection *inout[2], env_t *env, redirection *red);
 void prompt_prepare(buffer_t *buffer, env_t *env);
 
 int eval_raw_cmd(char *cmd, env_t *env);
