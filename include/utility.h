@@ -28,3 +28,5 @@ int count_char(const char *str, char c);
 int ncount_char(const char *str, int end, char c);
 int get_max_eof(char *ignoreeof);
 int skip_eof(buffer_t *buffer, env_t *env);
+
+#define MAX(x, y) ((x) < (y) ? (y) : (x))
