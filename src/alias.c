@@ -51,17 +51,13 @@ char *replace_alias(char *cmd, alias_t *alias)
 char *get_alias_command(char *cmd, alias_t *alias)
 {
     alias_t *tmp = NULL;
-    char **arr = NULL;
 
     tmp = alias;
     for (; tmp; tmp = tmp->next) {
-        arr = split_str(tmp->alias, '=');
-        if (!strcmp(cmd, arr[0])) {
+        if (!strcmp(cmd, tmp->alias)) {
             cmd = strdup(tmp->command);
             tmp = alias;
         }
-        if (arr)
-            free(arr);
     }
     return (cmd);
 }

@@ -28,7 +28,6 @@ char **get_envpath(env_t *env)
     if (pathstr) {
         path_cpy = strdup(pathstr);
         envpath = to_array(path_cpy);
-        free(path_cpy);
     }
     return (envpath);
 }

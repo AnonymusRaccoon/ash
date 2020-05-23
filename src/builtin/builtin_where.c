@@ -26,7 +26,7 @@ void print_alias_where(char *cmd, char *aliased)
 
 char *check_executable(char *cmd, char *folder)
 {
-    struct stat st_buff;
+    struct stat st_buff = {};
     char *path = catpath(folder, cmd);
     char *res = path;
 
