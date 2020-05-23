@@ -19,91 +19,21 @@
 
 char *strdup(const char *);
 
-const parser_map parsers[] = {
-    {'\'', &parse_quotes},
-    {'"', &parse_double_quotes},
-    {'\0', NULL}
-};
-
-bool is_character_valid(char c)
+int count_trailing_spaces(char *cmd)
 {
-    static bool is_valid = false;
+    int i = 0;
 
-    if (is_valid) {
-        is_valid = false;
-        return (true);
-    }
-    if (c == '\\') {
-        is_valid = true;
-    }
-    return (c >= 33 && c <= 126);
-}
-
-int call_parsers(char *cmd, int index, char **data, env_t *env)
-{
-    int new_index = 0;
-
-    for (int i = 0; parsers[i].key; i++) {
-        if (cmd[index] != parsers[i].key)
-            continue;
-        new_index = parsers[i].parser(&cmd[index], data, env);
-        if (!(*data))
-            return (-1);
-        return (new_index);
-    }
-    return (0);
-}
-
-int manage_specials_parsers(char *cmd, char **buffer, int *inc, env_t *env)
-{
-    int new_index = 0;
-    char *data = NULL;
-
-    new_index = call_parsers(cmd, 0, &data, env);
-    if (new_index == -1)
-        return (-1);
-    if (new_index > 0) {
-        (*inc)--;
-        *buffer = add_to_buffer(*buffer, &cmd[(*inc) * -1], (*inc), env);
-        *buffer = add_to_buffer(*buffer, data, strlen(data), NULL);
-        free(data);
-        (*inc) = 0;
-        if (!(*buffer))
-            return (-1);
-        return (new_index);
-    }
-    return (0);
-}
-
-int parser_loop(char *cmd, char **buffer, char **ptr, void **pack)
-{
-    int *i = pack[0];
-    int *inc = pack[1];
-    int *new_index = pack[2];
-    env_t *env = pack[3];
-
-    if (is_character_valid(cmd[*i])) {
-        (*new_index) = manage_specials_parsers(&cmd[(*i)], buffer, inc, env);
-        if ((*new_index) == -1)
-            return (-1);
-        (*i) += (*new_index);
-        if (*new_index)
-            (*ptr) = cmd + (*i) + 1;
-        return (1);
-    }
-    if (*inc == 1 && !(*new_index)) {
-        (*ptr) = cmd + (*i) + 1;
-        (*inc) = 0;
-        return (1);
-    }
-    return (0);
+    for (i = 0; cmd[i]; i++)
+        if (cmd[i] != ' ' && cmd[i] != '\t')
+            break;
+    return (i);
 }
 
 char **parse_input(char *cmd, env_t *env, wordexp_t *parser)
 {
     int bin_len;
 
-    cmd = strdup(cmd);
+    cmd = strdup(cmd + count_trailing_spaces(cmd));
     for (bin_len = 0; cmd[bin_len]; bin_len++) {
         if (cmd[bin_len] == ' ' || cmd[bin_len] == '\t')
             break;
