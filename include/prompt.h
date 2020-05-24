@@ -11,6 +11,7 @@
 char *prompt_attr(int attr, bool off);
 char *minimal_hostname(char *hostname);
 char *date_format(int date);
+char *str_tolower(char *str);
 
 char *get_prompt_value(char c, env_t *env);
 
