@@ -8,7 +8,7 @@
 SRC = src/shell.c \
 	src/prompt.c \
 	src/execute.c \
-	src/glob.c \
+	src/alias.c \
 	src/redirections/redirection_manager.c \
 	src/redirections/redirections.c \
 	src/redirections/redirections_functions.c \
