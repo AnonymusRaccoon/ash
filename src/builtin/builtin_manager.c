@@ -78,8 +78,10 @@ int builtin_exit(char **argv, env_t *env)
 {
     char *ptr = argv[1];
 
-    if (!ptr)
-        exit(0);
+    if (!ptr) {
+        env->vars = my_setenv(env->vars, "?", "0");
+        return (-1);
+    }
     if (argv[1][0] == '-') {
         ptr = &ptr[1];
     }
@@ -87,5 +89,6 @@ int builtin_exit(char **argv, env_t *env)
         dprintf(2, "exit: Expression Syntax.\n");
         return (0);
     }
-    exit(atoi(argv[1]));
+    env->vars = my_setenv(env->vars, "?", argv[1]);
+    return (-1);
 }
