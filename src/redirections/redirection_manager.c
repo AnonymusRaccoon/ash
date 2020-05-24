@@ -100,16 +100,16 @@ bool command_format_is_invalid(char **cmds, env_t *env, int *return_values)
 int eval_raw_cmd(char *cmd, env_t *env)
 {
     int *return_values = NULL;
-    char **cmds = NULL;
+    char **cmds =  split_str(cmd, (char *[]){";", "||", "&&", NULL});
+    char **const_cmd = cmds;
     int ret = 0;
 
     return_values = get_return_separator(cmd);
-    cmds = split_str(cmd, (char *[]){";", "||", "&&", NULL});
     cmds = remove_leading_entries(cmds);
-    if (!cmds)
+    if (!cmds || !return_values)
         return (-1);
     if (command_format_is_invalid(cmds, env, return_values))
-        return (0);
+        return (free(const_cmd), free(return_values), 0);
     for (int i = 0; cmds[i]; i++) {
         if ((return_values[i] == 0 && get_return(my_getenv(env->vars, "?"))) ||
         (return_values[i] == 1 && !get_return(my_getenv(env->vars, "?")))){
@@ -117,5 +117,7 @@ int eval_raw_cmd(char *cmd, env_t *env)
         } else if (run_with_redirections(cmds[i], env, NULL))
             ret = -1;
     }
+    free(const_cmd);
+    free(return_values);
     return (ret);
 }
