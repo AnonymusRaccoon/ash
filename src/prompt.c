@@ -30,6 +30,8 @@ const builtin builtins[] = {
     {"unalias", &builtin_unalias},
     {"bindkey", &builtin_bindkey},
     {"echo", &builtin_echo},
+    {"set", &builtin_set},
+    {"unset", &builtin_unset},
     {NULL, NULL}
 };
 
@@ -39,7 +41,7 @@ int prompt_run(char *cmd, redirection *inout[2], env_t *env, redirection *cmds)
     char **argv = parse_input(cmd, env, &parser);
     int ret = -2;
 
-    if (!argv)
+    if (!argv || !argv[0])
         return (0);
     if (**argv == '!' && argv[0][1] && argv[0][1] != ' ')
         ret = run_builtin(&builtins[5], argv, inout, env);

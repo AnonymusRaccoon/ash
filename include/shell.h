@@ -79,6 +79,7 @@ char **globbing(char **argv);
 
 #define INVALID_ENV_VAR \
 "setenv: Variable name must contain alphanumeric characters.\n"
+#define INVALID_VAR "set: Variable name must contain alphanumeric characters.\n"
 
 char *get_alias(char *cmd, alias_t *alias);
 char *add_separator(char *cmd, int *return_values, int index);
