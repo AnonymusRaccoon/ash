@@ -36,6 +36,7 @@ env_t *create_env(char **env)
     }
     envt->window = NULL;
     envt->alias = NULL;
+    envt->vars = my_setenv(envt->vars, "prompt", "%U%m%u:%B%~%b%# ");
     return (envt);
 }
 
