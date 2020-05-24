@@ -21,6 +21,7 @@
 #define KEY_DC CSI(0x7e33)
 
 #include <termios.h>
+#include <stdio.h>
 
 typedef struct
 {
@@ -42,6 +43,8 @@ void my_move(my_window *window, int y, int x);
 void my_getcuryx(int *y, int *x);
 void my_getmaxyx(int *y, int *x);
 int my_getch(void);
+const char *my_unctrl(int c);
+int my_parsechar(const char *c);
 
 void my_addstr(my_window *window, const char *str);
 #define my_mvaddstr(window, y, x, str) (my_move(window, y, x), \
@@ -70,3 +73,5 @@ my_addstr(window, str))
 
 void my_npause(my_window *window);
 void my_nresume(my_window *window);
+
+extern my_window *stdwin;

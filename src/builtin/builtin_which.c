@@ -12,6 +12,28 @@
 #include "utility.h"
 #include "builtin.h"
 
+char **get_paths_from_envpath(char *cmd, char **envpath)
+{
+    int len = 0;
+    char **res = NULL;
+
+    for (; envpath[len]; len++);
+    res = malloc(sizeof(char *) * (len + 2));
+    if (!res)
+        return (NULL);
+    fill_path_arr(cmd, envpath, res);
+    return (res);
+}
+
+void print_alias_which(char *cmd, char *aliased)
+{
+    if (aliased[0] == '(') {
+        aliased = &aliased[1];
+        aliased[strlen(aliased) - 1] = 0;
+    }
+    printf("%s:\taliased to %s\n", cmd, aliased);
+}
+
 bool find_path_in_builtins(char *cmd)
 {
     extern const builtin builtins[];
@@ -24,11 +46,17 @@ bool find_path_in_builtins(char *cmd)
     return (false);
 }
 
-void print_path(char *cmd, char **envpath)
+void print_path(char *cmd, char **envpath, env_t *env)
 {
     char **res = NULL;
+    char *dup_cmd = strdup(cmd);
     int len = 0;
-    //check_alias
+    char *aliased = get_alias_command(cmd, env->alias);
+
+    if (strcmp(aliased, dup_cmd)) {
+        print_alias_which(dup_cmd, aliased);
+        return;
+    }
     if (find_path_in_builtins(cmd))
         return;
     res = get_paths_from_envpath(cmd, envpath);
@@ -52,7 +80,7 @@ int builtin_which(char **argv, env_t *env)
     }
     envpath = get_envpath(env);
     for (int i = 1; argv[i]; i++)
-        print_path(argv[i], envpath);
+        print_path(argv[i], envpath, env);
     free(envpath);
     return (0);
 }

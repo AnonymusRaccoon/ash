@@ -24,6 +24,8 @@ typedef struct binding
 extern const key_function_t key_functions[];
 extern const binding_t emacs_bindings[];
 
+int get_emacs_bindings_size(void);
+
 int buffer_get_display_pos(buffer_t *buffer);
 
 
@@ -42,4 +44,8 @@ int end_of_line_command(int key, buffer_t *buffer, env_t *env);
 int up_history_command(int key, buffer_t *buffer, env_t *env);
 int down_history_command(int key, buffer_t *buffer, env_t *env);
 
+int quoted_insert_command(int key, buffer_t *buffer, env_t *env);
+int clear_screen_command(int key, buffer_t *buffer, env_t *env);
 int complete_command(int key, buffer_t *buffer, env_t *env);
+
+int tty_sigintr_command(int key, buffer_t *buffer, env_t *env);

@@ -34,18 +34,32 @@ int eof_command(int key, buffer_t *buffer, env_t *env)
     return (0);
 }
 
+int history_size(history_t *hist)
+{
+    int i = 1;
+
+    if (!hist)
+        return (0);
+    while (hist->next) {
+        hist = hist->next;
+        i++;
+    }
+    return (i);
+}
+
 bool set_buffer_to_history(buffer_t *buffer, env_t *env)
 {
     history_t *hist = env->history;
     char *cmd = NULL;
     int len;
+    int hist_index = history_size(env->history) - buffer->history_index;
 
     if (buffer->history_index == 0)
         cmd = buffer->saved_buffer != NULL ? buffer->saved_buffer : "";
     else
-        for (int i = 1; i < buffer->history_index && hist; i++)
+        for (int i = 0; i < hist_index && hist; i++)
             hist = hist->next;
-    if (!cmd && (!hist || !(cmd = hist->command)))
+    if (hist_index < 0 || (!cmd && (!hist || !(cmd = hist->command))))
         return (false);
     if (!buffer->buffer || buffer->size < (len = strlen(cmd))) {
         buffer->buffer = realloc(buffer->buffer, buffer->size + len);

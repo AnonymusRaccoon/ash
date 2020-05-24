@@ -13,6 +13,7 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <string.h>
+#include <stdio.h>
 #include "utility.h"
 #include "builtin.h"
 
@@ -66,31 +67,34 @@ int run_with_redirections(char *cmd, env_t *env, redirection *input)
     inout[0] = input;
     inout[1] = NULL;
     if (!cmds || !cmds[0].type)
-        return (prompt_run(cmd, inout, env));
+        return (prompt_run(cmd, inout, env, cmds));
     for (int i = 0; cmds[i].type; i++) {
         if (cmds[i].type->type & INPUT)
             inout[0] = &cmds[i];
         else
             inout[1] = &cmds[i];
         if (cmds[i].type->type & PIPE)
-            return (prompt_run(cmd, inout, env));
+            return (prompt_run(cmd, inout, env, cmds));
     }
-    return (prompt_run(cmd, inout, env));
+    return (prompt_run(cmd, inout, env, cmds));
 }
 
-int command_format_is_invalid(char **cmds, env_t *env, int *return_values)
+bool command_format_is_invalid(char **cmds, env_t *env, int *return_values)
 {
+    if (cmds[0] && !cmds[0][count_trailing_spaces(cmds[0])] && !cmds[1])
+        return (false);
     for (int i = 0; cmds[i]; i++) {
-        if (redirections_are_invalid(cmds[i])) {
-            env->env = my_setenv(env->vars, "?", "1");
-            return (1);
-        } else if (split_is_invalid(cmds, return_values, i)) {
-            write(2, "Invalid null command.\n", 22);
+        if (!cmds[i] || !cmds[i][count_trailing_spaces(cmds[i])]
+        || split_is_invalid(cmds, return_values, i)) {
+            dprintf(2, "Invalid null command.\n");
             env->vars = my_setenv(env->vars, "?", "1");
-            return (1);
+            return (true);
+        } else if (redirections_are_invalid(cmds[i])) {
+            env->env = my_setenv(env->vars, "?", "1");
+            return (true);
         }
     }
-    return (0);
+    return (false);
 }
 
 int eval_raw_cmd(char *cmd, env_t *env)
@@ -99,11 +103,9 @@ int eval_raw_cmd(char *cmd, env_t *env)
     char **cmds = NULL;
     int ret = 0;
 
-    cmd = get_alias(cmd, env->alias);
-    if (!cmd)
-        return (0);
     return_values = get_return_separator(cmd);
-    cmds = split_commands(cmd);
+    cmds = split_str(cmd, (char *[]){";", "||", "&&", NULL});
+    cmds = remove_leading_entries(cmds);
     if (!cmds)
         return (-1);
     if (command_format_is_invalid(cmds, env, return_values))

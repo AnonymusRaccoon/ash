@@ -19,7 +19,6 @@ typedef enum redirection_type {
     PTY = 1 << 4
 } redirection_type;
 
-
 typedef struct redirection_map {
     char *key;
     int (*get_fd)(redirection *);

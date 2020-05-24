@@ -24,6 +24,10 @@ int process_key(int key, buffer_t *buffer, env_t *env)
     if (key <= 0)
         return (0);
     my_clrtobot();
+    if (buffer->quoted_insert) {
+        buffer->quoted_insert = false;
+        return (self_insert_command(key, buffer, env));
+    }
     for (int i = 0; env->bindings[i].func; i++)
         if (key == env->bindings[i].key)
             return (env->bindings[i].func(key, buffer, env));
@@ -67,9 +71,10 @@ void shell_refresh(buffer_t *buffer, env_t *env)
 
 void start_shell(env_t *env)
 {
-    buffer_t buffer = {NULL, 0, 0, 0, 0, NULL};
+    buffer_t buffer = {NULL, 0, 0, 0, 0, NULL, false};
     int key;
 
+    setup_sigint();
     if (isatty(0)) {
         env->window = my_initwin();
         prompt_prepare(&buffer, env);

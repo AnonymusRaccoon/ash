@@ -8,11 +8,13 @@
 #include "shell.h"
 #include "builtin.h"
 #include "redirections.h"
-
 #include <unistd.h>
 #include <malloc.h>
 #include <errno.h>
 #include <string.h>
+#include <ctype.h>
+#include <stdio.h>
+#include <stdlib.h>
 
 int run_builtin(const builtin *cmd, char **a, redirection *inout[2], env_t *env)
 {
@@ -46,7 +48,6 @@ int builtin_cd(char **argv, env_t *env)
 
     if (get_argc(argv) > 2) {
         write(2, "cd: Too many arguments.\n", 25);
-        free(argv);
         env->vars = my_setenv(env->vars, "?", "1");
         return (0);
     }
@@ -61,14 +62,34 @@ int builtin_cd(char **argv, env_t *env)
     } else
         env->env = my_setenv(env->env, "OLDPWD", old);
     free(old);
-    free(argv);
     return (0);
+}
+
+bool my_strisnum(char *str)
+{
+    for (int i = 0; str[i]; i++) {
+        if (!isdigit(str[i]))
+            return (false);
+    }
+    return (true);
 }
 
 int builtin_exit(char **argv, env_t *env)
 {
-    if (argv[1])
+    char *ptr = argv[1];
+
+    if (!ptr) {
+        env->vars = my_setenv(env->vars, "?", "0");
+        return (-1);
+    }
+    if (argv[1][0] == '-') {
+        ptr = &ptr[1];
+    }
+    if (!my_strisnum(ptr)) {
+        dprintf(2, "exit: Expression Syntax.\n");
         env->vars = my_setenv(env->vars, "?", "1");
-    free(argv);
+        return (0);
+    }
+    env->vars = my_setenv(env->vars, "?", argv[1]);
     return (-1);
 }
