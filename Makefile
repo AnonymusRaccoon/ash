@@ -54,7 +54,8 @@ SRC = src/shell.c \
 	src/key_bindings/autocompletion.c \
 	src/builtin/builtin_bindkey.c \
 	src/key_bindings/other_bindings.c \
-	src/builtin/builtin_vars.c
+	src/builtin/builtin_vars.c \
+	src/key_bindings/signals.c
 
 OBJ = $(SRC:%.c=%.o)
 OBJ += src/main.o

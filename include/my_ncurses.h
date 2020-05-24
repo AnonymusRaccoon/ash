@@ -72,3 +72,5 @@ my_addstr(window, str))
 
 void my_npause(my_window *window);
 void my_nresume(my_window *window);
+
+extern my_window *stdwin;
