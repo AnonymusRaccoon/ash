@@ -15,6 +15,29 @@
 #include <stdio.h>
 #include <time.h>
 
+char *get_prompt_value4(char c, env_t *env, struct tm *tm)
+{
+    static char time[11];
+
+    if (c == 't' || c == '@') {
+        strftime(time, sizeof(time), "%I:%M%p", tm);
+        return (str_tolower(time));
+    }
+    if (c == 'T') {
+        strftime(time, sizeof(time), "%H:%M", tm);
+        return (time);
+    }
+    if (c == 'p') {
+        strftime(time, sizeof(time), "%I:%M:%S%p", tm);
+        return (str_tolower(time));
+    }
+    if (c == 'P') {
+        strftime(time, sizeof(time), "%H:%M:%S", tm);
+        return (time);
+    }
+    return (time);
+}
+
 char *get_prompt_value3(char c, env_t *env)
 {
     time_t t = time(NULL);
@@ -37,7 +60,7 @@ char *get_prompt_value3(char c, env_t *env)
         return (&tostr(tm->tm_year + 1900)[2]);
     if (c == 'Y')
         return (tostr(tm->tm_year + 1900));
-    return (NULL);
+    return (get_prompt_value4(c, env, tm));
 }
 
 char *get_prompt_value2(char c, env_t *env)

@@ -6,6 +6,7 @@
 */
 
 #include <stdbool.h>
+#include <ctype.h>
 #include "my_ncurses.h"
 
 char *minimal_hostname(char *hostname)
@@ -33,4 +34,11 @@ char *date_format(int date)
 
     sprintf(format, "%02d", date);
     return (format);
+}
+
+char *str_tolower(char *str)
+{
+    for (int i = 0; str[i]; i++)
+        str[i] = tolower(str[i]);
+    return (str);
 }
