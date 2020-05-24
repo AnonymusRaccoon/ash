@@ -58,7 +58,7 @@ int delete_char_command(int key, buffer_t *buffer, env_t *env)
 
 int newline_command(int key, buffer_t *buffer, env_t *env)
 {
-    int ret;
+    int ret = 0;
 
     env->vars = my_unsetenv(env->vars, "eof");
     if (env->window)
