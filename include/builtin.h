@@ -29,6 +29,7 @@ int builtin_history(char **args, env_t *env);
 int builtin_alias(char **args, env_t *env);
 int builtin_unalias(char **args, env_t *env);
 int builtin_echo(char **args, env_t *env);
+int builtin_if(char **argv, env_t *env);
 //utility
 bool find_path_in_builtins(char *cmd);
 char **get_envpath(env_t *env);
@@ -59,3 +60,8 @@ void remove_alias(char *alias, alias_t **list);
 
 //echo
 int print_char(char *str, int i);
+
+//if
+
+int get_test_return_value(char **argv, env_t *env);
+int get_max_cmd_len(char **argv);

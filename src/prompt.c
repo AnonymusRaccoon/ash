@@ -28,6 +28,7 @@ const builtin builtins[] = {
     {"alias", &builtin_alias},
     {"unalias", &builtin_unalias},
     {"echo", &builtin_echo},
+    {"if", &builtin_if},
     {NULL, NULL}
 };
 

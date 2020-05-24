@@ -10,7 +10,6 @@
 #include <string.h>
 #include "utility.h"
 
-
 char *my_getenv(char **env, char *name)
 {
     if (!env)
