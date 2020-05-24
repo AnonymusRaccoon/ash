@@ -5,13 +5,12 @@
 ** prompt
 */
 
-
-
 #include "shell.h"
 #include "builtin.h"
 #include "redirections.h"
 #include "parser.h"
 #include "utility.h"
+#include "prompt.h"
 #include <unistd.h>
 #include <malloc.h>
 #include <string.h>
@@ -58,12 +57,39 @@ int prompt_run(char *cmd, redirection *inout[2], env_t *env, redirection *cmds)
     return (ret);
 }
 
+char *parse_prompt(char *prompt, env_t *env)
+{
+    char *value = NULL;
+    int value_length = 0;
+    int length = strlen(prompt);
+
+    for (int i = 0; prompt[i]; i++) {
+        if (prompt[i] != '%')
+            continue;
+        value = get_prompt_value(prompt[i + 1], env);
+        if (!value)
+            continue;
+        value_length = strlen(value);
+        prompt = realloc(prompt, sizeof(char) * (value_length + length + 2));
+        if (!prompt)
+            return (NULL);
+        rm_n_char(&prompt[i], 2);
+        insert_substring(prompt, value, i + 1);
+        i += value_length - 1;
+        length += value_length - 2;
+    }
+    return (prompt);
+}
+
 void prompt_prepare(buffer_t *buffer, env_t *env)
 {
-    char *prompt = my_getenv(env->vars, "PS1");
+    char *prompt = my_getenv(env->vars, "prompt");
 
     if (!prompt)
-        prompt = "$ ";
-    printf("%s", prompt);
-    buffer->startx = strlen(prompt);
+        prompt = "";
+    prompt = strdup(prompt);
+    prompt = parse_prompt(prompt, env);
+    my_mvaddstr(env->window, NO_MOVE, 0, prompt);
+    buffer->startx = env->window->x;
+    free(prompt);
 }

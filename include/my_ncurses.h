@@ -64,7 +64,18 @@ my_addstr(window, str))
 #define CYAN 36
 #define WHITE 37
 
+#define BOLD 1
+#define FAINT 2
+#define ITALIC 3
+#define UNDERLINE 4
+#define SLOW_BLINK 5
+#define FAST_BLINK 6
+#define REVERSE 7
+
+#define DISABLE_ATTR 20
+
 #define my_attron(attr, value) (printf("\x1B[%dm", attr + value))
+#define my_attroff(attr, value) (printf("\x1B[%dm", attr + DISABLE_ATTR))
 #define my_attrreset() (printf("\x1B[0m"))
 
 

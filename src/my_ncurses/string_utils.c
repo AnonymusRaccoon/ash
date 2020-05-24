@@ -12,11 +12,26 @@
 #include <string.h>
 #include <sys/ioctl.h>
 
+int get_escape_character_length(const char *str)
+{
+    int i = 0;
+
+    if (str[1] != '[')
+        return (1);
+    while (str[i] && str[i] != 'm')
+        i++;
+    return (i);
+}
+
 void my_addstr(my_window *window, const char *str)
 {
     int tmp;
 
     for (int i = 0; str[i]; i++) {
+        if (str[i] == KEY_ESCAPE) {
+            i += get_escape_character_length(&str[i]);
+            continue;
+        }
         if (str[i] == '\n') {
             window->y++;
             window->x = 0;
@@ -59,23 +74,4 @@ int my_parsechar(const char *c)
     if (c[1])
         return (-1);
     return (c[0]);
-}
-
-void my_getmaxyx(int *y, int *x)
-{
-    struct winsize size;
-
-    ioctl(STDOUT_FILENO, TIOCGWINSZ, &size);
-    *y = size.ws_row;
-    *x = size.ws_col;
-}
-
-void my_getcuryx(int *y, int *x)
-{
-    my_refresh();
-    printf("\x1B[6n");
-    fflush(stdout);
-    scanf("\x1B[%d;%dR", y, x);
-    *y -= 1;
-    *x -= 1;
 }
