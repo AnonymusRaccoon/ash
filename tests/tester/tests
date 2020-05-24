@@ -183,17 +183,6 @@ TESTS=
   echo 'alias'
 [917-END]
 
-[918]
-NAME="918"
-SETUP=""
-CLEAN=""
-TESTS=
-  echo 'alias ls cd ..'
-  echo 'alias | grep cd'
-  echo 'alias ls cd'
-  echo 'alias | grep cd'
-[918-END]
-
 [919]
 NAME="919"
 SETUP=""

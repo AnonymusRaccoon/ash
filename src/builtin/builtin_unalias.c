@@ -33,6 +33,7 @@ void free_alias(alias_t *alias)
 
 void remove_alias(char *alias, alias_t **list)
 {
+    alias_t *prev = NULL;
     alias_t *tmp = *list;
 
     if (!tmp)
@@ -42,15 +43,14 @@ void remove_alias(char *alias, alias_t **list)
         free_alias(tmp);
         return;
     }
-    for (alias_t *ptr = *list; ptr->next; ptr = ptr->next) {
-        if (strcmp(ptr->next->alias, alias) == 0) {
-            tmp = ptr->next;
-            ptr->next = ptr->next->next;
+    prev = tmp;
+    tmp = tmp->next;
+    for (; tmp; tmp = tmp->next) {
+        if (strcmp(tmp->alias, alias) == 0) {
+            prev->next = tmp->next;
             free_alias(tmp);
             return;
         }
+        prev = tmp;
     }
-    for (tmp = *list; tmp; tmp = tmp->next->next);
-    free_alias(tmp->next);
-    tmp->next = NULL;
 }
