@@ -5,17 +5,15 @@
 ** prompt
 */
 
-
-
 #include "shell.h"
 #include "builtin.h"
 #include "redirections.h"
 #include "parser.h"
 #include "utility.h"
+#include "prompt.h"
 #include <unistd.h>
 #include <malloc.h>
 #include <string.h>
-#include <limits.h>
 
 const builtin builtins[] = {
     {"env", &builtin_env},
@@ -57,45 +55,6 @@ int prompt_run(char *cmd, redirection *inout[2], env_t *env, redirection *cmds)
     if (cmds)
         free(cmds);
     return (ret);
-}
-
-char *minmal_hostname(char *hostname)
-{
-    int i = 0;
-
-    while (hostname[i] && hostname[i] != '.')
-        i++;
-    if (hostname[i] == '.')
-        hostname[i] = '\0';
-    return (hostname);
-}
-
-char *get_prompt_value(char c, env_t *env)
-{
-    static char value[PATH_MAX];
-
-    if (c == '/' || c == '~')
-        return (getcwd(value, sizeof(value)));
-    if (c == 'n' || c == 'N')
-        return (getlogin());
-    if (c == 'M' || c == 'm') {
-        gethostname(value, sizeof(value));
-        if (c == 'm')
-            minmal_hostname(value);
-        return (value);
-    }
-    if (c == '%')
-        return "%";
-    if (c == 'l')
-        return (ttyname(STDIN_FILENO));
-    if (c == '#') {
-        if (!geteuid())
-            return ("#");
-        return (">");
-    }
-    if (c == '?')
-        return (my_getenv(env->vars, "?"));
-    return (NULL);
 }
 
 char *parse_prompt(char *prompt, env_t *env)

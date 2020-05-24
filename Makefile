@@ -55,7 +55,9 @@ SRC = src/shell.c \
 	src/builtin/builtin_bindkey.c \
 	src/key_bindings/other_bindings.c \
 	src/builtin/builtin_vars.c \
-	src/key_bindings/signals.c
+	src/key_bindings/signals.c \
+	src/prompt/prompt_values.c \
+	src/prompt/prompt_utilities.c
 
 OBJ = $(SRC:%.c=%.o)
 OBJ += src/main.o
