@@ -22,6 +22,9 @@ const key_function_t key_functions[] = {
     {"end-of-line", &end_of_line_command},
     {"up-history", &up_history_command},
     {"down-history", &down_history_command},
+    {"complete-command", &complete_command},
+    {"clear-screen", &clear_screen_command},
+    {"quoted-insert", &quoted_insert_command},
     {NULL, NULL}
 };
 
@@ -38,5 +41,12 @@ const binding_t emacs_bindings[] = {
     {KEY_UP, &up_history_command},
     {KEY_DOWN, &down_history_command},
     {'\t', &complete_command},
+    {CTRL('l'), &clear_screen_command},
+    {CTRL('v'), &quoted_insert_command},
     {0, NULL}
 };
+
+int get_emacs_bindings_size()
+{
+    return sizeof(emacs_bindings);
+}

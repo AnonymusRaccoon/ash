@@ -28,6 +28,7 @@ int builtin_source(char **argv, env_t *env);
 int builtin_history(char **args, env_t *env);
 int builtin_alias(char **args, env_t *env);
 int builtin_unalias(char **args, env_t *env);
+int builtin_bindkey(char **argv, env_t *env);
 int builtin_echo(char **args, env_t *env);
 //which / where
 bool find_path_in_builtins(char *cmd);
