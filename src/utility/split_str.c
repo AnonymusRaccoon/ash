@@ -37,7 +37,7 @@ static int get_splitted_count(char *str, char **delims)
         delim = get_delimiter(str + i, delims);
         if (delim) {
             count++;
-            i += strlen(delim);
+            i += strlen(delim) - 1;
         }
     }
     return (count);

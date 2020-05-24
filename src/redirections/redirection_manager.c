@@ -81,6 +81,8 @@ int run_with_redirections(char *cmd, env_t *env, redirection *input)
 
 bool command_format_is_invalid(char **cmds, env_t *env, int *return_values)
 {
+    if (cmds[0] && !cmds[0][count_trailing_spaces(cmds[0])] && !cmds[1])
+        return (false);
     for (int i = 0; cmds[i]; i++) {
         if (!cmds[i] || !cmds[i][count_trailing_spaces(cmds[i])]
         || split_is_invalid(cmds, return_values, i)) {
