@@ -24,7 +24,7 @@ typedef struct binding
 extern const key_function_t key_functions[];
 extern const binding_t emacs_bindings[];
 
-int get_emacs_bindings_size();
+int get_emacs_bindings_size(void);
 
 int buffer_get_display_pos(buffer_t *buffer);
 

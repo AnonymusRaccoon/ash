@@ -48,7 +48,7 @@ const binding_t emacs_bindings[] = {
     {0, NULL}
 };
 
-int get_emacs_bindings_size()
+int get_emacs_bindings_size(void)
 {
     return sizeof(emacs_bindings);
 }

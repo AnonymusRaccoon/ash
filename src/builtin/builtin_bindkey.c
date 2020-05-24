@@ -43,7 +43,8 @@ static binding_t *get_binding(const char *c, env_t *env)
     return (NULL);
 }
 
-static void new_binding(const char *c, int (*func)(int, buffer_t *, env_t *), env_t *env)
+static void new_binding(const char *c, int (*func)(int, buffer_t *, env_t *)\
+, env_t *env)
 {
     int key = my_parsechar(c);
     int size = 0;
