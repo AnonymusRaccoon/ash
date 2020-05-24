@@ -21,6 +21,7 @@
 #define KEY_DC CSI(0x7e33)
 
 #include <termios.h>
+#include <stdio.h>
 
 typedef struct
 {
