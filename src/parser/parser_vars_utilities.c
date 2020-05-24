@@ -21,7 +21,10 @@ char *get_var_value(char *var, env_t *env)
     value = my_getenv(env->vars, var);
     if (value)
         return (value);
-    printf("%s: Undefined variable.\n", var);
+    if (!var[0])
+        printf("Illegal variable name.\n");
+    else
+        printf("%s: Undefined variable.\n", var);
     env->vars = my_setenv(env->vars, "?", "1");
     return (NULL);
 }
@@ -36,7 +39,7 @@ int get_var_name(char *ptr, char **name)
         length++;
     }
     *name = strndup(&ptr[1], length);
-    return (length + 1);
+    return (length - 1);
 }
 
 void rm_n_char(char *ptr, int n)
@@ -57,7 +60,7 @@ char *process_vars(char *cmd, env_t *env)
     int length = strlen(cmd);
     bool parse = true;
 
-    for (int i = 0; i < length; i += new_index + 1, length = strlen(cmd)) {
+    for (int i = 0; i < length; i += 1 + new_index, length = strlen(cmd)) {
         if (cmd[i] == '\'' || cmd[i] == '`')
             parse = !parse;
         if (cmd[i] != '$' || !parse)
