@@ -10,6 +10,7 @@
 #include "shell.h"
 #include "builtin.h"
 #include "redirections.h"
+#include "parser.h"
 #include "utility.h"
 #include <unistd.h>
 #include <malloc.h>
@@ -32,27 +33,27 @@ const builtin builtins[] = {
     {NULL, NULL}
 };
 
-int prompt_run(char *cmd, redirection *inout[2], env_t *env)
+int prompt_run(char *cmd, redirection *inout[2], env_t *env, redirection *cmds)
 {
-    char **argv = get_argv(cmd);
+    wordexp_t parser;
+    char **argv = parse_input(cmd, env, &parser);
+    int ret = -2;
 
-    if (!argv) {
-        perror(SHELL_NAME);
-        return (-1);
-    }
-    if (!argv[0])
-        return (0);
-    argv = globbing(argv);
     if (!argv)
         return (0);
     if (**argv == '!' && argv[0][1] && argv[0][1] != ' ')
-        return (run_builtin(&builtins[5], argv, inout, env));
+        ret = run_builtin(&builtins[5], argv, inout, env);
     for (int i = 0; builtins[i].name; i++)
         if (!strcmp(argv[0], builtins[i].name))
-            return (run_builtin(&builtins[i], argv, inout, env));
-    run_cmd(argv, inout, env);
-    free(argv);
-    return (0);
+            ret = run_builtin(&builtins[i], argv, inout, env);
+    if (ret == -2) {
+        run_cmd(argv, inout, env);
+        ret = 0;
+    }
+    wordfree(&parser);
+    if (cmds)
+        free(cmds);
+    return (ret);
 }
 
 void prompt_prepare(buffer_t *buffer, env_t *env)

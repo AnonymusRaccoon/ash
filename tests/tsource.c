@@ -15,7 +15,7 @@
 
 Test(get_special_arg_at, at_arg)
 {
-    char **argv = split_str(strdup("source file a b c"), ' ');
+    char **argv = split_str(strdup("source file a b c"), (char *[]) {" ", NULL});
     int argv_len = 5;
     char *res = NULL;
 
@@ -26,7 +26,7 @@ Test(get_special_arg_at, at_arg)
 
 Test(get_special_arg_star, at_arg)
 {
-    char **argv = split_str(strdup("source file a b c"), ' ');
+    char **argv = split_str(strdup("source file a b c"), (char *[]) {" ", NULL});
     int argv_len = 5;
     char *res = NULL;
 

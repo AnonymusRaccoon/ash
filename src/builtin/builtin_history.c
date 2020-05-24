@@ -37,8 +37,10 @@ int add_to_history(char *cmd, env_t *env)
     char *command = cmd;
 
     for (; *command && (*command == ' ' || *command == '\t'); command++);
-    if (!strlen(command))
+    if (!strlen(command)) {
+        free(log);
         return (0);
+    }
     if (!log)
         return (-1);
     for (tmp = env->history; tmp && tmp->next; tmp = tmp->next);
