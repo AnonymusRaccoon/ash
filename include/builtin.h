@@ -62,6 +62,6 @@ void remove_alias(char *alias, alias_t **list);
 int print_char(char *str, int i);
 
 //if
-
+char *get_expr(char **argv);
 int get_test_return_value(char **argv, env_t *env);
 int get_max_cmd_len(char **argv);
