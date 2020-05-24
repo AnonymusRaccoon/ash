@@ -70,7 +70,7 @@ my_addstr(window, str))
 #define UNDERLINE 4
 #define SLOW_BLINK 5
 #define FAST_BLINK 6
-#define REVERSE 6
+#define REVERSE 7
 
 #define DISABLE_ATTR 20
 
