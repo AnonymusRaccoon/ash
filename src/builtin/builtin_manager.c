@@ -14,6 +14,7 @@
 #include <string.h>
 #include <ctype.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 int run_builtin(const builtin *cmd, char **a, redirection *inout[2], env_t *env)
 {
@@ -75,7 +76,6 @@ bool my_strisnum(char *str)
 
 int builtin_exit(char **argv, env_t *env)
 {
-    int ret = 0;
     char *ptr = argv[1];
 
     if (!ptr)
@@ -87,8 +87,5 @@ int builtin_exit(char **argv, env_t *env)
         dprintf(2, "exit: Expression Syntax.\n");
         return (0);
     }
-    if (my_strisnum(ptr))
-        ret = atoi(argv[1]);
-    exit(ret);
-    return (-1);
+    exit(atoi(argv[1]));
 }
