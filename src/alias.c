@@ -39,7 +39,7 @@ char *replace_alias(char *cmd, alias_t *alias)
 
     if (!arg_array)
         return (NULL);
-    for (int i = 0; arg_array[i]; i++) {
+    for (int i = 0; i == 0; i++) {
         arg_array[i] = get_alias_command(arg_array[i], alias);
         if (!arg_array[i])
             return (NULL);
@@ -54,8 +54,8 @@ char *get_alias_command(char *cmd, alias_t *alias)
 
     tmp = alias;
     for (; tmp; tmp = tmp->next) {
-        if (!strcmp(cmd, alias->alias)) {
-            cmd = strdup(alias->command);
+        if (!strcmp(cmd, tmp->alias)) {
+            cmd = strdup(tmp->command);
             tmp = alias;
         }
     }
