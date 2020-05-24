@@ -52,7 +52,7 @@ char *process_vars(char *cmd, env_t *env)
     char *name = NULL;
     char *value;
     int new_index;
-    int length = strlen(cmd);
+    int length = strlen(cmd); 
 
     for (int i = 0; i < length; i++, length = strlen(cmd)) {
         if (cmd[i] != '$')
