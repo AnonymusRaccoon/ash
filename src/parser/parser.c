@@ -18,6 +18,7 @@
 #include <malloc.h>
 
 char *strdup(const char *);
+int dprintf(int, const char *, ...);
 
 int count_trailing_spaces(char *cmd)
 {
