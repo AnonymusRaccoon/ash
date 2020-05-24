@@ -13,6 +13,32 @@
 #include <unistd.h>
 #include <limits.h>
 #include <stdio.h>
+#include <time.h>
+
+char *get_prompt_value3(char c, env_t *env)
+{
+    time_t t = time(NULL);
+    struct tm *tm = localtime(&t);
+    static char name[10];
+
+    if (c == 'd') {
+        strftime(name, sizeof(name), "%a", tm);
+        return (name);
+    }
+    if (c == 'D')
+        return (date_format(tm->tm_mday));
+    if (c == 'w') {
+        strftime(name, sizeof(name), "%b", tm);
+        return (name);
+    }
+    if (c == 'W')
+        return (date_format(tm->tm_mon + 1));
+    if (c == 'y')
+        return (&tostr(tm->tm_year + 1900)[2]);
+    if (c == 'Y')
+        return (tostr(tm->tm_year + 1900));
+    return (NULL);
+}
 
 char *get_prompt_value2(char c, env_t *env)
 {
@@ -34,7 +60,7 @@ char *get_prompt_value2(char c, env_t *env)
         return (prompt_attr(REVERSE, true));
     if (c == '!' || c == 'h')
         return (tostr(history_size(env->history)));
-    return (NULL);
+    return (get_prompt_value3(c, env));
 }
 
 char *get_prompt_value(char c, env_t *env)

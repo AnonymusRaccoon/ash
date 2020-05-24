@@ -26,3 +26,11 @@ char *prompt_attr(int attr, bool off)
     sprintf(str, "\x1B[%dm", attr + (off ? DISABLE_ATTR : 0));
     return (str);
 }
+
+char *date_format(int date)
+{
+    static char format[3];
+
+    sprintf(format, "%02d", date);
+    return (format);
+}
