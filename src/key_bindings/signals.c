@@ -17,6 +17,10 @@ void on_sigint(int sig, siginfo_t *info, void *context)
     my_addstr(stdwin, "\n");
 }
 
+void on_sigtstp(int sig, siginfo_t *info, void *context)
+{
+}
+
 void setup_sigint(void)
 {
     struct sigaction sa;
@@ -25,6 +29,9 @@ void setup_sigint(void)
     sigemptyset(&sa.sa_mask);
     sa.sa_flags = SA_SIGINFO;
     sigaction(SIGINT, &sa, NULL);
+    sa.sa_sigaction = &on_sigtstp;
+    sa.sa_flags = SA_SIGINFO;
+    sigaction(SIGTSTP, &sa, NULL);
 }
 
 int tty_sigintr_command(int key, buffer_t *buffer, env_t *env)
