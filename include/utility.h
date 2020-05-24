@@ -29,3 +29,5 @@ int get_max_eof(char *ignoreeof);
 int skip_eof(buffer_t *buffer, env_t *env);
 int count_trailing_spaces(char *cmd);
 char **remove_leading_entries(char **cmds);
+
+#define MAX(x, y) ((x) < (y) ? (y) : (x))

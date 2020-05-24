@@ -20,6 +20,8 @@ const key_function_t key_functions[] = {
     {"forward-char", &forward_char_command},
     {"beginning-of-line", &beginning_of_line_command},
     {"end-of-line", &end_of_line_command},
+    {"up-history", &up_history_command},
+    {"down-history", &down_history_command},
     {NULL, NULL}
 };
 
@@ -35,5 +37,6 @@ const binding_t emacs_bindings[] = {
     {KEY_END, &end_of_line_command},
     {KEY_UP, &up_history_command},
     {KEY_DOWN, &down_history_command},
+    {'\t', &complete_command},
     {0, NULL}
 };

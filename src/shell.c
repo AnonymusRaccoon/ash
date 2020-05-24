@@ -23,6 +23,7 @@ int process_key(int key, buffer_t *buffer, env_t *env)
 {
     if (key <= 0)
         return (0);
+    my_clrtobot();
     for (int i = 0; env->bindings[i].func; i++)
         if (key == env->bindings[i].key)
             return (env->bindings[i].func(key, buffer, env));
@@ -57,7 +58,7 @@ void shell_refresh(buffer_t *buffer, env_t *env)
 
     if (buffer->buffer)
         my_mvaddstr(env->window, y, buffer->startx, buffer->buffer);
-    my_clrtobot();
+    my_clrtoeol();
     my_move(env->window, newy, buf_getx(buffer, env));
     my_refresh();
     oldbuffer_pos = buffer->pos;
