@@ -52,7 +52,8 @@ SRC = src/shell.c \
 	src/my_ncurses/string_utils.c \
 	src/my_ncurses/pause_utils.c \
 	src/key_bindings/autocompletion.c \
-	src/builtin/builtin_bindkey.c
+	src/builtin/builtin_bindkey.c \
+	src/key_bindings/other_bindings.c
 
 OBJ = $(SRC:%.c=%.o)
 OBJ += src/main.o

@@ -33,6 +33,7 @@ typedef struct buffer
     int startx;
     int history_index;
     char *saved_buffer;
+    bool quoted_insert;
 } buffer_t;
 
 typedef struct alias_s
