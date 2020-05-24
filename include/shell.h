@@ -85,5 +85,6 @@ char *get_alias(char *cmd, alias_t *alias);
 char *add_separator(char *cmd, int *return_values, int index);
 char *get_alias_command(char *cmd, alias_t *alias);
 
+void setup_sigint(void);
 
 #define ERROR 84

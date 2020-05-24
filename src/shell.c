@@ -74,6 +74,7 @@ void start_shell(env_t *env)
     buffer_t buffer = {NULL, 0, 0, 0, 0, NULL, false};
     int key;
 
+    setup_sigint();
     if (isatty(0)) {
         env->window = my_initwin();
         prompt_prepare(&buffer, env);
