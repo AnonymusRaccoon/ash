@@ -11,44 +11,40 @@
 #include <errno.h>
 #include <string.h>
 
-int builtin_env(char **argv, env_t *env)
+int builtin_set(char **argv, env_t *env)
 {
-    for (int i = 0; env->env && env->env[i]; i++)
-        puts(env->env[i]);
-    env->vars = my_setenv(env->vars, "?", "0");
-    return (0);
-}
-
-int builtin_setenv(char **argv, env_t *env)
-{
-    if (!argv[1])
-        return (builtin_env(argv, env));
+    if (!argv[1]) {
+        for (int i = 0; env->vars && env->vars[i]; i++)
+            puts(env->vars[i]);
+        env->vars = my_setenv(env->vars, "?", "0");
+        return (0);
+    }
     if ((!('a' <= argv[1][0] && argv[1][0] <= 'z'))
     && (!('A' <= argv[1][0] && argv[1][0] <= 'Z'))) {
-        write(2, "setenv: Variable name must begin with a letter.\n", 49);
+        dprintf(2, "set: Variable name must begin with a letter.\n");
         env->vars = my_setenv(env->vars, "?", "1");
         return (0);
     }
     if (!envvar_is_valid(argv[1])) {
-        write(2, INVALID_ENV_VAR, strlen(INVALID_ENV_VAR));
+        dprintf(2, INVALID_VAR);
         env->vars = my_setenv(env->vars, "?", "1");
         return (0);
     }
-    env->env = my_setenv(env->env, argv[1], argv[2]);
+    env->vars = my_setenv(env->vars, argv[1], argv[2]);
     env->vars = my_setenv(env->vars, "?", "0");
     return (0);
 }
 
-int builtin_unsetenv(char **argv, env_t *env)
+int builtin_unset(char **argv, env_t *env)
 {
     if (!argv[1]) {
-        write(2, "unsetenv: Too few arguments.\n", 29);
+        dprintf(2, "unset: Too few arguments.\n");
         env->vars = my_setenv(env->vars, "?", "1");
         return (0);
     }
     for (int i = 1; argv[i]; i++)
         if (!strchr(argv[i], '='))
-            env->env = my_unsetenv(env->env, argv[i]);
+            env->vars = my_unsetenv(env->vars, argv[i]);
     env->vars = my_setenv(env->vars, "?", "0");
     return (0);
 }

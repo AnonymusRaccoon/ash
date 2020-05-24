@@ -30,6 +30,8 @@ const builtin builtins[] = {
     {"unalias", &builtin_unalias},
     {"bindkey", &builtin_bindkey},
     {"echo", &builtin_echo},
+    {"set", &builtin_set},
+    {"unset", &builtin_unset},
     {NULL, NULL}
 };
 

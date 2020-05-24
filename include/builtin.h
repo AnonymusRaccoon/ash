@@ -30,6 +30,9 @@ int builtin_alias(char **args, env_t *env);
 int builtin_unalias(char **args, env_t *env);
 int builtin_bindkey(char **argv, env_t *env);
 int builtin_echo(char **args, env_t *env);
+int builtin_set(char **argv, env_t *env);
+int builtin_unset(char **argv, env_t *env);
+
 //which / where
 bool find_path_in_builtins(char *cmd);
 char **get_envpath(env_t *env);
@@ -37,6 +40,7 @@ char *check_executable(char *cmd, char *folder);
 char **get_paths_from_envpath(char *cmd, char **envpath);
 char **get_envpath(env_t *env);
 void fill_path_arr(char *cmd, char **envpath, char **res);
+
 //history
 int add_to_history(char *cmd, env_t *env);
 int show_history(env_t *env);
@@ -45,17 +49,18 @@ int execute_from_history(char **args, env_t *env);
 void remove_duplicate_history(env_t *env);
 int execute_command_history(history_t *old, history_t *new,
 char **args, env_t *env);
+
 //source
 void init_source_args(char **argv, int len_argv, env_t *env);
 void reset_source_args(int len_argv, env_t *env);
 char *get_special_arg_at(char **argv, int len_argv);
 char *get_special_arg_star(char **argv, int len_argv);
+
 //alias
 int add_alias(alias_t **list, char *alias, char **command);
 char *concatenate(char **command);
 void print_aliases(alias_t *list);
 int add_alias_to_list(alias_t **list, alias_t *elem, char *alias);
-
 //unalias
 void remove_alias(char *alias, alias_t **list);
 
