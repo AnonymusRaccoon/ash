@@ -53,25 +53,22 @@ char *process_vars(char *cmd, env_t *env)
 {
     char *name = NULL;
     char *value;
-    int new_index;
+    int new_index = 0;
     int length = strlen(cmd);
     bool parse = true;
 
-    for (int i = 0; i < length; i++, length = strlen(cmd)) {
+    for (int i = 0; i < length; i += new_index + 1, length = strlen(cmd)) {
         if (cmd[i] == '\'' || cmd[i] == '`')
             parse = !parse;
         if (cmd[i] != '$' || !parse)
             continue;
         new_index = get_var_name(&cmd[i], &name);
-        value = get_var_value(name, env);
-        if (!value)
+        if (!(value = get_var_value(name, env)))
             return (NULL);
-        cmd = realloc(cmd, sizeof(char) * (strlen(value) + length + 2));
-        if (!cmd)
+        if (!(cmd = realloc(cmd, sizeof(char) * (strlen(value) + length + 2))))
             return (NULL);
         rm_n_char(&cmd[i], strlen(name) + 1);
         insert_substring(cmd, value, i + 1);
-        i += new_index;
         free(name);
     }
     return (cmd);
