@@ -6,7 +6,12 @@
 */
 
 #include "my_ncurses.h"
-#include <stddef.h>
+#include <stdio.h>
+#include <unctrl.h>
+#include <unistd.h>
+#include <string.h>
+#include <sys/ioctl.h>
+
 
 void my_npause(my_window *window)
 {
