@@ -101,7 +101,7 @@ bool handle_parent_inout(redirection *inout[2], env_t *env, bool builtin)
 void run_cmd(char **argv, redirection *inout[2], env_t *env)
 {
     pid_t pid;
-    int status;
+    int status = 0;
     char *path;
 
     if (strlen(argv[0]) == 0)

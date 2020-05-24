@@ -21,6 +21,7 @@
 #define KEY_DC CSI(0x7e33)
 
 #include <termios.h>
+#include <stdio.h>
 
 typedef struct
 {
@@ -72,3 +73,5 @@ my_addstr(window, str))
 
 void my_npause(my_window *window);
 void my_nresume(my_window *window);
+
+extern my_window *stdwin;

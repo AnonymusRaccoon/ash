@@ -25,6 +25,7 @@ const key_function_t key_functions[] = {
     {"complete-command", &complete_command},
     {"clear-screen", &clear_screen_command},
     {"quoted-insert", &quoted_insert_command},
+    {"tty-sigintr", &tty_sigintr_command},
     {NULL, NULL}
 };
 
@@ -43,6 +44,7 @@ const binding_t emacs_bindings[] = {
     {'\t', &complete_command},
     {CTRL('l'), &clear_screen_command},
     {CTRL('v'), &quoted_insert_command},
+    {CTRL('c'), &tty_sigintr_command},
     {0, NULL}
 };
 
