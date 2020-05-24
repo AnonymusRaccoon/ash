@@ -31,6 +31,8 @@ int get_var_name(char *ptr, char **name)
     int length = 0;
 
     for (int i = 1; ptr[i] && ptr[i] != ' ' && ptr[i] != '$'; i++) {
+        if (ptr[i] == '"')
+            break;
         length++;
     }
     *name = strndup(&ptr[1], length);
@@ -52,10 +54,13 @@ char *process_vars(char *cmd, env_t *env)
     char *name = NULL;
     char *value;
     int new_index;
-    int length = strlen(cmd); 
+    int length = strlen(cmd);
+    bool parse = true;
 
     for (int i = 0; i < length; i++, length = strlen(cmd)) {
-        if (cmd[i] != '$')
+        if (cmd[i] == '\'' || cmd[i] == '`')
+            parse = !parse;
+        if (cmd[i] != '$' || !parse)
             continue;
         new_index = get_var_name(&cmd[i], &name);
         value = get_var_value(name, env);
