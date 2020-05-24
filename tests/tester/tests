@@ -289,16 +289,6 @@ TESTS=
   echo 'echo "$"'
 [928-END]
 
-[929]
-NAME="929"
-SETUP=""
-CLEAN=""
-TESTS=
-  echo 'echo "\t"'
-  echo 'echo $'
-  echo 'echo $?'
-[929-END]
-
 [930]
 NAME="930"
 SETUP=""
