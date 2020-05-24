@@ -82,7 +82,7 @@ int run_with_redirections(char *cmd, env_t *env, redirection *input)
 bool command_format_is_invalid(char **cmds, env_t *env, int *return_values)
 {
     for (int i = 0; cmds[i]; i++) {
-        if (!cmds[i] || !cmds[i][count_trailing_spaces(cmds[i])] 
+        if (!cmds[i] || !cmds[i][count_trailing_spaces(cmds[i])]
         || split_is_invalid(cmds, return_values, i)) {
             dprintf(2, "Invalid null command.\n");
             env->vars = my_setenv(env->vars, "?", "1");
