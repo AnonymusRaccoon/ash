@@ -30,7 +30,7 @@ void setup_sigint(void)
     sa.sa_flags = SA_SIGINFO;
     sigaction(SIGINT, &sa, NULL);
     sa.sa_sigaction = &on_sigtstp;
-    sa.sa_flags = SA_SIGINFO;
+    sa.sa_flags = SA_SIGINFO | SA_RESTART;
     sigaction(SIGTSTP, &sa, NULL);
 }
 
