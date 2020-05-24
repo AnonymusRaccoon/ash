@@ -59,33 +59,42 @@ int prompt_run(char *cmd, redirection *inout[2], env_t *env, redirection *cmds)
     return (ret);
 }
 
+char *minmal_hostname(char *hostname)
+{
+    int i = 0;
+
+    while (hostname[i] && hostname[i] != '.')
+        i++;
+    if (hostname[i] == '.')
+        hostname[i] = '\0';
+    return (hostname);
+}
+
 char *get_prompt_value(char c, env_t *env)
 {
     static char value[PATH_MAX];
 
-    switch (c)
-    {
-    case '/':
-    case '~':
+    if (c == '/' || c == '~')
         return (getcwd(value, sizeof(value)));
-    case 'n':
-    case 'N':
+    if (c == 'n' || c == 'N')
         return (getlogin());
-    case 'm':
-    case 'M':
+    if (c == 'M' || c == 'm') {
         gethostname(value, sizeof(value));
+        if (c == 'm')
+            minmal_hostname(value);
         return (value);
-    case '%':
+    }
+    if (c == '%')
         return "%";
-    case 'l':
+    if (c == 'l')
         return (ttyname(STDIN_FILENO));
-    case '#':
+    if (c == '#') {
         if (!geteuid())
             return ("#");
         return (">");
-    case '?':
-        return (my_getenv(env->vars, "?"));
     }
+    if (c == '?')
+        return (my_getenv(env->vars, "?"));
     return (NULL);
 }
 
