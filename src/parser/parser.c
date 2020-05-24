@@ -18,6 +18,7 @@
 #include <malloc.h>
 
 char *strdup(const char *);
+int dprintf(int, const char *, ...);
 
 int count_trailing_spaces(char *cmd)
 {
@@ -42,6 +43,7 @@ char **remove_leading_entries(char **cmds)
 char *process_aliases(char *cmd, env_t *env)
 {
     int bin_len;
+    int len;
 
     for (bin_len = 0; cmd[bin_len]; bin_len++) {
         if (cmd[bin_len] == ' ' || cmd[bin_len] == '\t')
@@ -49,10 +51,11 @@ char *process_aliases(char *cmd, env_t *env)
     }
     for (alias_t *al = env->alias; al; al = al->next) {
         if (!strncmp(al->alias, cmd, bin_len)) {
-            cmd = realloc(cmd, strlen(cmd) + strlen(al->command) + 1 - bin_len);
+            len = strlen(cmd) + strlen(al->command) + 1 - bin_len;
+            rm_n_char(cmd, bin_len);
+            cmd = realloc(cmd, len);
             if (!cmd)
                 return (NULL);
-            rm_n_char(cmd, bin_len);
             insert_substring(cmd, al->command, 1);
         }
     }
@@ -66,8 +69,17 @@ char **parse_input(char *cmd, env_t *env, wordexp_t *parser)
     if (!(cmd = process_vars(cmd, env)))
         return (NULL);
     cmd = process_aliases(cmd, env);
-    if (wordexp(cmd, parser, WRDE_SHOWERR)) {
-        perror(SHELL_NAME);
+    switch (wordexp(cmd, parser, WRDE_SHOWERR)) {
+    case 0:
+        break;
+    case WRDE_BADCHAR:
+        dprintf(2, "Illegal occurrence of one of |, &, ;, <, >, (, ), {, }.\n");
+        return (NULL);
+    case WRDE_SYNTAX:
+        dprintf(2, "Shell syntax error\n");
+        return (NULL);
+    default:
+        dprintf(2, "Unknonw parsing error.\n");
         return (NULL);
     }
     free(cmd);
