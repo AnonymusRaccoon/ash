@@ -8,6 +8,8 @@
 #include "shell.h"
 #include "my_ncurses.h"
 #include "prompt.h"
+#include "key_functions.h"
+#include "utility.h"
 #include <unistd.h>
 #include <limits.h>
 #include <stdio.h>
@@ -21,7 +23,7 @@ char *get_prompt_value2(char c, env_t *env)
     if (c == 'B')
         return (prompt_attr(BOLD, false));
     if (c == 'b')
-        return (prompt_attr(BOLD, true));
+        return (prompt_attr(0, false));
     if (c == 'U')
         return (prompt_attr(UNDERLINE, false));
     if (c == 'u')
@@ -30,6 +32,8 @@ char *get_prompt_value2(char c, env_t *env)
         return (prompt_attr(REVERSE, false));
     if (c == 's')
         return (prompt_attr(REVERSE, true));
+    if (c == '!' || c == 'h')
+        return (tostr(history_size(env->history)));
     return (NULL);
 }
 
