@@ -22,3 +22,22 @@ void my_nresume(my_window *window)
         return;
     tcsetattr(0, TCSANOW, &window->saved_termios);
 }
+
+void my_getmaxyx(int *y, int *x)
+{
+    struct winsize size;
+
+    ioctl(STDOUT_FILENO, TIOCGWINSZ, &size);
+    *y = size.ws_row;
+    *x = size.ws_col;
+}
+
+void my_getcuryx(int *y, int *x)
+{
+    my_refresh();
+    printf("\x1B[6n");
+    fflush(stdout);
+    scanf("\x1B[%d;%dR", y, x);
+    *y -= 1;
+    *x -= 1;
+}

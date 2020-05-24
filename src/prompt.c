@@ -89,7 +89,7 @@ void prompt_prepare(buffer_t *buffer, env_t *env)
         prompt = "";
     prompt = strdup(prompt);
     prompt = parse_prompt(prompt, env);
-    printf("%s", prompt);
-    buffer->startx = strlen(prompt);
+    my_mvaddstr(env->window, NO_MOVE, 0, prompt);
+    buffer->startx = env->window->x;
     free(prompt);
 }
