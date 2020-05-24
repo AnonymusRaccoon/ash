@@ -87,6 +87,7 @@ int builtin_exit(char **argv, env_t *env)
     }
     if (!my_strisnum(ptr)) {
         dprintf(2, "exit: Expression Syntax.\n");
+        env->vars = my_setenv(env->vars, "?", "1");
         return (0);
     }
     env->vars = my_setenv(env->vars, "?", argv[1]);
