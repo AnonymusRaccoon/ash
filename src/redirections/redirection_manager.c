@@ -99,12 +99,11 @@ bool command_format_is_invalid(char **cmds, env_t *env, int *return_values)
 
 int eval_raw_cmd(char *cmd, env_t *env)
 {
-    int *return_values = NULL;
+    int *return_values = get_return_separator(cmd);
     char **cmds =  split_str(cmd, (char *[]){";", "||", "&&", NULL});
     char **const_cmd = cmds;
     int ret = 0;
 
-    return_values = get_return_separator(cmd);
     cmds = remove_leading_entries(cmds);
     if (!cmds || !return_values)
         return (-1);
