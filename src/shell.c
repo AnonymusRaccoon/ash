@@ -23,7 +23,10 @@ int process_key(int key, buffer_t *buffer, env_t *env)
 {
     if (key <= 0)
         return (0);
-    my_clrtobot();
+    if (env->window) {
+        my_move(env->window, NO_MOVE, env->window->w);
+        my_clrtobot();
+    }
     if (buffer->quoted_insert) {
         buffer->quoted_insert = false;
         return (self_insert_command(key, buffer, env));
@@ -57,6 +60,8 @@ void shell_refresh(buffer_t *buffer, env_t *env)
     static int oldwidth = -1;
     if (oldwidth == -1)
         oldwidth = env->window->w;
+    if (buffer->buffer && !buffer->buffer[0])
+        oldbuffer_pos = 0;
     int y = env->window->y - (oldbuffer_pos + buffer->startx) / oldwidth;
     int newy = y + (buffer->pos + buffer->startx) / env->window->w;
 
