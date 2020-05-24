@@ -28,6 +28,7 @@ const builtin builtins[] = {
     {"source", &builtin_source},
     {"alias", &builtin_alias},
     {"unalias", &builtin_unalias},
+    {"bindkey", &builtin_bindkey},
     {"echo", &builtin_echo},
     {NULL, NULL}
 };

@@ -85,7 +85,7 @@ int complete_command(int key, buffer_t *buffer, env_t *env)
     char *p = get_start_of_current_arg(buffer);
     glob_t result;
 
-    if (!buffer->buffer || !p)
+    if (!env->window || !buffer->buffer || !p)
         return (0);
     str = malloc(buffer->pos - (p - buffer->buffer) + 2);
     if (!str)
