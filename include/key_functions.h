@@ -44,4 +44,6 @@ int end_of_line_command(int key, buffer_t *buffer, env_t *env);
 int up_history_command(int key, buffer_t *buffer, env_t *env);
 int down_history_command(int key, buffer_t *buffer, env_t *env);
 
+int clear_screen_command(int key, buffer_t *buffer, env_t *env);
+
 int complete_command(int key, buffer_t *buffer, env_t *env);

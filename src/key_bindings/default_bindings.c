@@ -23,6 +23,7 @@ const key_function_t key_functions[] = {
     {"up-history", &up_history_command},
     {"down-history", &down_history_command},
     {"complete-command", &complete_command},
+    {"clear-screen", &clear_screen_command},
     {NULL, NULL}
 };
 
@@ -39,6 +40,7 @@ const binding_t emacs_bindings[] = {
     {KEY_UP, &up_history_command},
     {KEY_DOWN, &down_history_command},
     {'\t', &complete_command},
+    {CTRL('l'), &clear_screen_command},
     {0, NULL}
 };
 
