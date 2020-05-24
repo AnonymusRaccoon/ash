@@ -332,7 +332,7 @@ NAME="933"
 SETUP=""
 CLEAN=""
 TESTS=
-  echo ' || ls'
+  echo ' && ls'
 [933-END]
 
 [934]
@@ -342,14 +342,6 @@ CLEAN=""
 TESTS=
   echo ' ||   '
 [934-END]
-
-[935]
-NAME="935"
-SETUP=""
-CLEAN=""
-TESTS=
-  echo ' &&     '
-[935-END]
 
 [936]
 NAME="936"

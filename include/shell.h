@@ -54,7 +54,7 @@ typedef struct env_s
 
 void start_shell(env_t *env);
 void free_env(env_t *env);
-int prompt_run(char *cmd, redirection *inout[2], env_t *env);
+int prompt_run(char *cmd, redirection *inout[2], env_t *env, redirection *red);
 void prompt_prepare(buffer_t *buffer, env_t *env);
 
 int eval_raw_cmd(char *cmd, env_t *env);
@@ -81,7 +81,6 @@ char **globbing(char **argv);
 
 char *get_alias(char *cmd, alias_t *alias);
 char *add_separator(char *cmd, int *return_values, int index);
-char *replace_alias(char *cmd, alias_t *alias);
 char *get_alias_command(char *cmd, alias_t *alias);
 
 

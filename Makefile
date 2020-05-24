@@ -7,9 +7,8 @@
 
 SRC = src/shell.c \
 	src/prompt.c \
-	src/alias.c \
 	src/execute.c \
-	src/glob.c \
+	src/alias.c \
 	src/redirections/redirection_manager.c \
 	src/redirections/redirections.c \
 	src/redirections/redirections_functions.c \
@@ -39,6 +38,11 @@ SRC = src/shell.c \
 	src/utility/fusion.c	\
 	src/utility/split_commands.c \
 	src/utility/get_return.c \
+	src/parser/parser.c \
+	src/parser/quotes.c \
+	src/parser/double_quotes.c \
+	src/parser/parser_utilities.c \
+	src/parser/parser_vars_utilities.c \
 	src/utility/eof.c \
 	src/key_bindings/basic_typing_functions.c \
 	src/key_bindings/default_bindings.c \
@@ -56,7 +60,7 @@ TESTS = tests/tenv.c \
 	tests/targc.c \
 	tests/texecute.c \
 	tests/tcd.c \
-  tests/tsource.c \
+	tests/tsource.c \
 	tests/techo.c
 
 COVERAGE = -lcriterion --coverage
@@ -79,7 +83,7 @@ $(NAME): $(OBJ)
 	$(CC) -o $(NAME) $(OBJ) $(LDFLAGS)
 
 tests_run: clean
-	$(CC) -o $(UT) $(TESTS) $(SRC) $(COVERAGE) $(CFLAGS) $(LDFLAGS)
+	$(CC) -o $(UT) $(TESTS) $(SRC) $(COVERAGE) -g $(CFLAGS) $(LDFLAGS)
 	$(UT)
 
 func: all

@@ -16,10 +16,10 @@ int get_max_eof(char *ignoreeof)
     bool correct = true;
 
     for (int i = 0; ignoreeof[i] && correct; i++)
-        if(!is_num(ignoreeof[i]))
+        if (!is_num(ignoreeof[i]))
             correct = false;
     if (correct && strcmp(ignoreeof, "0") && strcmp(ignoreeof, ""))
-        return(strtol(ignoreeof, NULL, 10));
+        return (strtol(ignoreeof, NULL, 10));
     return (26);
 }
 

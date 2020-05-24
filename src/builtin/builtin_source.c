@@ -25,7 +25,7 @@ char **get_arr_from_fd(int fd, char *filepath, char *str)
     str = malloc(st_buff.st_size + 1);
     if (str) {
         read(fd, str, st_buff.st_size);
-        arr = split_str(str, '\n');
+        arr = split_str(str, (char *[]){"\n", NULL});
     }
     return (arr);
 }
