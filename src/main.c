@@ -36,7 +36,6 @@ env_t *create_env(char **env)
     }
     envt->window = NULL;
     envt->alias = NULL;
-    envt->vars = my_setenv(envt->vars, "prompt", "%U%m%u:%B%~%b%# ");
     return (envt);
 }
 
@@ -47,6 +46,7 @@ int main(int argc, char **argv, char **env)
 
     if (!envt)
         return (ERROR);
+    envt->vars = my_setenv(envt->vars, "prompt", "%U%m%u:%B%~%b%# ");
     if (argc >= 2)
         builtin_source(argv, envt);
     else
