@@ -26,6 +26,7 @@ SRC = src/shell.c \
 	src/builtin/builtin_where.c \
 	src/builtin/builtin_alias.c \
 	src/builtin/builtin_unalias.c \
+	src/builtin/builtin_echo.c \
 	src/signal.c \
 	src/free_env.c \
 	src/utility/same_var.c \
@@ -38,6 +39,7 @@ SRC = src/shell.c \
 	src/utility/fusion.c	\
 	src/utility/split_commands.c \
 	src/utility/get_return.c \
+	src/utility/eof.c \
 	src/key_bindings/basic_typing_functions.c \
 	src/key_bindings/default_bindings.c \
 	src/key_bindings/control_commands.c \
@@ -55,7 +57,8 @@ TESTS = tests/tenv.c \
 	tests/targc.c \
 	tests/texecute.c \
 	tests/tcd.c \
-	tests/tsource.c \
+  tests/tsource.c \
+	tests/techo.c
 
 COVERAGE = -lcriterion --coverage
 
