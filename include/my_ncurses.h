@@ -43,6 +43,7 @@ void my_getcuryx(int *y, int *x);
 void my_getmaxyx(int *y, int *x);
 int my_getch(void);
 const char *my_unctrl(int c);
+int my_parsechar(const char *c);
 
 void my_addstr(my_window *window, const char *str);
 #define my_mvaddstr(window, y, x, str) (my_move(window, y, x), \

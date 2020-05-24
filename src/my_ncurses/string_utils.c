@@ -9,6 +9,7 @@
 #include <stdio.h>
 #include <unctrl.h>
 #include <unistd.h>
+#include <string.h>
 #include <sys/ioctl.h>
 
 void my_addstr(my_window *window, const char *str)
@@ -47,6 +48,17 @@ const char *my_unctrl(int c)
         return (str);
     }
     return (unctrl(c));
+}
+
+int my_parsechar(const char *c)
+{
+    if (!strcmp(c, "^?"))
+        return (KEY_DC);
+    if (c[0] == '^' && c[1] == '[')
+        return (CSI(c[2] | c[3] << 8u));
+    if (c[1])
+        return (-1);
+    return (c[0]);
 }
 
 void my_getmaxyx(int *y, int *x)
