@@ -90,7 +90,7 @@ bool command_format_is_invalid(char **cmds, env_t *env, int *return_values)
             env->vars = my_setenv(env->vars, "?", "1");
             return (true);
         } else if (redirections_are_invalid(cmds[i])) {
-            env->env = my_setenv(env->vars, "?", "1");
+            env->vars = my_setenv(env->vars, "?", "1");
             return (true);
         }
     }
